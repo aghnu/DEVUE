@@ -20,35 +20,35 @@ const movingWindows: MovingWindowLocalState[] = [
 ]
 
 const desktopStates = useDesktopStatesStore();
-const windowsContainerElement = ref<HTMLDivElement>();
-const handlerWindowResizeUpdateWindowsContainerState = (event: UIEvent) => {
-  if (windowsContainerElement.value !== undefined && windowsContainerElement.value !== null) {
-    const rect = windowsContainerElement.value.getBoundingClientRect();
-    desktopStates.updateSizeWindowsContainer([windowsContainerElement.value.offsetWidth, windowsContainerElement.value.offsetHeight]);
-    desktopStates.updatePositionWindowsContainer([rect.left, rect.top]);
+const windowsManagerElement = ref<HTMLDivElement>();
+const handlerWindowResizeUpdateWindowsManagerState = (event: UIEvent) => {
+  if (windowsManagerElement.value !== undefined && windowsManagerElement.value !== null) {
+    const rect = windowsManagerElement.value.getBoundingClientRect();
+    desktopStates.updateSizeWindowsManager([windowsManagerElement.value.offsetWidth, windowsManagerElement.value.offsetHeight]);
+    desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
   }
 };
 
 // life cycle
 onMounted(() => {
-  window.addEventListener('resize', handlerWindowResizeUpdateWindowsContainerState);
+  window.addEventListener('resize', handlerWindowResizeUpdateWindowsManagerState);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handlerWindowResizeUpdateWindowsContainerState);
+  window.removeEventListener('resize', handlerWindowResizeUpdateWindowsManagerState);
 });
 
 
 </script>
 
 <template>
-  <div class="WindowsContainer" ref="windowsContainerElement">
+  <div class="WindowsManager" ref="windowsManagerElement">
     <MovingWindow v-for="mw in movingWindows" :position="mw.position.value" :size="mw.size.value" />
   </div>
 </template>
 
 <style scoped lang="scss">
-.WindowsContainer {
+.WindowsManager {
   background-color: red;
   height: 100%;
   width: 100%;

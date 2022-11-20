@@ -2,33 +2,33 @@ import { defineStore } from "pinia";
 
 interface DesktopStates {
   positionPointer: [number, number];
-  positionWindowsContainer: [number, number];
-  sizeWindowsContainer: [number, number];
+  positionWindowsManager: [number, number];
+  sizeWindowsManager: [number, number];
 }
 
 export const useDesktopStatesStore = defineStore("desktopStates", {
   state: (): DesktopStates => {
     return {
       positionPointer: [0, 0],
-      sizeWindowsContainer: [0, 0],
-      positionWindowsContainer: [0, 0],
+      sizeWindowsManager: [0, 0],
+      positionWindowsManager: [0, 0],
     };
   },
   getters: {
     relativePosXPointer(): number {
       return (
         Math.min(
-          Math.max(this.positionPointer[0], this.positionWindowsContainer[0]),
-          this.positionWindowsContainer[0] + this.sizeWindowsContainer[0]
-        ) - this.positionWindowsContainer[0]
+          Math.max(this.positionPointer[0], this.positionWindowsManager[0]),
+          this.positionWindowsManager[0] + this.sizeWindowsManager[0]
+        ) - this.positionWindowsManager[0]
       );
     },
     relativePosYPointer(): number {
       return (
         Math.min(
-          Math.max(this.positionPointer[1], this.positionWindowsContainer[1]),
-          this.positionWindowsContainer[1] + this.sizeWindowsContainer[1]
-        ) - this.positionWindowsContainer[1]
+          Math.max(this.positionPointer[1], this.positionWindowsManager[1]),
+          this.positionWindowsManager[1] + this.sizeWindowsManager[1]
+        ) - this.positionWindowsManager[1]
       );
     },
   },
@@ -37,12 +37,12 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
       this.positionPointer = newPosition;
     },
 
-    updateSizeWindowsContainer(newSize: [number, number]) {
-      this.sizeWindowsContainer = newSize;
+    updateSizeWindowsManager(newSize: [number, number]) {
+      this.sizeWindowsManager = newSize;
     },
 
-    updatePositionWindowsContainer(newPosition: [number, number]) {
-      this.positionWindowsContainer = newPosition;
+    updatePositionWindowsManager(newPosition: [number, number]) {
+      this.positionWindowsManager = newPosition;
     },
   },
 });

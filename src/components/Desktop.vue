@@ -1,7 +1,7 @@
 <template>
   <div class="Desktop">
     <div class="Desktop__windows">
-      <WindowsContainer />
+      <WindowsManager />
     </div>
     <div class="Desktop__action_bar">
       <ActionBar />
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import ActionBar from "./ActionBar.vue";
-import WindowsContainer from "./WindowsContainer.vue";
+import WindowsManager from "./WindowsManager.vue";
 import { onMounted, onUnmounted } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
