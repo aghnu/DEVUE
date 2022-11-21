@@ -9,6 +9,7 @@ import {
   EventInfoMove,
 } from "./MovingWindow.vue";
 
+// types
 interface CurrentWindowActionState {
   windowPositionSnapshot: [number, number];
   pointerPositionSnapshot: [number, number];
@@ -20,6 +21,7 @@ interface MovingWindowLocalState {
   size: Ref<[number, number]>;
 }
 
+// mockups
 const movingWindows: Map<string, MovingWindowLocalState> = new Map([
   [
     uuid(),
@@ -37,9 +39,13 @@ const movingWindows: Map<string, MovingWindowLocalState> = new Map([
   ],
 ]);
 
+// variables
 const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
-const handlerWindowResizeUpdateWindowsManagerState = () => {
+let currentWindowActionState: CurrentWindowActionState | null = null;
+
+// handlers
+function handlerWindowResizeUpdateWindowsManagerState() {
   if (
     windowsManagerElement.value !== undefined &&
     windowsManagerElement.value !== null
@@ -51,15 +57,8 @@ const handlerWindowResizeUpdateWindowsManagerState = () => {
     ]);
     desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
   }
-};
-
-// window resize and move event handlers
-let currentWindowActionState: CurrentWindowActionState | null = null;
-
-const resetWindowActionState = () => {
-  currentWindowActionState = null;
-};
-const handlerWindowActionStart = (e: EventInfoResize | EventInfoMove) => {
+}
+function handlerWindowActionStart(e: EventInfoResize | EventInfoMove) {
   const movingWindowState: MovingWindowLocalState | undefined =
     movingWindows.get(e.id);
   if (movingWindowState === undefined) {
@@ -77,52 +76,77 @@ const handlerWindowActionStart = (e: EventInfoResize | EventInfoMove) => {
       windowPositionSnapshot: movingWindowState.position.value,
     };
   }
-};
-const handlerWindowActionEnd = (e: EventInfoResize | EventInfoMove) => {
+}
+function handlerWindowActionEnd(e: EventInfoResize | EventInfoMove) {
   if (
     currentWindowActionState !== null &&
     currentWindowActionState.event.id === e.id
   ) {
     resetWindowActionState();
   }
-};
+}
 
-const executeWindowAction = () => {
+// other functions
+function resetWindowActionState() {
+  currentWindowActionState = null;
+}
+function windowActionExecuteFuncMove(
+  currentWindowActionState: CurrentWindowActionState,
+  movingWindowState: MovingWindowLocalState
+) {
+  // move window relative to original pointer snapshot
+  const windowPositionSnapshot =
+    currentWindowActionState.windowPositionSnapshot;
+  const pointerPositionCurrent = desktopStates.relativePositionPointer;
+  const pointerPositionSnapshot =
+    currentWindowActionState.pointerPositionSnapshot;
+
+  const windowsPosXNew =
+    windowPositionSnapshot[0] +
+    pointerPositionCurrent[0] -
+    pointerPositionSnapshot[0];
+  const windowsPosYNew =
+    windowPositionSnapshot[1] +
+    pointerPositionCurrent[1] -
+    pointerPositionSnapshot[1];
+
+  // set new
+  movingWindowState.position.value = [windowsPosXNew, windowsPosYNew];
+}
+function windowActionExecuteFuncResize(
+  currentWindowActionState: CurrentWindowActionState,
+  movingWindowState: MovingWindowLocalState
+) {}
+function executeWindowAction() {
   if (currentWindowActionState !== null) {
-    if (currentWindowActionState.event.type === "move") {
-      const movingWindowState: MovingWindowLocalState | undefined =
-        movingWindows.get(currentWindowActionState.event.id);
+    switch (currentWindowActionState.event.type) {
+      case "move":
+        {
+          const movingWindowState: MovingWindowLocalState | undefined =
+            movingWindows.get(currentWindowActionState.event.id);
 
-      if (movingWindowState !== undefined) {
-        // move window relative to original pointer snapshot
-        const windowPositionSnapshot =
-          currentWindowActionState.windowPositionSnapshot;
-        const pointerPositionCurrent = desktopStates.relativePositionPointer;
-        const pointerPositionSnapshot =
-          currentWindowActionState.pointerPositionSnapshot;
-
-        const windowsPosXNew =
-          windowPositionSnapshot[0] +
-          pointerPositionCurrent[0] -
-          pointerPositionSnapshot[0];
-        const windowsPosYNew =
-          windowPositionSnapshot[1] +
-          pointerPositionCurrent[1] -
-          pointerPositionSnapshot[1];
-
-        // set new
-        movingWindowState.position.value = [windowsPosXNew, windowsPosYNew];
-      } else {
-        console.error(
-          `Error: window action requested on MovingWindow object id:${currentWindowActionState.event.id}, but its state is not tracked inside WindowsManager`
-        );
-        resetWindowActionState();
-      }
-    } else if (currentWindowActionState.event.type === "resize") {
+          if (movingWindowState !== undefined) {
+            windowActionExecuteFuncMove(
+              currentWindowActionState,
+              movingWindowState
+            );
+          } else {
+            console.error(
+              `Error: window action requested on MovingWindow object id:${currentWindowActionState.event.id}, but its state is not tracked inside WindowsManager`
+            );
+            resetWindowActionState();
+          }
+        }
+        break;
+      case "resize":
+        {
+        }
+        break;
     }
   }
-};
+}
 
+// reactive watch
 watch(
   () => desktopStates.relativePositionPointer,
   () => {
