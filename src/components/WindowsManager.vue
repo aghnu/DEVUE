@@ -5,39 +5,51 @@ import { v4 as uuid } from "uuid";
 import MovingWindow from "./MovingWindow.vue";
 import {
   MovingWindowResizeDirection,
-  EventInfoResize,
-  EventInfoMove,
+  MovingWindowActionEvent,
 } from "./MovingWindow.vue";
 
 // types
 interface CurrentWindowActionState {
   windowPositionSnapshot: [number, number];
   pointerPositionSnapshot: [number, number];
-  event: EventInfoMove | EventInfoResize;
+  event: MovingWindowActionEvent;
 }
 
 interface MovingWindowLocalState {
-  position: Ref<[number, number]>;
-  size: Ref<[number, number]>;
+  id: string;
+  order: number;
+  position: [number, number];
+  size: [number, number];
 }
 
-// mockups
-const movingWindows: Map<string, MovingWindowLocalState> = new Map([
-  [
-    uuid(),
-    {
-      position: ref([20, 50] as [number, number]),
-      size: ref([200, 200] as [number, number]),
-    },
-  ],
-  [
-    uuid(),
-    {
-      position: ref([90, 50] as [number, number]),
-      size: ref([100, 100] as [number, number]),
-    },
-  ],
-]);
+// functions related to window creation, mockup for now
+const movingWindows: Ref<Map<string, MovingWindowLocalState>> = ref(new Map());
+const movingWindowsOrderStack: Ref<string[]> = ref([]); // when changing order, make sure its atomic, change will trigger a watch
+
+function trackMovingWindowState(movingWindowState: MovingWindowLocalState) {
+  // add moving window state to windowsManager and make respective updates
+  movingWindows.value.set(movingWindowState.id, movingWindowState);
+  windowOrderStackOperationAddNew(movingWindowState.id);
+}
+function createMovingWindowState(): MovingWindowLocalState {
+  // mockup for now
+  var orderCount = 0;
+  const movingWindowState = {
+    id: uuid(),
+    order: orderCount++,
+    position: [Math.random() * 500, Math.random() * 500] as [number, number],
+    size: [Math.random() * 300 + 100, Math.random() * 300 + 100] as [
+      number,
+      number
+    ],
+  };
+  return movingWindowState;
+}
+
+// MOCKUP, REMOVE LATER
+trackMovingWindowState(createMovingWindowState());
+trackMovingWindowState(createMovingWindowState());
+trackMovingWindowState(createMovingWindowState());
 
 // variables
 const desktopStates = useDesktopStatesStore();
@@ -58,9 +70,9 @@ function handlerWindowResizeUpdateWindowsManagerState() {
     desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
   }
 }
-function handlerWindowActionStart(e: EventInfoResize | EventInfoMove) {
+function handlerWindowActionStart(e: MovingWindowActionEvent) {
   const movingWindowState: MovingWindowLocalState | undefined =
-    movingWindows.get(e.id);
+    movingWindows.value.get(e.id);
   if (movingWindowState === undefined) {
     // MovingWindow does not exist in movingWindows, this should never happend
     console.error(
@@ -73,11 +85,11 @@ function handlerWindowActionStart(e: EventInfoResize | EventInfoMove) {
         desktopStates.relativePosXPointer,
         desktopStates.relativePosYPointer,
       ],
-      windowPositionSnapshot: movingWindowState.position.value,
+      windowPositionSnapshot: movingWindowState.position,
     };
   }
 }
-function handlerWindowActionEnd(e: EventInfoResize | EventInfoMove) {
+function handlerWindowActionEnd(e: MovingWindowActionEvent) {
   if (
     currentWindowActionState !== null &&
     currentWindowActionState.event.id === e.id
@@ -88,17 +100,76 @@ function handlerWindowActionEnd(e: EventInfoResize | EventInfoMove) {
 
 // other functions
 function updateMovingWindowPosition(
-  movingWindowState: MovingWindowLocalState,
+  movingWindowID: string,
   position: [number, number]
 ) {
-  movingWindowState.position.value = position;
+  const movingWindowState = movingWindows.value.get(movingWindowID);
+  if (movingWindowState !== undefined) {
+    movingWindowState.position = position;
+  } else {
+    console.error(
+      "Error: movingWindow not tracked when updating window position"
+    );
+  }
 }
 function updateMovingWindowSize(
-  movingWindowState: MovingWindowLocalState,
+  movingWindowID: string,
   size: [number, number]
 ) {
-  movingWindowState.size.value = size;
+  const movingWindowState = movingWindows.value.get(movingWindowID);
+  if (movingWindowState !== undefined) {
+    movingWindowState.size = size;
+  } else {
+    console.error(
+      "Error: movingWindow not tracked when updating window position"
+    );
+  }
 }
+function updateMovingWindowOrder(movingWindowID: string, order: number) {
+  const movingWindowState = movingWindows.value.get(movingWindowID);
+  if (movingWindowState !== undefined) {
+    movingWindowState.order = order;
+  } else {
+    console.error(
+      "Error: movingWindow not tracked when updating window position"
+    );
+  }
+}
+function windowOrderStackOperationAddNew(movingWindowID: string) {
+  const movingWindowState = movingWindows.value.get(movingWindowID);
+  if (movingWindowState !== undefined) {
+    movingWindowsOrderStack.value.push(movingWindowState.id);
+  }
+}
+function windowOrderStackOperationMoveToTop(movingWindowID: string) {
+  // check if already on top
+  if (
+    movingWindowsOrderStack.value.length === 0 ||
+    movingWindowsOrderStack.value[movingWindowsOrderStack.value.length - 1] ===
+      movingWindowID
+  ) {
+    return;
+  }
+
+  // else, do the operation
+  const newMovingWindowOrderStack: string[] = [];
+  for (let i = 0; i < movingWindowsOrderStack.value.length; i++) {
+    const id = movingWindowsOrderStack.value[i];
+    if (id !== movingWindowID) {
+      newMovingWindowOrderStack.push(id);
+    }
+  }
+  if (
+    newMovingWindowOrderStack.length ===
+    movingWindowsOrderStack.value.length - 1
+  ) {
+    // making sure movingWindowID is tracked
+    newMovingWindowOrderStack.push(movingWindowID);
+    // update stack
+    movingWindowsOrderStack.value = newMovingWindowOrderStack;
+  }
+}
+
 function resetWindowActionState() {
   currentWindowActionState = null;
 }
@@ -123,7 +194,7 @@ function windowActionExecuteFuncMove(
     pointerPositionSnapshot[1];
 
   // set new
-  updateMovingWindowPosition(movingWindowState, [
+  updateMovingWindowPosition(movingWindowState.id, [
     windowsPosXNew,
     windowsPosYNew,
   ]);
@@ -134,29 +205,27 @@ function windowActionExecuteFuncResize(
 ) {}
 function executeWindowAction() {
   if (currentWindowActionState !== null) {
-    switch (currentWindowActionState.event.type) {
-      case "move":
-        {
-          const movingWindowState: MovingWindowLocalState | undefined =
-            movingWindows.get(currentWindowActionState.event.id);
+    const movingWindowState: MovingWindowLocalState | undefined =
+      movingWindows.value.get(currentWindowActionState.event.id);
 
-          if (movingWindowState !== undefined) {
-            windowActionExecuteFuncMove(
-              currentWindowActionState,
-              movingWindowState
-            );
-          } else {
-            console.error(
-              `Error: window action requested on MovingWindow object id:${currentWindowActionState.event.id}, but its state is not tracked inside WindowsManager`
-            );
-            resetWindowActionState();
-          }
-        }
-        break;
-      case "resize":
-        {
-        }
-        break;
+    if (movingWindowState !== undefined) {
+      // move window to top
+      windowOrderStackOperationMoveToTop(movingWindowState.id);
+      switch (currentWindowActionState.event.type) {
+        case "move":
+          windowActionExecuteFuncMove(
+            currentWindowActionState,
+            movingWindowState
+          );
+          break;
+        case "resize":
+          break;
+      }
+    } else {
+      console.error(
+        `Error: window action requested on MovingWindow object id:${currentWindowActionState.event.id}, but its state is not tracked inside WindowsManager`
+      );
+      resetWindowActionState();
     }
   }
 }
@@ -167,8 +236,8 @@ function spreadDesktopSizeStateChangeToMovingWindows(
   const changeIndividualMovingWindowState = (
     movingWindowState: MovingWindowLocalState
   ) => {
-    const movingWindowPosition = movingWindowState.position.value;
-    const movingWindowSize = movingWindowState.size.value;
+    const movingWindowPosition = movingWindowState.position;
+    const movingWindowSize = movingWindowState.size;
 
     const newWindowPosX =
       movingWindowPosition[0] >= 0
@@ -190,13 +259,13 @@ function spreadDesktopSizeStateChangeToMovingWindows(
     const newWindowSizeY =
       (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
 
-    updateMovingWindowPosition(movingWindowState, [
+    updateMovingWindowPosition(movingWindowState.id, [
       newWindowPosX,
       newWindowPosY,
     ]);
   };
 
-  movingWindows.forEach((movingWindowState, id) => {
+  movingWindows.value.forEach((movingWindowState, id) => {
     new Promise(() => {
       changeIndividualMovingWindowState(movingWindowState);
     });
@@ -230,6 +299,14 @@ onMounted(() => {
       spreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
     }
   );
+
+  // watch window order change
+  watch(movingWindowsOrderStack, () => {
+    for (let i = 0; i < movingWindowsOrderStack.value.length; i++) {
+      const movingWindowStateID = movingWindowsOrderStack.value[i];
+      updateMovingWindowOrder(movingWindowStateID, i);
+    }
+  });
 });
 
 onUnmounted(() => {
@@ -249,8 +326,9 @@ onUnmounted(() => {
       v-for="[id, mvState] in movingWindows"
       :key="id"
       :id="id"
-      :position="mvState.position.value"
-      :size="mvState.size.value"
+      :position="mvState.position"
+      :size="mvState.size"
+      :order="mvState.order"
       @moving-window-move-start="handlerWindowActionStart"
       @moving-window-move-end="handlerWindowActionEnd"
       @moving-window-resize-start="handlerWindowActionStart"

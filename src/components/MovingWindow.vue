@@ -14,30 +14,26 @@ export type MovingWindowResizeDirection =
   | "s"
   | "e";
 
-export interface EventInfoResize {
+export interface MovingWindowActionEvent {
   id: string;
-  type: "resize";
-  direction: MovingWindowResizeDirection;
-}
-
-export interface EventInfoMove {
-  id: string;
-  type: "move";
+  type: "resize" | "move";
+  direction?: MovingWindowResizeDirection;
 }
 
 // define props
 const props = defineProps<{
   id: string;
+  order: number;
   position: [number, number];
   size: [number, number];
 }>();
 
 // define events
 const emits = defineEmits<{
-  (e: "movingWindowResizeStart", eventInfo: EventInfoResize): void;
-  (e: "movingWindowResizeEnd", eventInfo: EventInfoResize): void;
-  (e: "movingWindowMoveStart", eventInfo: EventInfoMove): void;
-  (e: "movingWindowMoveEnd", eventInfo: EventInfoMove): void;
+  (e: "movingWindowResizeStart", eventInfo: MovingWindowActionEvent): void;
+  (e: "movingWindowResizeEnd", eventInfo: MovingWindowActionEvent): void;
+  (e: "movingWindowMoveStart", eventInfo: MovingWindowActionEvent): void;
+  (e: "movingWindowMoveEnd", eventInfo: MovingWindowActionEvent): void;
 }>();
 
 // compute styling string
@@ -47,6 +43,7 @@ const styleWindowPositionLeft = computed(
 const styleWindowPositionTop = computed(() => String(props.position[1]) + "px");
 const styleWindowSizeWidth = computed(() => String(props.size[0]) + "px");
 const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
+const styleWindowZIndex = computed(() => String(props.order));
 </script>
 
 <template>
@@ -336,6 +333,8 @@ const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
   width: v-bind(styleWindowSizeWidth);
   left: v-bind(styleWindowPositionLeft);
   top: v-bind(styleWindowPositionTop);
+
+  z-index: v-bind(styleWindowZIndex);
 
   background-color: aqua;
 

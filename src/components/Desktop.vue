@@ -53,12 +53,16 @@ const handlerUpdatePointerPositionTouch = (event: TouchEvent) => {
 onMounted(() => {
   // udpate pointer position state
   document.addEventListener("mousemove", handlerUpdatePointerPositionMouse);
+  document.addEventListener("mousedown", handlerUpdatePointerPositionMouse);
   document.addEventListener("touchmove", handlerUpdatePointerPositionTouch);
+  document.addEventListener("touchstart", handlerUpdatePointerPositionTouch);
 });
 
 onUnmounted(() => {
   // clean up pointer listeners
   document.removeEventListener("mousemove", handlerUpdatePointerPositionMouse);
+  document.removeEventListener("mousedown", handlerUpdatePointerPositionMouse);
   document.removeEventListener("touchmove", handlerUpdatePointerPositionTouch);
+  document.removeEventListener("touchstart", handlerUpdatePointerPositionTouch);
 });
 </script>
