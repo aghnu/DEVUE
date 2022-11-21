@@ -16,11 +16,13 @@ export type MovingWindowResizeDirection =
 
 export interface EventInfoResize {
   id: string;
+  type: "resize";
   direction: MovingWindowResizeDirection;
 }
 
 export interface EventInfoMove {
   id: string;
+  type: "move";
 }
 
 // define props
@@ -51,10 +53,14 @@ const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
   <div class="MovingWindow">
     <div
       class="MovingWindow__title_bar"
-      @mousedown="emits('movingWindowMoveStart', { id: props.id })"
-      @touchstart="emits('movingWindowMoveStart', { id: props.id })"
-      @mouseup="emits('movingWindowMoveEnd', { id: props.id })"
-      @touchend="emits('movingWindowMoveEnd', { id: props.id })"
+      @mousedown="
+        emits('movingWindowMoveStart', { id: props.id, type: 'move' })
+      "
+      @touchstart="
+        emits('movingWindowMoveStart', { id: props.id, type: 'move' })
+      "
+      @mouseup="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
+      @touchend="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
     >
       <MovingWindowTitleBar />
     </div>
@@ -65,128 +71,256 @@ const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-se"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'se' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'se',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'se' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'se',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'se' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'se',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'se' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'se',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-sw"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'sw' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'sw',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'sw' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'sw',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'sw' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'sw',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'sw' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'sw',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-ne"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'ne' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'ne',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'ne' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'ne',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'ne' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'ne',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'ne' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'ne',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-nw"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'nw' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'nw',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'nw' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'nw',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'nw' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'nw',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'nw' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'nw',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-n"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'n' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'n',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'n' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'n',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'n' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'n',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'n' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'n',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-w"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'w' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'w',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'w' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'w',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'w' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'w',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'w' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'w',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-s"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 's' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 's',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 's' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 's',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 's' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 's',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 's' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 's',
+          type: 'resize',
+        })
       "
     ></div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-e"
       @mousedown="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'e' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'e',
+          type: 'resize',
+        })
       "
       @touchstart="
-        emits('movingWindowResizeStart', { id: props.id, direction: 'e' })
+        emits('movingWindowResizeStart', {
+          id: props.id,
+          direction: 'e',
+          type: 'resize',
+        })
       "
       @mouseup="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'e' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'e',
+          type: 'resize',
+        })
       "
       @touchend="
-        emits('movingWindowResizeEnd', { id: props.id, direction: 'e' })
+        emits('movingWindowResizeEnd', {
+          id: props.id,
+          direction: 'e',
+          type: 'resize',
+        })
       "
     ></div>
   </div>

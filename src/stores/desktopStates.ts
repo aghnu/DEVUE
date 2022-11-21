@@ -31,6 +31,9 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
         ) - this.positionWindowsManager[1]
       );
     },
+    relativePositionPointer(): [number, number] {
+      return [this.relativePosXPointer, this.relativePosYPointer];
+    },
   },
   actions: {
     updatePositionPointer(newPosition: [number, number]) {
