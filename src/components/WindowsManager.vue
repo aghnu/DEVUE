@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, Ref, onMounted, onUnmounted, watch, readonly } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { v4 as uuid } from "uuid";
 import MovingWindow from "./MovingWindow.vue";
@@ -23,6 +23,10 @@ interface MovingWindowLocalState {
   size: [number, number];
   sizeMin: [number, number];
 }
+
+const WINDOW_CONFIG = {
+  MIN_WINDOW_VISIABLE_BOARDER: 50, // minial visual parts of a moving window within window manager
+} as const;
 
 // functions related to window creation, mockup for now
 const movingWindows: Ref<Map<string, MovingWindowLocalState>> = ref(new Map());
@@ -110,7 +114,23 @@ function updateMovingWindowPosition(
 ) {
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
-    movingWindowState.position = position;
+    // porting the logic from original project, change later?
+    const desktopSize = desktopStates.sizeWindowsManager;
+    const movingWindowSize = movingWindowState.size;
+
+    const maxX = desktopSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
+    const maxY = desktopSize[1] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
+
+    const minX =
+      0 - (movingWindowSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER);
+    const minY = 0;
+
+    const newPosX = Math.min(Math.max(position[0], minX), maxX);
+    const newPosY = Math.min(Math.max(position[1], minY), maxY);
+
+    // update position
+    const newPosition = [newPosX, newPosY] as [number, number];
+    movingWindowState.position = newPosition;
     return position;
   } else {
     console.error(
@@ -220,42 +240,43 @@ function windowActionExecuteFuncResize(
     direction: MovingWindowResizeDirection
   ) => {
     // port code from the old project, may need refactor later
-    const windowStateSnapshot = currentWindowActionState.windowPositionSnapshot;
+    const windowStateSnapshotPosition =
+      currentWindowActionState.windowPositionSnapshot;
     const windowStateSnapshotSize = currentWindowActionState.windowSizeSnapshot;
-    const pointerStateSnapshot =
+    const pointerStateSnapshotPosition =
       currentWindowActionState.pointerPositionSnapshot;
 
-    const windowStateCurrent = movingWindowState.position;
+    const windowStateCurrentPosition = movingWindowState.position;
     const windowStateCurrentSize = movingWindowState.size;
-    const pointerStateCurrent = desktopStates.relativePositionPointer;
+    const pointerStateCurrentPosition = desktopStates.relativePositionPointer;
 
     switch (direction) {
       case "n":
         {
           const newPosY =
-            windowStateSnapshot[1] +
-            pointerStateCurrent[1] -
-            pointerStateSnapshot[1];
+            windowStateSnapshotPosition[1] +
+            pointerStateCurrentPosition[1] -
+            pointerStateSnapshotPosition[1];
           const positionNew = updateMovingWindowPosition(movingWindowState.id, [
-            windowStateCurrent[0],
+            windowStateCurrentPosition[0],
             newPosY,
           ])!;
 
           const newSizeY =
             windowStateSnapshotSize[1] -
-            (positionNew[1] - windowStateSnapshot[1]);
+            (positionNew[1] - windowStateSnapshotPosition[1]);
           const sizeNew = updateMovingWindowSize(movingWindowState.id, [
             windowStateCurrentSize[0],
             newSizeY,
           ])!;
 
           if (sizeNew[1] !== newSizeY) {
-            // this.windowState = windowStateCurrent;
+            // this.windowState = windowStateCurrentPosition;
             const newPosYCorrected =
-              windowStateSnapshot[1] +
+              windowStateSnapshotPosition[1] +
               (windowStateSnapshotSize[1] - sizeNew[1]);
             updateMovingWindowPosition(movingWindowState.id, [
-              windowStateCurrent[0],
+              windowStateCurrentPosition[0],
               newPosYCorrected,
             ]);
             updateMovingWindowSize(movingWindowState.id, [
@@ -268,30 +289,30 @@ function windowActionExecuteFuncResize(
       case "w":
         {
           const newPosX =
-            windowStateSnapshot[0] +
-            pointerStateCurrent[0] -
-            pointerStateSnapshot[0];
+            windowStateSnapshotPosition[0] +
+            pointerStateCurrentPosition[0] -
+            pointerStateSnapshotPosition[0];
           const positionNew = updateMovingWindowPosition(movingWindowState.id, [
             newPosX,
-            windowStateCurrent[1],
+            windowStateCurrentPosition[1],
           ])!;
 
           const newSizeX =
             windowStateSnapshotSize[0] -
-            (positionNew[0] - windowStateSnapshot[0]);
+            (positionNew[0] - windowStateSnapshotPosition[0]);
           const sizeNew = updateMovingWindowSize(movingWindowState.id, [
             newSizeX,
             windowStateCurrentSize[1],
           ])!;
 
           if (sizeNew[0] !== newSizeX) {
-            // this.windowState = windowStateCurrent;
+            // this.windowState = windowStateCurrentPosition;
             const newPosXCorrected =
-              windowStateSnapshot[0] +
+              windowStateSnapshotPosition[0] +
               (windowStateSnapshotSize[0] - sizeNew[0]);
             updateMovingWindowPosition(movingWindowState.id, [
               newPosXCorrected,
-              windowStateCurrent[1],
+              windowStateCurrentPosition[1],
             ]);
             updateMovingWindowSize(movingWindowState.id, [
               sizeNew[0],
@@ -305,16 +326,16 @@ function windowActionExecuteFuncResize(
         updateMovingWindowSize(movingWindowState.id, [
           windowStateCurrentSize[0],
           windowStateSnapshotSize[1] +
-            pointerStateCurrent[1] -
-            pointerStateSnapshot[1],
+            pointerStateCurrentPosition[1] -
+            pointerStateSnapshotPosition[1],
         ]);
         break;
       case "e":
         // east edge
         updateMovingWindowSize(movingWindowState.id, [
           windowStateSnapshotSize[0] +
-            pointerStateCurrent[0] -
-            pointerStateSnapshot[0],
+            pointerStateCurrentPosition[0] -
+            pointerStateSnapshotPosition[0],
           windowStateCurrentSize[1],
         ]);
         break;
