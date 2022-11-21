@@ -515,6 +515,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .WindowsManager {
+  position: relative;
   background-color: black;
   height: 100%;
   width: 100%;
