@@ -87,6 +87,18 @@ function handlerWindowActionEnd(e: EventInfoResize | EventInfoMove) {
 }
 
 // other functions
+function updateMovingWindowPosition(
+  movingWindowState: MovingWindowLocalState,
+  position: [number, number]
+) {
+  movingWindowState.position.value = position;
+}
+function updateMovingWindowSize(
+  movingWindowState: MovingWindowLocalState,
+  size: [number, number]
+) {
+  movingWindowState.size.value = size;
+}
 function resetWindowActionState() {
   currentWindowActionState = null;
 }
@@ -111,7 +123,10 @@ function windowActionExecuteFuncMove(
     pointerPositionSnapshot[1];
 
   // set new
-  movingWindowState.position.value = [windowsPosXNew, windowsPosYNew];
+  updateMovingWindowPosition(movingWindowState, [
+    windowsPosXNew,
+    windowsPosYNew,
+  ]);
 }
 function windowActionExecuteFuncResize(
   currentWindowActionState: CurrentWindowActionState,
