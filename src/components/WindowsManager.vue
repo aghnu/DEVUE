@@ -11,6 +11,7 @@ import {
 // types
 interface CurrentWindowActionState {
   windowPositionSnapshot: [number, number];
+  windowSizeSnapshot: [number, number];
   pointerPositionSnapshot: [number, number];
   event: MovingWindowActionEvent;
 }
@@ -20,6 +21,7 @@ interface MovingWindowLocalState {
   order: number;
   position: [number, number];
   size: [number, number];
+  sizeMin: [number, number];
 }
 
 // functions related to window creation, mockup for now
@@ -42,7 +44,9 @@ function createMovingWindowState(): MovingWindowLocalState {
       number,
       number
     ],
+    sizeMin: [100, 100] as [number, number],
   };
+
   return movingWindowState;
 }
 
@@ -86,6 +90,7 @@ function handlerWindowActionStart(e: MovingWindowActionEvent) {
         desktopStates.relativePosYPointer,
       ],
       windowPositionSnapshot: movingWindowState.position,
+      windowSizeSnapshot: movingWindowState.size,
     };
   }
 }
@@ -106,10 +111,12 @@ function updateMovingWindowPosition(
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
     movingWindowState.position = position;
+    return position;
   } else {
     console.error(
       "Error: movingWindow not tracked when updating window position"
     );
+    return null;
   }
 }
 function updateMovingWindowSize(
@@ -119,20 +126,24 @@ function updateMovingWindowSize(
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
     movingWindowState.size = size;
+    return size;
   } else {
     console.error(
       "Error: movingWindow not tracked when updating window position"
     );
+    return null;
   }
 }
 function updateMovingWindowOrder(movingWindowID: string, order: number) {
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
     movingWindowState.order = order;
+    return order;
   } else {
     console.error(
       "Error: movingWindow not tracked when updating window position"
     );
+    return null;
   }
 }
 function windowOrderStackOperationAddNew(movingWindowID: string) {
@@ -202,7 +213,147 @@ function windowActionExecuteFuncMove(
 function windowActionExecuteFuncResize(
   currentWindowActionState: CurrentWindowActionState,
   movingWindowState: MovingWindowLocalState
-) {}
+) {
+  // direction
+
+  const helperFuncResizeToDirection = (
+    direction: MovingWindowResizeDirection
+  ) => {
+    // port code from the old project, may need refactor later
+    const windowStateSnapshot = currentWindowActionState.windowPositionSnapshot;
+    const windowStateSnapshotSize = currentWindowActionState.windowSizeSnapshot;
+    const pointerStateSnapshot =
+      currentWindowActionState.pointerPositionSnapshot;
+
+    const windowStateCurrent = movingWindowState.position;
+    const windowStateCurrentSize = movingWindowState.size;
+    const pointerStateCurrent = desktopStates.relativePositionPointer;
+
+    switch (direction) {
+      case "n":
+        {
+          const newPosY =
+            windowStateSnapshot[1] +
+            pointerStateCurrent[1] -
+            pointerStateSnapshot[1];
+          const positionNew = updateMovingWindowPosition(movingWindowState.id, [
+            windowStateCurrent[0],
+            newPosY,
+          ])!;
+
+          const newSizeY =
+            windowStateSnapshotSize[1] -
+            (positionNew[1] - windowStateSnapshot[1]);
+          const sizeNew = updateMovingWindowSize(movingWindowState.id, [
+            windowStateCurrentSize[0],
+            newSizeY,
+          ])!;
+
+          if (sizeNew[1] !== newSizeY) {
+            // this.windowState = windowStateCurrent;
+            const newPosYCorrected =
+              windowStateSnapshot[1] +
+              (windowStateSnapshotSize[1] - sizeNew[1]);
+            updateMovingWindowPosition(movingWindowState.id, [
+              windowStateCurrent[0],
+              newPosYCorrected,
+            ]);
+            updateMovingWindowSize(movingWindowState.id, [
+              windowStateCurrentSize[0],
+              sizeNew[1],
+            ]);
+          }
+        }
+        break;
+      case "w":
+        {
+          const newPosX =
+            windowStateSnapshot[0] +
+            pointerStateCurrent[0] -
+            pointerStateSnapshot[0];
+          const positionNew = updateMovingWindowPosition(movingWindowState.id, [
+            newPosX,
+            windowStateCurrent[1],
+          ])!;
+
+          const newSizeX =
+            windowStateSnapshotSize[0] -
+            (positionNew[0] - windowStateSnapshot[0]);
+          const sizeNew = updateMovingWindowSize(movingWindowState.id, [
+            newSizeX,
+            windowStateCurrentSize[1],
+          ])!;
+
+          if (sizeNew[0] !== newSizeX) {
+            // this.windowState = windowStateCurrent;
+            const newPosXCorrected =
+              windowStateSnapshot[0] +
+              (windowStateSnapshotSize[0] - sizeNew[0]);
+            updateMovingWindowPosition(movingWindowState.id, [
+              newPosXCorrected,
+              windowStateCurrent[1],
+            ]);
+            updateMovingWindowSize(movingWindowState.id, [
+              sizeNew[0],
+              windowStateCurrentSize[1],
+            ]);
+          }
+        }
+        break;
+      case "s":
+        // south edge
+        updateMovingWindowSize(movingWindowState.id, [
+          windowStateCurrentSize[0],
+          windowStateSnapshotSize[1] +
+            pointerStateCurrent[1] -
+            pointerStateSnapshot[1],
+        ]);
+        break;
+      case "e":
+        // east edge
+        updateMovingWindowSize(movingWindowState.id, [
+          windowStateSnapshotSize[0] +
+            pointerStateCurrent[0] -
+            pointerStateSnapshot[0],
+          windowStateCurrentSize[1],
+        ]);
+        break;
+    }
+  };
+
+  // execute the operation
+  switch (currentWindowActionState.event.direction!) {
+    case "se":
+      helperFuncResizeToDirection("s");
+      helperFuncResizeToDirection("e");
+      break;
+    case "sw":
+      helperFuncResizeToDirection("s");
+      helperFuncResizeToDirection("w");
+      break;
+    case "ne":
+      helperFuncResizeToDirection("n");
+      helperFuncResizeToDirection("e");
+      break;
+    case "nw":
+      helperFuncResizeToDirection("n");
+      helperFuncResizeToDirection("w");
+      break;
+
+    case "n":
+      helperFuncResizeToDirection("n");
+      break;
+    case "w":
+      helperFuncResizeToDirection("w");
+      break;
+    case "s":
+      helperFuncResizeToDirection("s");
+      break;
+    case "e":
+      helperFuncResizeToDirection("e");
+      break;
+  }
+}
 function executeWindowAction() {
   if (currentWindowActionState !== null) {
     const movingWindowState: MovingWindowLocalState | undefined =
@@ -219,6 +370,10 @@ function executeWindowAction() {
           );
           break;
         case "resize":
+          windowActionExecuteFuncResize(
+            currentWindowActionState,
+            movingWindowState
+          );
           break;
       }
     } else {
@@ -254,10 +409,10 @@ function spreadDesktopSizeStateChangeToMovingWindows(
     const newWindowPosY =
       (movingWindowPosition[1] / oldDesktopSize[1]) * newDesktopSize[1];
 
-    const newWindowSizeX =
-      (movingWindowSize[0] / oldDesktopSize[0]) * newDesktopSize[0];
-    const newWindowSizeY =
-      (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
+    // const newWindowSizeX =
+    //   (movingWindowSize[0] / oldDesktopSize[0]) * newDesktopSize[0];
+    // const newWindowSizeY =
+    //   (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
 
     updateMovingWindowPosition(movingWindowState.id, [
       newWindowPosX,
@@ -339,7 +494,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .WindowsManager {
-  background-color: red;
+  background-color: black;
   height: 100%;
   width: 100%;
 }

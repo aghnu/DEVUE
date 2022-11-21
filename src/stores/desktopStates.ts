@@ -1,9 +1,12 @@
 import { defineStore } from "pinia";
 
+export type PointerOperation = 'move' | 'down';
+
 interface DesktopStates {
   positionPointer: [number, number];
   positionWindowsManager: [number, number];
   sizeWindowsManager: [number, number];
+  lastPointerOperationType: PointerOperation;
 }
 
 export const useDesktopStatesStore = defineStore("desktopStates", {
@@ -12,6 +15,7 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
       positionPointer: [0, 0],
       sizeWindowsManager: [0, 0],
       positionWindowsManager: [0, 0],
+      lastPointerOperationType: 'move',
     };
   },
   getters: {
@@ -36,6 +40,10 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
     },
   },
   actions: {
+    updatePointerOperationType(operationType: PointerOperation) {
+      this.lastPointerOperationType = operationType;
+    },
+    
     updatePositionPointer(newPosition: [number, number]) {
       this.positionPointer = newPosition;
     },

@@ -36,33 +36,48 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 const desktopStates = useDesktopStatesStore();
 
 // handlers
-const handlerUpdatePointerPositionMouse = (event: MouseEvent) => {
-  event.preventDefault();
-  desktopStates.updatePositionPointer([event.clientX, event.clientY]);
+const updatePointerPosoition = (position: [number, number]) => {
+  desktopStates.updatePositionPointer(position);
 };
 
-const handlerUpdatePointerPositionTouch = (event: TouchEvent) => {
-  event.preventDefault();
-  desktopStates.updatePositionPointer([
-    event.touches[0].clientX,
-    event.touches[0].clientY,
-  ]);
+const handlerMouseMove = (e: MouseEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("move");
+  updatePointerPosoition([e.clientX, e.clientY]);
+};
+
+const handlerTouchMove = (e: TouchEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("move");
+  updatePointerPosoition([e.touches[0].clientX, e.touches[1].clientY]);
+};
+
+const handlerMouseDown = (e: MouseEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("down");
+  updatePointerPosoition([e.clientX, e.clientY]);
+};
+
+const handlerTouchStart = (e: TouchEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("down");
+  updatePointerPosoition([e.touches[0].clientX, e.touches[1].clientY]);
 };
 
 // life cycle
 onMounted(() => {
   // udpate pointer position state
-  document.addEventListener("mousemove", handlerUpdatePointerPositionMouse);
-  document.addEventListener("mousedown", handlerUpdatePointerPositionMouse);
-  document.addEventListener("touchmove", handlerUpdatePointerPositionTouch);
-  document.addEventListener("touchstart", handlerUpdatePointerPositionTouch);
+  document.addEventListener("mousemove", handlerMouseMove);
+  document.addEventListener("mousedown", handlerMouseDown);
+  document.addEventListener("touchmove", handlerTouchMove);
+  document.addEventListener("touchstart", handlerTouchStart);
 });
 
 onUnmounted(() => {
   // clean up pointer listeners
-  document.removeEventListener("mousemove", handlerUpdatePointerPositionMouse);
-  document.removeEventListener("mousedown", handlerUpdatePointerPositionMouse);
-  document.removeEventListener("touchmove", handlerUpdatePointerPositionTouch);
-  document.removeEventListener("touchstart", handlerUpdatePointerPositionTouch);
+  document.removeEventListener("mousemove", handlerMouseMove);
+  document.removeEventListener("mousedown", handlerMouseDown);
+  document.removeEventListener("touchmove", handlerTouchMove);
+  document.removeEventListener("touchstart", handlerTouchStart);
 });
 </script>
