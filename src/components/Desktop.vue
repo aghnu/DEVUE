@@ -13,16 +13,18 @@
 .Desktop {
   height: 100%;
   width: 100%;
-  display: flex;
+  display: block;
   flex-direction: column;
 
+  --action-bar-height: 5rem;
+
   &__windows {
-    height: 100%;
+    height: calc(100% - var(--action-bar-height));
     padding: 0.5rem;
   }
 
   &__action_bar {
-    height: 5rem;
+    height: var(--action-bar-height);
   }
 }
 </style>
@@ -66,7 +68,7 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 // life cycle
 onMounted(() => {
-  // udpate pointer position state
+  // update pointer position state
   document.addEventListener("mousemove", handlerMouseMove);
   document.addEventListener("mousedown", handlerMouseDown);
   document.addEventListener("touchmove", handlerTouchMove);

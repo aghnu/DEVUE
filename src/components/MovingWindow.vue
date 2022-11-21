@@ -326,7 +326,7 @@ const styleWindowZIndex = computed(() => String(props.order));
 <style scoped lang="scss">
 .MovingWindow {
   position: absolute;
-  display: flex;
+  display: block;
   flex-direction: column;
 
   height: v-bind(styleWindowSizeHeight);
@@ -338,13 +338,15 @@ const styleWindowZIndex = computed(() => String(props.order));
 
   background-color: aqua;
 
+  --title-height: 1.75rem;
+
   &__title_bar {
-    height: 1.75rem;
+    height: var(--title-height);
     background-color: yellow;
   }
 
   &__content {
-    height: 100%;
+    height: calc(100% - var(--title-height));
     background-color: purple;
   }
 
