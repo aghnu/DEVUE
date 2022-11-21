@@ -13,14 +13,16 @@
 .Desktop {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 
   &__windows {
-    height: 80%;
+    height: 100%;
     padding: 0.5rem;
   }
 
   &__action_bar {
-    height: 20%;
+    height: 5rem;
   }
 }
 </style>
@@ -37,24 +39,26 @@ const desktopStates = useDesktopStatesStore();
 const handlerUpdatePointerPositionMouse = (event: MouseEvent) => {
   event.preventDefault();
   desktopStates.updatePositionPointer([event.clientX, event.clientY]);
-}
+};
 
 const handlerUpdatePointerPositionTouch = (event: TouchEvent) => {
   event.preventDefault();
-  desktopStates.updatePositionPointer([event.touches[0].clientX, event.touches[0].clientY]);
-}
+  desktopStates.updatePositionPointer([
+    event.touches[0].clientX,
+    event.touches[0].clientY,
+  ]);
+};
 
 // life cycle
 onMounted(() => {
   // udpate pointer position state
-  document.addEventListener('mousemove', handlerUpdatePointerPositionMouse);
-  document.addEventListener('touchmove', handlerUpdatePointerPositionTouch);
+  document.addEventListener("mousemove", handlerUpdatePointerPositionMouse);
+  document.addEventListener("touchmove", handlerUpdatePointerPositionTouch);
 });
 
 onUnmounted(() => {
   // clean up pointer listeners
-  document.removeEventListener('mousemove', handlerUpdatePointerPositionMouse);
-  document.removeEventListener('touchmove', handlerUpdatePointerPositionTouch);
-})
-
+  document.removeEventListener("mousemove", handlerUpdatePointerPositionMouse);
+  document.removeEventListener("touchmove", handlerUpdatePointerPositionTouch);
+});
 </script>
