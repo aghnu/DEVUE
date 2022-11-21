@@ -160,17 +160,52 @@ function executeWindowAction() {
     }
   }
 }
+function spreadDesktopSizeStateChangeToMovingWindows(
+  newDesktopSize: [number, number],
+  oldDesktopSize: [number, number]
+) {
+  const changeIndividualMovingWindowState = (
+    movingWindowState: MovingWindowLocalState
+  ) => {
+    const movingWindowPosition = movingWindowState.position.value;
+    const movingWindowSize = movingWindowState.size.value;
 
-// reactive watch
-watch(
-  () => desktopStates.relativePositionPointer,
-  () => {
-    executeWindowAction();
-  }
-);
+    const newWindowPosX =
+      movingWindowPosition[0] >= 0
+        ? (movingWindowPosition[0] / oldDesktopSize[0]) * newDesktopSize[0]
+        : (() => {
+            // special case left is out of desktop's left edge
+            // make the change reverse
+            const posXDiff =
+              (movingWindowPosition[0] / oldDesktopSize[0]) *
+                newDesktopSize[0] -
+              movingWindowPosition[0];
+            return movingWindowPosition[0] - posXDiff;
+          })();
+    const newWindowPosY =
+      (movingWindowPosition[1] / oldDesktopSize[1]) * newDesktopSize[1];
+
+    const newWindowSizeX =
+      (movingWindowSize[0] / oldDesktopSize[0]) * newDesktopSize[0];
+    const newWindowSizeY =
+      (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
+
+    updateMovingWindowPosition(movingWindowState, [
+      newWindowPosX,
+      newWindowPosY,
+    ]);
+  };
+
+  movingWindows.forEach((movingWindowState, id) => {
+    new Promise(() => {
+      changeIndividualMovingWindowState(movingWindowState);
+    });
+  });
+}
 
 // life cycle
 onMounted(() => {
+  // init
   handlerWindowResizeUpdateWindowsManagerState();
   window.addEventListener(
     "resize",
@@ -179,6 +214,22 @@ onMounted(() => {
   window.addEventListener("blur", resetWindowActionState);
   document.addEventListener("touchend", resetWindowActionState);
   document.addEventListener("mouseup", resetWindowActionState);
+
+  // reactive watch
+  // watch pointer state update
+  watch(
+    () => desktopStates.relativePositionPointer,
+    () => {
+      executeWindowAction();
+    }
+  );
+  // watch desktop window manager state update
+  watch(
+    () => desktopStates.sizeWindowsManager,
+    (newSize, oldSize) => {
+      spreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
+    }
+  );
 });
 
 onUnmounted(() => {
