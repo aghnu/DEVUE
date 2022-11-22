@@ -96,7 +96,6 @@ function initMovingWindowState(
   };
 
   if (topWindow !== null) {
-    console.log("COOL");
     // calculate size and pos from top window
     const initPosX =
       topWindow.position[0] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[0];
@@ -168,7 +167,6 @@ function initMovingWindowState(
       }
     }
   } else {
-    console.log("ok");
     generateInitSize();
     generateInitPos();
   }
