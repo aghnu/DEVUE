@@ -28,44 +28,173 @@ interface MovingWindowLocalState {
 const WINDOW_CONFIG = {
   MIN_WINDOW_VISIABLE_BOARDER: 50, // minial visual parts of a moving window within window manager
   DEFAULT_SIZE_MIN_WINDOW: [125, 200] as [number, number],
+  WIN_INIT_SIZE_PERC: [0.75, 0.75] as [number, number],
+  WIN_INIT_SIZE_RATIO: (16 / 9) as number,
+  WIN_INIT_STACK_POSITION_OFFSET: [20, 35] as [number, number],
 } as const;
 
 // functions related to window creation, mockup for now
 const movingWindows: Ref<Map<string, MovingWindowLocalState>> = ref(new Map());
 const movingWindowsOrderStack: Ref<string[]> = ref([]); // when changing order, make sure its atomic, change will trigger a watch
 
+// variables
+const desktopStates = useDesktopStatesStore();
+const windowsManagerElement = ref<HTMLDivElement>();
+let currentWindowActionState: CurrentWindowActionState | null = null;
+
+function initMovingWindowState(
+  movingWindowStateDetached: MovingWindowLocalState
+) {
+  const topWindow: MovingWindowLocalState | null =
+    movingWindowsOrderStack.value.length !== 0
+      ? movingWindows.value.get(
+          movingWindowsOrderStack.value[
+            movingWindowsOrderStack.value.length - 1
+          ]
+        )!
+      : null;
+  const areaSize = desktopStates.sizeWindowsManager;
+
+  const helperCheckMovingWindowInsideDesktop = () => {
+    if (
+      movingWindowStateDetached.position[1] < 0 ||
+      movingWindowStateDetached.position[0] < 0 ||
+      movingWindowStateDetached.position[1] +
+        movingWindowStateDetached.size[1] >
+        areaSize[1] ||
+      movingWindowStateDetached.position[0] +
+        movingWindowStateDetached.size[0] >
+        areaSize[0]
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const generateInitSize = () => {
+    const initSizeY = WINDOW_CONFIG.WIN_INIT_SIZE_PERC[1] * areaSize[1];
+    const initSizeX = Math.min(
+      WINDOW_CONFIG.WIN_INIT_SIZE_PERC[0] * areaSize[0],
+      WINDOW_CONFIG.WIN_INIT_SIZE_RATIO * initSizeY
+    );
+
+    movingWindowStateDetached.size = calculateWindowSize(
+      movingWindowStateDetached,
+      [initSizeX, initSizeY]
+    );
+  };
+
+  const generateInitPos = () => {
+    const initPosX = (areaSize[0] - movingWindowStateDetached.size[0]) / 2;
+    const initPosY = (areaSize[1] - movingWindowStateDetached.size[1]) / 3;
+
+    movingWindowStateDetached.position = calculateWindowPosition(
+      movingWindowStateDetached,
+      [initPosX, initPosY]
+    );
+  };
+
+  if (topWindow !== null) {
+    console.log("COOL");
+    // calculate size and pos from top window
+    const initPosX =
+      topWindow.position[0] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[0];
+    const initPosY =
+      topWindow.position[1] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[1];
+    const initSizeX = topWindow.size[0];
+    const initSizeY = topWindow.size[1];
+
+    // set size and pos
+    movingWindowStateDetached.size = calculateWindowSize(
+      movingWindowStateDetached,
+      [initSizeX, initSizeY]
+    );
+    movingWindowStateDetached.position = calculateWindowPosition(
+      movingWindowStateDetached,
+      [initPosX, initPosY]
+    );
+
+    if (helperCheckMovingWindowInsideDesktop() === false) {
+      // calculate size and pos from top window
+      const initPosX =
+        topWindow.position[0] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[0];
+      const initPosY = topWindow.position[1];
+
+      // set size and pos
+      movingWindowStateDetached.size = calculateWindowSize(
+        movingWindowStateDetached,
+        [initSizeX, initSizeY]
+      );
+      movingWindowStateDetached.position = calculateWindowPosition(
+        movingWindowStateDetached,
+        [initPosX, initPosY]
+      );
+
+      if (helperCheckMovingWindowInsideDesktop() === false) {
+        // calculate size and pos from top window
+        const initPosX = topWindow.position[0];
+        const initPosY =
+          topWindow.position[1] +
+          WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[1];
+
+        // set size and pos
+        movingWindowStateDetached.size = calculateWindowSize(
+          movingWindowStateDetached,
+          [initSizeX, initSizeY]
+        );
+        movingWindowStateDetached.position = calculateWindowPosition(
+          movingWindowStateDetached,
+          [initPosX, initPosY]
+        );
+
+        // try if valid init position
+        if (helperCheckMovingWindowInsideDesktop() === false) {
+          // not valid
+          // try to keep size and retry
+          generateInitPos();
+
+          // same position with old top window or size not valid
+          if (
+            (topWindow.position[0] === movingWindowStateDetached.position[0] &&
+              topWindow.position[1] ===
+                movingWindowStateDetached.position[1]) ||
+            helperCheckMovingWindowInsideDesktop() === false
+          ) {
+            generateInitSize();
+            generateInitPos();
+          }
+        }
+      }
+    }
+  } else {
+    console.log("ok");
+    generateInitSize();
+    generateInitPos();
+  }
+
+  return movingWindowStateDetached;
+}
+
 function trackMovingWindowState(movingWindowState: MovingWindowLocalState) {
   // add moving window state to windowsManager and make respective updates
   movingWindows.value.set(movingWindowState.id, movingWindowState);
   windowOrderStackOperationAddNew(movingWindowState.id);
 }
-function createMovingWindowState(
-  position: [number, number],
-  size: [number, number]
-): MovingWindowLocalState {
+function createMovingWindowState(): MovingWindowLocalState {
   // mockup for now
   var orderCount = 0;
-  const movingWindowState = {
+  const movingWindowState: MovingWindowLocalState = {
     id: uuid(),
     order: orderCount++,
-    position: position,
-    size: size,
+    position: [0, 0],
+    size: [0, 0],
     sizeMin: null,
     sizeMax: null,
   };
 
-  return movingWindowState;
+  return initMovingWindowState(movingWindowState);
 }
-
-// MOCKUP, REMOVE LATER
-trackMovingWindowState(createMovingWindowState([150, 120], [300, 250]));
-trackMovingWindowState(createMovingWindowState([165, 155], [300, 250]));
-trackMovingWindowState(createMovingWindowState([180, 190], [300, 250]));
-
-// variables
-const desktopStates = useDesktopStatesStore();
-const windowsManagerElement = ref<HTMLDivElement>();
-let currentWindowActionState: CurrentWindowActionState | null = null;
 
 // handlers
 function handlerWindowResizeUpdateWindowsManagerState() {
@@ -111,28 +240,65 @@ function handlerWindowActionEnd(e: MovingWindowActionEvent) {
 }
 
 // other functions
+function calculateWindowPosition(
+  movingWindowState: MovingWindowLocalState,
+  position: [number, number]
+) {
+  // porting the original logic here. change later?
+  const desktopSize = desktopStates.sizeWindowsManager;
+  const movingWindowSize = movingWindowState.size;
+
+  const maxX = desktopSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
+  const maxY = desktopSize[1] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
+
+  const minX =
+    0 - (movingWindowSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER);
+  const minY = 0;
+
+  const newPosX = Math.min(Math.max(position[0], minX), maxX);
+  const newPosY = Math.min(Math.max(position[1], minY), maxY);
+
+  return [newPosX, newPosY] as [number, number];
+}
+
+function calculateWindowSize(
+  movingWindowState: MovingWindowLocalState,
+  size: [number, number]
+) {
+  // porting the original logic here. change later?
+  const windowStateCurrentSizeMin =
+    movingWindowState.sizeMin !== null
+      ? movingWindowState.sizeMin
+      : WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW;
+  const windowStateCurrentSizeMax = movingWindowState.sizeMax;
+
+  const newSizeX =
+    windowStateCurrentSizeMax !== null
+      ? Math.min(
+          Math.max(size[0], windowStateCurrentSizeMin[0]),
+          windowStateCurrentSizeMax[0]
+        )
+      : Math.max(size[0], windowStateCurrentSizeMin[0]);
+
+  const newSizeY =
+    windowStateCurrentSizeMax !== null
+      ? Math.min(
+          Math.max(size[1], windowStateCurrentSizeMin[1]),
+          windowStateCurrentSizeMax[1]
+        )
+      : Math.max(size[1], windowStateCurrentSizeMin[1]);
+
+  return [newSizeX, newSizeY] as [number, number];
+}
+
 function updateMovingWindowPosition(
   movingWindowID: string,
   position: [number, number]
 ) {
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
-    // porting the logic from original project, change later?
-    const desktopSize = desktopStates.sizeWindowsManager;
-    const movingWindowSize = movingWindowState.size;
-
-    const maxX = desktopSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
-    const maxY = desktopSize[1] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER;
-
-    const minX =
-      0 - (movingWindowSize[0] - WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER);
-    const minY = 0;
-
-    const newPosX = Math.min(Math.max(position[0], minX), maxX);
-    const newPosY = Math.min(Math.max(position[1], minY), maxY);
-
     // update position
-    const newPosition = [newPosX, newPosY] as [number, number];
+    const newPosition = calculateWindowPosition(movingWindowState, position);
     movingWindowState.position = newPosition;
     return position;
   } else {
@@ -148,30 +314,7 @@ function updateMovingWindowSize(
 ) {
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
-    // porting the original logic here. change later?
-    const windowStateCurrentSizeMin =
-      movingWindowState.sizeMin !== null
-        ? movingWindowState.sizeMin
-        : WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW;
-    const windowStateCurrentSizeMax = movingWindowState.sizeMax;
-
-    const newSizeX =
-      windowStateCurrentSizeMax !== null
-        ? Math.min(
-            Math.max(size[0], windowStateCurrentSizeMin[0]),
-            windowStateCurrentSizeMax[0]
-          )
-        : Math.max(size[0], windowStateCurrentSizeMin[0]);
-
-    const newSizeY =
-      windowStateCurrentSizeMax !== null
-        ? Math.min(
-            Math.max(size[1], windowStateCurrentSizeMin[1]),
-            windowStateCurrentSizeMax[1]
-          )
-        : Math.max(size[1], windowStateCurrentSizeMin[1]);
-
-    const newSize = [newSizeX, newSizeY] as [number, number];
+    const newSize = calculateWindowSize(movingWindowState, size);
     movingWindowState.size = newSize;
     return newSize;
   } else {
@@ -227,7 +370,6 @@ function windowOrderStackOperationMoveToTop(movingWindowID: string) {
     movingWindowsOrderStack.value = newMovingWindowOrderStack;
   }
 }
-
 function resetWindowActionState() {
   currentWindowActionState = null;
 }
@@ -510,6 +652,13 @@ onMounted(() => {
       updateMovingWindowOrder(movingWindowStateID, i);
     }
   });
+
+  // init done, window creation
+
+  // MOCKUP, REMOVE LATER
+  trackMovingWindowState(createMovingWindowState());
+  trackMovingWindowState(createMovingWindowState());
+  trackMovingWindowState(createMovingWindowState());
 });
 
 onUnmounted(() => {
