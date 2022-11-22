@@ -11,16 +11,18 @@
 
 <style scoped lang="scss">
 .Desktop {
+  --action-bar-height: 5rem;
+
   height: 100%;
   width: 100%;
   display: block;
   flex-direction: column;
 
-  --action-bar-height: 5rem;
+  background-color: #222222;
 
   &__windows {
     height: calc(100% - var(--action-bar-height));
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
   &__action_bar {

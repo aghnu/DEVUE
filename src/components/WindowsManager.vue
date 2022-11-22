@@ -532,10 +532,8 @@ onUnmounted(() => {
       :position="mvState.position"
       :size="mvState.size"
       :order="mvState.order"
-      @moving-window-move-start="handlerWindowActionStart"
-      @moving-window-move-end="handlerWindowActionEnd"
-      @moving-window-resize-start="handlerWindowActionStart"
-      @moving-window-resize-end="handlerWindowActionEnd"
+      @moving-window-action-event-start="handlerWindowActionStart"
+      @moving-window-action-event-end="handlerWindowActionEnd"
     />
   </div>
 </template>
@@ -543,8 +541,26 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .WindowsManager {
   position: relative;
-  background-color: black;
+  overflow: hidden;
   height: 100%;
   width: 100%;
+
+  border-radius: 0.75rem;
+  box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
+  background-image: linear-gradient(
+    to left top,
+    #d16ba5,
+    #c777b9,
+    #ba83ca,
+    #aa8fd8,
+    #9a9ae1,
+    #84a7ef,
+    #68b5f7,
+    #49c1fb,
+    #00d3fc,
+    #00e3f1,
+    #00f0db,
+    #5ffbbe
+  );
 }
 </style>

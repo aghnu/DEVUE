@@ -17,7 +17,7 @@ export type MovingWindowResizeDirection =
 
 export interface MovingWindowActionEvent {
   id: string;
-  type: "resize" | "move";
+  type: "resize" | "move" | "focus";
   direction?: MovingWindowResizeDirection;
 }
 
@@ -34,10 +34,8 @@ const props = defineProps<{
 
 // define events
 const emits = defineEmits<{
-  (e: "movingWindowResizeStart", eventInfo: MovingWindowActionEvent): void;
-  (e: "movingWindowResizeEnd", eventInfo: MovingWindowActionEvent): void;
-  (e: "movingWindowMoveStart", eventInfo: MovingWindowActionEvent): void;
-  (e: "movingWindowMoveEnd", eventInfo: MovingWindowActionEvent): void;
+  (e: "movingWindowActionEventStart", eventInfo: MovingWindowActionEvent): void;
+  (e: "movingWindowActionEventEnd", eventInfo: MovingWindowActionEvent): void;
 }>();
 
 // compute styling string
@@ -70,58 +68,88 @@ const handlerTouchStart = (e: TouchEvent) => {
   <div class="MovingWindow">
     <div
       class="MovingWindow__title_bar"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowMoveStart', { id: props.id, type: 'move' });
+          emits('movingWindowActionEventStart', { id: props.id, type: 'move' });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowMoveStart', { id: props.id, type: 'move' });
+          emits('movingWindowActionEventStart', { id: props.id, type: 'move' });
         }
       "
-      @mouseup="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
-      @touchend="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
+      "
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
+      "
     >
       <MovingWindowTitleBar />
     </div>
-    <div class="MovingWindow__content">
+    <div
+      class="MovingWindow__content"
+      @mousedown.stop="
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowActionEventStart', {
+            id: props.id,
+            type: 'focus',
+          });
+        }
+      "
+      @touchstart.stop="
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowActionEventStart', {
+            id: props.id,
+            type: 'focus',
+          });
+        }
+      "
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
+      "
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
+      "
+    >
       <MovingWindowContent />
     </div>
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-se"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'se',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'se',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'se',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'se',
           type: 'resize',
@@ -131,35 +159,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-sw"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'sw',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'sw',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'sw',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'sw',
           type: 'resize',
@@ -169,35 +197,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-ne"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'ne',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'ne',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'ne',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'ne',
           type: 'resize',
@@ -207,35 +235,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-nw"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'nw',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'nw',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'nw',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'nw',
           type: 'resize',
@@ -245,35 +273,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-n"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'n',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'n',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'n',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'n',
           type: 'resize',
@@ -283,35 +311,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-w"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'w',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'w',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'w',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'w',
           type: 'resize',
@@ -321,35 +349,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-s"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 's',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 's',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 's',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 's',
           type: 'resize',
@@ -359,35 +387,35 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-e"
-      @mousedown="
+      @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'e',
             type: 'resize',
           });
         }
       "
-      @touchstart="
+      @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowResizeStart', {
+          emits('movingWindowActionEventStart', {
             id: props.id,
             direction: 'e',
             type: 'resize',
           });
         }
       "
-      @mouseup="
-        emits('movingWindowResizeEnd', {
+      @mouseup.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'e',
           type: 'resize',
         })
       "
-      @touchend="
-        emits('movingWindowResizeEnd', {
+      @touchend.stop="
+        emits('movingWindowActionEventEnd', {
           id: props.id,
           direction: 'e',
           type: 'resize',
@@ -399,6 +427,8 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 <style scoped lang="scss">
 .MovingWindow {
+  --title-height: 1.75rem;
+
   position: absolute;
   display: block;
   flex-direction: column;
@@ -410,23 +440,23 @@ const handlerTouchStart = (e: TouchEvent) => {
 
   z-index: v-bind(styleWindowZIndex);
 
-  background-color: aqua;
-
-  --title-height: 1.75rem;
+  border-radius: 0.55rem;
+  box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
+  background-color: #282828;
+  border: solid;
+  border-width: 2px;
+  border-color: #3c3a40;
 
   &__title_bar {
     height: var(--title-height);
-    background-color: yellow;
   }
 
   &__content {
     height: calc(100% - var(--title-height));
-    background-color: purple;
   }
 
   &__panel_resize {
     position: absolute;
-    background-color: green;
 
     &--direction {
       @mixin MovingWindow__panel_resize--corner {
