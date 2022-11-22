@@ -30,6 +30,7 @@ const props = defineProps<{
   order: number;
   position: [number, number];
   size: [number, number];
+  focused: boolean;
 }>();
 
 // define events
@@ -66,7 +67,10 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 <template>
   <div class="MovingWindow">
-    <div class="MovingWindow__window_display">
+    <div
+      class="MovingWindow__window_display"
+      :class="{ 'MovingWindow__window_display--focused': props.focused }"
+    >
       <div
         class="MovingWindow__window_display__title_bar"
         @mousedown.stop="
@@ -94,7 +98,7 @@ const handlerTouchStart = (e: TouchEvent) => {
           emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
         "
       >
-        <MovingWindowTitleBar />
+        <MovingWindowTitleBar :focused="props.focused" />
       </div>
       <div
         class="MovingWindow__window_display__content"
@@ -435,7 +439,7 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 2rem;
+  --title-height: 2.5rem;
 
   position: absolute;
 
@@ -452,12 +456,18 @@ const handlerTouchStart = (e: TouchEvent) => {
 
     overflow: hidden;
 
-    border-radius: 0.55rem;
+    border-radius: 0.6rem;
     box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
     background-color: #282828;
     border: solid;
     border-width: 2px;
     border-color: #3c3a40;
+
+    &--focused {
+      background-color: red;
+      box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
+      background-color: #202020;
+    }
 
     &__title_bar {
       height: var(--title-height);

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ref, Ref, onMounted, onUnmounted, watch, readonly } from "vue";
+import {
+  ref,
+  Ref,
+  onMounted,
+  onUnmounted,
+  watch,
+  readonly,
+  compile,
+} from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { v4 as uuid } from "uuid";
 import MovingWindow from "./MovingWindow.vue";
@@ -7,6 +15,7 @@ import {
   MovingWindowResizeDirection,
   MovingWindowActionEvent,
 } from "./MovingWindow.vue";
+import { computed } from "@vue/reactivity";
 
 // types
 interface CurrentWindowActionState {
@@ -36,6 +45,15 @@ const WINDOW_CONFIG = {
 // functions related to window creation, mockup for now
 const movingWindows: Ref<Map<string, MovingWindowLocalState>> = ref(new Map());
 const movingWindowsOrderStack: Ref<string[]> = ref([]); // when changing order, make sure its atomic, change will trigger a watch
+const topMovingWindowStateID = computed(() => {
+  if (movingWindowsOrderStack.value.length === 0) {
+    return null;
+  } else {
+    return movingWindowsOrderStack.value[
+      movingWindowsOrderStack.value.length - 1
+    ];
+  }
+});
 
 // variables
 const desktopStates = useDesktopStatesStore();
@@ -335,10 +353,10 @@ function updateMovingWindowOrder(movingWindowID: string, order: number) {
   }
 }
 function windowOrderStackOperationAddNew(movingWindowID: string) {
-  const movingWindowState = movingWindows.value.get(movingWindowID);
-  if (movingWindowState !== undefined) {
-    movingWindowsOrderStack.value.push(movingWindowState.id);
-  }
+  movingWindowsOrderStack.value = [
+    ...movingWindowsOrderStack.value,
+    movingWindowID,
+  ];
 }
 function windowOrderStackOperationMoveToTop(movingWindowID: string) {
   // check if already on top
@@ -679,6 +697,9 @@ onUnmounted(() => {
       :position="mvState.position"
       :size="mvState.size"
       :order="mvState.order"
+      :focused="
+        topMovingWindowStateID !== null && mvState.id === topMovingWindowStateID
+      "
       @moving-window-action-event-start="handlerWindowActionStart"
       @moving-window-action-event-end="handlerWindowActionEnd"
     />
