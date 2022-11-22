@@ -38,32 +38,34 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 const desktopStates = useDesktopStatesStore();
 
 // handlers
-const updatePointerPosoition = (position: [number, number]) => {
-  desktopStates.updatePositionPointer(position);
-};
-
 const handlerMouseMove = (e: MouseEvent) => {
   e.preventDefault();
   desktopStates.updatePointerOperationType("move");
-  updatePointerPosoition([e.clientX, e.clientY]);
+  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
 };
 
 const handlerTouchMove = (e: TouchEvent) => {
   e.preventDefault();
   desktopStates.updatePointerOperationType("move");
-  updatePointerPosoition([e.touches[0].clientX, e.touches[1].clientY]);
+  desktopStates.updatePositionPointer([
+    e.touches[0].clientX,
+    e.touches[0].clientY,
+  ]);
 };
 
 const handlerMouseDown = (e: MouseEvent) => {
   e.preventDefault();
   desktopStates.updatePointerOperationType("down");
-  updatePointerPosoition([e.clientX, e.clientY]);
+  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
 };
 
 const handlerTouchStart = (e: TouchEvent) => {
   e.preventDefault();
   desktopStates.updatePointerOperationType("down");
-  updatePointerPosoition([e.touches[0].clientX, e.touches[1].clientY]);
+  desktopStates.updatePositionPointer([
+    e.touches[0].clientX,
+    e.touches[0].clientY,
+  ]);
 };
 
 // life cycle
@@ -71,8 +73,10 @@ onMounted(() => {
   // update pointer position state
   document.addEventListener("mousemove", handlerMouseMove);
   document.addEventListener("mousedown", handlerMouseDown);
-  document.addEventListener("touchmove", handlerTouchMove);
-  document.addEventListener("touchstart", handlerTouchStart);
+  document.addEventListener("touchmove", handlerTouchMove, { passive: false });
+  document.addEventListener("touchstart", handlerTouchStart, {
+    passive: false,
+  });
 });
 
 onUnmounted(() => {

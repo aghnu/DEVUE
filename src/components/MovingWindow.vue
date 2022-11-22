@@ -2,6 +2,7 @@
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { computed } from "@vue/reactivity";
+import { useDesktopStatesStore } from "../stores/desktopStates";
 
 // type
 export type MovingWindowResizeDirection =
@@ -19,6 +20,9 @@ export interface MovingWindowActionEvent {
   type: "resize" | "move";
   direction?: MovingWindowResizeDirection;
 }
+
+// store
+const desktopStates = useDesktopStatesStore();
 
 // define props
 const props = defineProps<{
@@ -44,6 +48,22 @@ const styleWindowPositionTop = computed(() => String(props.position[1]) + "px");
 const styleWindowSizeWidth = computed(() => String(props.size[0]) + "px");
 const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
 const styleWindowZIndex = computed(() => String(props.order));
+
+// handler
+const handlerMouseDown = (e: MouseEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("down");
+  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
+};
+
+const handlerTouchStart = (e: TouchEvent) => {
+  e.preventDefault();
+  desktopStates.updatePointerOperationType("down");
+  desktopStates.updatePositionPointer([
+    e.touches[0].clientX,
+    e.touches[0].clientY,
+  ]);
+};
 </script>
 
 <template>
@@ -51,10 +71,16 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__title_bar"
       @mousedown="
-        emits('movingWindowMoveStart', { id: props.id, type: 'move' })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowMoveStart', { id: props.id, type: 'move' });
+        }
       "
       @touchstart="
-        emits('movingWindowMoveStart', { id: props.id, type: 'move' })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowMoveStart', { id: props.id, type: 'move' });
+        }
       "
       @mouseup="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
       @touchend="emits('movingWindowMoveEnd', { id: props.id, type: 'move' })"
@@ -68,18 +94,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-se"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'se',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'se',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'se',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'se',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -100,18 +132,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-sw"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'sw',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'sw',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'sw',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'sw',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -132,18 +170,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-ne"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'ne',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'ne',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'ne',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'ne',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -164,18 +208,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-nw"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'nw',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'nw',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'nw',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'nw',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -196,18 +246,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-n"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'n',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'n',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'n',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'n',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -228,18 +284,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-w"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'w',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'w',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'w',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'w',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -260,18 +322,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-s"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 's',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 's',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 's',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 's',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
@@ -292,18 +360,24 @@ const styleWindowZIndex = computed(() => String(props.order));
     <div
       class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-e"
       @mousedown="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'e',
-          type: 'resize',
-        })
+        (e) => {
+          handlerMouseDown(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'e',
+            type: 'resize',
+          });
+        }
       "
       @touchstart="
-        emits('movingWindowResizeStart', {
-          id: props.id,
-          direction: 'e',
-          type: 'resize',
-        })
+        (e) => {
+          handlerTouchStart(e);
+          emits('movingWindowResizeStart', {
+            id: props.id,
+            direction: 'e',
+            type: 'resize',
+          });
+        }
       "
       @mouseup="
         emits('movingWindowResizeEnd', {
