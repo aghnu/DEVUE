@@ -27,7 +27,7 @@ interface MovingWindowLocalState {
 
 const WINDOW_CONFIG = {
   MIN_WINDOW_VISIABLE_BOARDER: 50, // minial visual parts of a moving window within window manager
-  DEFAULT_SIZE_MIN_WINDOW: [125, 275] as [number, number],
+  DEFAULT_SIZE_MIN_WINDOW: [125, 200] as [number, number],
 } as const;
 
 // functions related to window creation, mockup for now
@@ -39,17 +39,17 @@ function trackMovingWindowState(movingWindowState: MovingWindowLocalState) {
   movingWindows.value.set(movingWindowState.id, movingWindowState);
   windowOrderStackOperationAddNew(movingWindowState.id);
 }
-function createMovingWindowState(): MovingWindowLocalState {
+function createMovingWindowState(
+  position: [number, number],
+  size: [number, number]
+): MovingWindowLocalState {
   // mockup for now
   var orderCount = 0;
   const movingWindowState = {
     id: uuid(),
     order: orderCount++,
-    position: [Math.random() * 500, Math.random() * 500] as [number, number],
-    size: [Math.random() * 300 + 100, Math.random() * 300 + 100] as [
-      number,
-      number
-    ],
+    position: position,
+    size: size,
     sizeMin: null,
     sizeMax: null,
   };
@@ -58,9 +58,9 @@ function createMovingWindowState(): MovingWindowLocalState {
 }
 
 // MOCKUP, REMOVE LATER
-trackMovingWindowState(createMovingWindowState());
-trackMovingWindowState(createMovingWindowState());
-trackMovingWindowState(createMovingWindowState());
+trackMovingWindowState(createMovingWindowState([150, 120], [300, 250]));
+trackMovingWindowState(createMovingWindowState([165, 155], [300, 250]));
+trackMovingWindowState(createMovingWindowState([180, 190], [300, 250]));
 
 // variables
 const desktopStates = useDesktopStatesStore();
