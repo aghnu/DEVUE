@@ -1,5 +1,33 @@
-<template></template>
+<template>
+  <div class="MovingWindowTitleBar">
+    <div class="MovingWindowTitleBar__control_section">
+      <MovingWindowTitleBarControlButton />
+    </div>
+  </div>
+</template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.MovingWindowTitleBar {
+  --MovingWindowTitleBar__control_section--gap: 0.65rem;
 
-<script setup lang="ts"></script>
+  height: 100%;
+  width: 100%;
+
+  &__control_section {
+    height: 100%;
+    width: fit-content;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--MovingWindowTitleBar__control_section--gap);
+    padding-left: var(--MovingWindowTitleBar__control_section--gap);
+    padding-right: var(--MovingWindowTitleBar__control_section--gap);
+  }
+}
+</style>
+
+<script setup lang="ts">
+import MovingWindowTitleBarControlButton from "./MovingWindowTitleBarControlButton.vue";
+</script>

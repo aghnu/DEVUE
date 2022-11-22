@@ -66,57 +66,65 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 <template>
   <div class="MovingWindow">
-    <div
-      class="MovingWindow__title_bar"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          emits('movingWindowActionEventStart', { id: props.id, type: 'move' });
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          emits('movingWindowActionEventStart', { id: props.id, type: 'move' });
-        }
-      "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
-      "
-    >
-      <MovingWindowTitleBar />
-    </div>
-    <div
-      class="MovingWindow__content"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            type: 'focus',
-          });
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            type: 'focus',
-          });
-        }
-      "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
-      "
-    >
-      <MovingWindowContent />
+    <div class="MovingWindow__window_display">
+      <div
+        class="MovingWindow__window_display__title_bar"
+        @mousedown.stop="
+          (e) => {
+            handlerMouseDown(e);
+            emits('movingWindowActionEventStart', {
+              id: props.id,
+              type: 'move',
+            });
+          }
+        "
+        @touchstart.stop="
+          (e) => {
+            handlerTouchStart(e);
+            emits('movingWindowActionEventStart', {
+              id: props.id,
+              type: 'move',
+            });
+          }
+        "
+        @mouseup.stop="
+          emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
+        "
+        @touchend.stop="
+          emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
+        "
+      >
+        <MovingWindowTitleBar />
+      </div>
+      <div
+        class="MovingWindow__window_display__content"
+        @mousedown.stop="
+          (e) => {
+            handlerMouseDown(e);
+            emits('movingWindowActionEventStart', {
+              id: props.id,
+              type: 'focus',
+            });
+          }
+        "
+        @touchstart.stop="
+          (e) => {
+            handlerTouchStart(e);
+            emits('movingWindowActionEventStart', {
+              id: props.id,
+              type: 'focus',
+            });
+          }
+        "
+        @mouseup.stop="
+          emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
+        "
+        @touchend.stop="
+          emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
+        "
+      >
+        <MovingWindowContent />
+      </div>
     </div>
 
     <div
@@ -427,11 +435,9 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 1.75rem;
+  --title-height: 2rem;
 
   position: absolute;
-  display: block;
-  flex-direction: column;
 
   height: v-bind(styleWindowSizeHeight);
   width: v-bind(styleWindowSizeWidth);
@@ -440,19 +446,26 @@ const handlerTouchStart = (e: TouchEvent) => {
 
   z-index: v-bind(styleWindowZIndex);
 
-  border-radius: 0.55rem;
-  box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-  background-color: #282828;
-  border: solid;
-  border-width: 2px;
-  border-color: #3c3a40;
+  &__window_display {
+    height: 100%;
+    width: 100%;
 
-  &__title_bar {
-    height: var(--title-height);
-  }
+    overflow: hidden;
 
-  &__content {
-    height: calc(100% - var(--title-height));
+    border-radius: 0.55rem;
+    box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
+    background-color: #282828;
+    border: solid;
+    border-width: 2px;
+    border-color: #3c3a40;
+
+    &__title_bar {
+      height: var(--title-height);
+    }
+
+    &__content {
+      height: calc(100% - var(--title-height));
+    }
   }
 
   &__panel_resize {

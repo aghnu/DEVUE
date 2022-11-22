@@ -547,20 +547,8 @@ onUnmounted(() => {
 
   border-radius: 0.75rem;
   box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-  background-image: linear-gradient(
-    to left top,
-    #d16ba5,
-    #c777b9,
-    #ba83ca,
-    #aa8fd8,
-    #9a9ae1,
-    #84a7ef,
-    #68b5f7,
-    #49c1fb,
-    #00d3fc,
-    #00e3f1,
-    #00f0db,
-    #5ffbbe
-  );
+  background-color: rgb(225, 225, 225);
+  // background-size: cover;
+  // background-position: center center;
 }
 </style>

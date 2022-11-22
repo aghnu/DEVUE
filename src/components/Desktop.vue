@@ -11,7 +11,7 @@
 
 <style scoped lang="scss">
 .Desktop {
-  --action-bar-height: 5rem;
+  --action-bar-height: 4rem;
 
   height: 100%;
   width: 100%;
