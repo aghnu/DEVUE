@@ -547,7 +547,7 @@ onUnmounted(() => {
 
   border-radius: 0.75rem;
   box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-  background-color: rgb(70, 170, 255);
+  background-color: rgb(100, 220, 255);
   // background-size: cover;
   // background-position: center center;
 }
