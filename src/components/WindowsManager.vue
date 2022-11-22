@@ -21,11 +21,13 @@ interface MovingWindowLocalState {
   order: number;
   position: [number, number];
   size: [number, number];
-  sizeMin: [number, number];
+  sizeMin: [number, number] | null;
+  sizeMax: [number, number] | null;
 }
 
 const WINDOW_CONFIG = {
   MIN_WINDOW_VISIABLE_BOARDER: 50, // minial visual parts of a moving window within window manager
+  DEFAULT_SIZE_MIN_WINDOW: [125, 275] as [number, number],
 } as const;
 
 // functions related to window creation, mockup for now
@@ -48,7 +50,8 @@ function createMovingWindowState(): MovingWindowLocalState {
       number,
       number
     ],
-    sizeMin: [100, 100] as [number, number],
+    sizeMin: null,
+    sizeMax: null,
   };
 
   return movingWindowState;
@@ -145,8 +148,32 @@ function updateMovingWindowSize(
 ) {
   const movingWindowState = movingWindows.value.get(movingWindowID);
   if (movingWindowState !== undefined) {
-    movingWindowState.size = size;
-    return size;
+    // porting the original logic here. change later?
+    const windowStateCurrentSizeMin =
+      movingWindowState.sizeMin !== null
+        ? movingWindowState.sizeMin
+        : WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW;
+    const windowStateCurrentSizeMax = movingWindowState.sizeMax;
+
+    const newSizeX =
+      windowStateCurrentSizeMax !== null
+        ? Math.min(
+            Math.max(size[0], windowStateCurrentSizeMin[0]),
+            windowStateCurrentSizeMax[0]
+          )
+        : Math.max(size[0], windowStateCurrentSizeMin[0]);
+
+    const newSizeY =
+      windowStateCurrentSizeMax !== null
+        ? Math.min(
+            Math.max(size[1], windowStateCurrentSizeMin[1]),
+            windowStateCurrentSizeMax[1]
+          )
+        : Math.max(size[1], windowStateCurrentSizeMin[1]);
+
+    const newSize = [newSizeX, newSizeY] as [number, number];
+    movingWindowState.size = newSize;
+    return newSize;
   } else {
     console.error(
       "Error: movingWindow not tracked when updating window position"
