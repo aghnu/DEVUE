@@ -10,7 +10,10 @@ import {
 } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { v4 as uuid } from "uuid";
+
 import MovingWindow from "./MovingWindow.vue";
+import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
+
 import {
   MovingWindowResizeDirection,
   MovingWindowActionEvent,
@@ -18,14 +21,14 @@ import {
 import { computed } from "@vue/reactivity";
 
 // types
-interface CurrentWindowActionState {
+export interface CurrentWindowActionState {
   windowPositionSnapshot: [number, number];
   windowSizeSnapshot: [number, number];
   pointerPositionSnapshot: [number, number];
   event: MovingWindowActionEvent;
 }
 
-interface MovingWindowLocalState {
+export interface MovingWindowLocalState {
   id: string;
   order: number;
   position: [number, number];
@@ -58,7 +61,7 @@ const topMovingWindowStateID = computed(() => {
 // variables
 const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
-let currentWindowActionState: CurrentWindowActionState | null = null;
+const currentWindowAction: Ref<CurrentWindowActionState | null> = ref(null);
 
 function initMovingWindowState(
   movingWindowStateDetached: MovingWindowLocalState
@@ -235,7 +238,7 @@ function handlerWindowActionStart(e: MovingWindowActionEvent) {
       `Error: MovingWindow id:${e.id} triggered an event but it is not tracked by WindowsManager`
     );
   } else {
-    currentWindowActionState = {
+    currentWindowAction.value = {
       event: e,
       pointerPositionSnapshot: [
         desktopStates.relativePosXPointer,
@@ -248,8 +251,8 @@ function handlerWindowActionStart(e: MovingWindowActionEvent) {
 }
 function handlerWindowActionEnd(e: MovingWindowActionEvent) {
   if (
-    currentWindowActionState !== null &&
-    currentWindowActionState.event.id === e.id
+    currentWindowAction.value !== null &&
+    currentWindowAction.value.event.id === e.id
   ) {
     resetWindowActionState();
   }
@@ -387,7 +390,7 @@ function windowOrderStackOperationMoveToTop(movingWindowID: string) {
   }
 }
 function resetWindowActionState() {
-  currentWindowActionState = null;
+  currentWindowAction.value = null;
 }
 function windowActionExecuteFuncMove(
   currentWindowActionState: CurrentWindowActionState,
@@ -561,30 +564,30 @@ function windowActionExecuteFuncResize(
   }
 }
 function executeWindowAction() {
-  if (currentWindowActionState !== null) {
+  if (currentWindowAction.value !== null) {
     const movingWindowState: MovingWindowLocalState | undefined =
-      movingWindows.value.get(currentWindowActionState.event.id);
+      movingWindows.value.get(currentWindowAction.value.event.id);
 
     if (movingWindowState !== undefined) {
       // move window to top
       windowOrderStackOperationMoveToTop(movingWindowState.id);
-      switch (currentWindowActionState.event.type) {
+      switch (currentWindowAction.value.event.type) {
         case "move":
           windowActionExecuteFuncMove(
-            currentWindowActionState,
+            currentWindowAction.value,
             movingWindowState
           );
           break;
         case "resize":
           windowActionExecuteFuncResize(
-            currentWindowActionState,
+            currentWindowAction.value,
             movingWindowState
           );
           break;
       }
     } else {
       console.error(
-        `Error: window action requested on MovingWindow object id:${currentWindowActionState.event.id}, but its state is not tracked inside WindowsManager`
+        `Error: window action requested on MovingWindow object id:${currentWindowAction.value.event.id}, but its state is not tracked inside WindowsManager`
       );
       resetWindowActionState();
     }
@@ -690,6 +693,14 @@ onUnmounted(() => {
 
 <template>
   <div class="WindowsManager" ref="windowsManagerElement">
+    <WindowsManagerGhostPanel
+      :focused-moving-window-state="(topMovingWindowStateID !== null) ? movingWindows.get(topMovingWindowStateID)! : null"
+      :ghost-panel-enabled="
+        currentWindowAction !== null
+          ? currentWindowAction.event.type === 'move'
+          : false
+      "
+    />
     <MovingWindow
       v-for="[id, mvState] in movingWindows"
       :key="id"
@@ -715,8 +726,20 @@ onUnmounted(() => {
 
   border-radius: 0.75rem;
   box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-  background-color: rgb(100, 220, 255);
-  // background-size: cover;
-  // background-position: center center;
+  background-image: linear-gradient(
+    to left top,
+    #d16ba5,
+    #c777b9,
+    #ba83ca,
+    #aa8fd8,
+    #9a9ae1,
+    #84a7ef,
+    #68b5f7,
+    #49c1fb,
+    #00d3fc,
+    #00e3f1,
+    #00f0db,
+    #5ffbbe
+  );
 }
 </style>

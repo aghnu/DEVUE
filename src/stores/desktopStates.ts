@@ -2,6 +2,12 @@ import { defineStore } from "pinia";
 
 export type PointerOperation = 'move' | 'down';
 
+export type PointerLocation = 'left' | 'right' | 'top' | 'center';
+
+const POINTER_CONFIG = {
+  POINTER_LOCATION_OFFSET: 16
+} as const;
+
 interface DesktopStates {
   positionPointer: [number, number];
   positionWindowsManager: [number, number];
@@ -19,6 +25,22 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
     };
   },
   getters: {
+    pointerLocation(): PointerLocation {
+      if ((this.relativePosXPointer >= 0) && (this.relativePosXPointer <= POINTER_CONFIG.POINTER_LOCATION_OFFSET)) {
+          // left
+          return 'left';
+      } else if ((this.relativePosXPointer >= this.sizeWindowsManager[0] - POINTER_CONFIG.POINTER_LOCATION_OFFSET) && (this.relativePosXPointer <= this.sizeWindowsManager[0])) {
+          // right
+          return 'right'
+      } else if (this.relativePosYPointer <= 0) {
+          // top
+          return 'top'
+      } else {
+          // close
+          return 'center'
+      }
+      
+    },
     relativePosXPointer(): number {
       return (
         Math.min(
