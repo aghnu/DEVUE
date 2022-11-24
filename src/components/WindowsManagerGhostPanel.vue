@@ -118,9 +118,14 @@ onMounted(() => {
       height: 100%;
       width: 100%;
 
-      border-radius: 0.55rem;
+      background-color: #282828;
+      border: solid;
+      border-width: 2px;
+      border-color: rgba(60, 58, 64, 0.2);
+
+      border-radius: 0.6rem;
       box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0, 0, 0, 0.65);
     }
   }
 }
