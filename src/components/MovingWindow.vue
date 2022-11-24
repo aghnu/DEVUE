@@ -4,22 +4,7 @@ import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
-// type
-export type MovingWindowResizeDirection =
-  | "se"
-  | "sw"
-  | "ne"
-  | "nw"
-  | "n"
-  | "w"
-  | "s"
-  | "e";
-
-export interface MovingWindowActionEvent {
-  id: string;
-  type: "resize" | "move" | "focus";
-  direction?: MovingWindowResizeDirection;
-}
+import {MovingWindowActionEvent} from "../types/TypeWindows";
 
 // store
 const desktopStates = useDesktopStatesStore();

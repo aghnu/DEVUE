@@ -5,8 +5,7 @@ import {
   onMounted,
   onUnmounted,
   watch,
-  readonly,
-  compile,
+  computed
 } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { v4 as uuid } from "uuid";
@@ -17,33 +16,11 @@ import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 import {
   MovingWindowResizeDirection,
   MovingWindowActionEvent,
-} from "./MovingWindow.vue";
-import { computed } from "@vue/reactivity";
+  MovingWindowLocalState,
+  CurrentWindowActionState
+} from "../types/TypeWindows";
+import {WINDOW_CONFIG} from "../constants/WindowManager";
 
-// types
-export interface CurrentWindowActionState {
-  windowPositionSnapshot: [number, number];
-  windowSizeSnapshot: [number, number];
-  pointerPositionSnapshot: [number, number];
-  event: MovingWindowActionEvent;
-}
-
-export interface MovingWindowLocalState {
-  id: string;
-  order: number;
-  position: [number, number];
-  size: [number, number];
-  sizeMin: [number, number] | null;
-  sizeMax: [number, number] | null;
-}
-
-const WINDOW_CONFIG = {
-  MIN_WINDOW_VISIABLE_BOARDER: 50, // minial visual parts of a moving window within window manager
-  DEFAULT_SIZE_MIN_WINDOW: [125, 200] as [number, number],
-  WIN_INIT_SIZE_PERC: [0.75, 0.75] as [number, number],
-  WIN_INIT_SIZE_RATIO: (16 / 9) as number,
-  WIN_INIT_STACK_POSITION_OFFSET: [20, 35] as [number, number],
-} as const;
 
 // functions related to window creation, mockup for now
 const movingWindows: Ref<Map<string, MovingWindowLocalState>> = ref(new Map());

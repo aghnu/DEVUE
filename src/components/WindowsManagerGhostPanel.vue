@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from "@vue/reactivity";
 import { onMounted, watch } from "vue";
-import { MovingWindowLocalState } from "./WindowsManager.vue";
-import { useDesktopStatesStore } from "../stores/desktopStates";
-import { storeToRefs } from "pinia";
+import { MovingWindowLocalState } from "../types/TypeWindows";
+import { usePointerLocation } from "../composables/usePointerLocation";
 
 const props = defineProps<{
   focusedMovingWindowState: MovingWindowLocalState | null; // get focused window order and its state
   ghostPanelEnabled: boolean;
 }>();
-// vairables
-const desktopStates = useDesktopStatesStore();
 
-// reactive variables
-const { pointerLocation } = storeToRefs(desktopStates);
+// vairables
+const { pointerLocation } = usePointerLocation();
+
 const ghostPanelShow = computed(() => {
   return (
     props.ghostPanelEnabled &&
@@ -112,7 +110,7 @@ onMounted(() => {
 
     z-index: v-bind(stylePanelZIndex);
 
-    transition: all 0.5s;
+    transition: all 0.4s;
 
     &__inner {
       height: 100%;
