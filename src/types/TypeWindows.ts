@@ -1,3 +1,5 @@
+import { Tuple } from "../types/TypeBasic";
+
 // type
 export type MovingWindowResizeDirection =
   | "se"
@@ -13,20 +15,22 @@ export interface MovingWindowActionEvent {
   id: string;
   type: "resize" | "move" | "focus";
   direction?: MovingWindowResizeDirection;
+  windowPositionSnapshot: Tuple<number>;
+  windowSizeSnapshot: Tuple<number>;
+  pointerPositionSnapshot: Tuple<number>;
 }
 
-export interface CurrentWindowActionState {
-  windowPositionSnapshot: [number, number];
-  windowSizeSnapshot: [number, number];
-  pointerPositionSnapshot: [number, number];
-  event: MovingWindowActionEvent;
+export interface MovingWindowLocation {
+  position: Tuple<number>;
+  size: Tuple<number>;
+  sizeMin: Tuple<number> | null;
+  sizeMax: Tuple<number> | null;
 }
 
-export interface MovingWindowLocalState {
+export interface MovingWindowLocalState extends MovingWindowLocation {
   id: string;
   order: number;
-  position: [number, number];
-  size: [number, number];
-  sizeMin: [number, number] | null;
-  sizeMax: [number, number] | null;
+  action: MovingWindowActionEvent | null;
 }
+
+export type MovingWindowID = string;

@@ -1,9 +1,11 @@
+import { Tuple } from "../types/TypeBasic";
+
 import { defineStore } from "pinia";
-import { DesktopStates } from "../types/TypeDesktop";
+import { DesktopStatesStore } from "../types/TypeStores";
 import { PointerOperation } from "../types/TypeDesktop";
 
 export const useDesktopStatesStore = defineStore("desktopStates", {
-  state: (): DesktopStates => {
+  state: (): DesktopStatesStore => {
     return {
       positionPointer: [0, 0],
       sizeWindowsManager: [0, 0],
@@ -28,7 +30,7 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
         ) - this.positionWindowsManager[1]
       );
     },
-    relativePositionPointer(): [number, number] {
+    relativePositionPointer(): Tuple<number> {
       return [this.relativePosXPointer, this.relativePosYPointer];
     },
   },
@@ -37,15 +39,15 @@ export const useDesktopStatesStore = defineStore("desktopStates", {
       this.lastPointerOperationType = operationType;
     },
 
-    updatePositionPointer(newPosition: [number, number]) {
+    updatePositionPointer(newPosition: Tuple<number>) {
       this.positionPointer = newPosition;
     },
 
-    updateSizeWindowsManager(newSize: [number, number]) {
+    updateSizeWindowsManager(newSize: Tuple<number>) {
       this.sizeWindowsManager = newSize;
     },
 
-    updatePositionWindowsManager(newPosition: [number, number]) {
+    updatePositionWindowsManager(newPosition: Tuple<number>) {
       this.positionWindowsManager = newPosition;
     },
   },

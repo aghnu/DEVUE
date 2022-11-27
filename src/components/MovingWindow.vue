@@ -1,28 +1,31 @@
 <script setup lang="ts">
+import { Tuple } from "../types/TypeBasic";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
+import { useWindowsStatesStore } from "../stores/windowsStates";
 
-import {MovingWindowActionEvent} from "../types/TypeWindows";
+import { MovingWindowActionEvent } from "../types/TypeWindows";
 
 // store
 const desktopStates = useDesktopStatesStore();
+const windowsStates = useWindowsStatesStore();
 
 // define props
 const props = defineProps<{
   id: string;
   order: number;
-  position: [number, number];
-  size: [number, number];
+  position: Tuple<number>;
+  size: Tuple<number>;
   focused: boolean;
 }>();
 
-// define events
-const emits = defineEmits<{
-  (e: "movingWindowActionEventStart", eventInfo: MovingWindowActionEvent): void;
-  (e: "movingWindowActionEventEnd", eventInfo: MovingWindowActionEvent): void;
-}>();
+// // define events
+// const emits = defineEmits<{
+//   (e: "movingWindowActionEventStart", eventInfo: MovingWindowActionEvent): void;
+//   (e: "movingWindowActionEventEnd", eventInfo: MovingWindowActionEvent): void;
+// }>();
 
 // compute styling string
 const styleWindowPositionLeft = computed(
@@ -48,6 +51,18 @@ const handlerTouchStart = (e: TouchEvent) => {
     e.touches[0].clientY,
   ]);
 };
+
+function updateActionEventMoving() {
+  windowsStates.updateMovingWindowAction(props.id, {id: props.id, type: 'move', windowPositionSnapshot: desktopStates.positionWindowsManager, windowSizeSnapshot: desktopStates.sizeWindowsManager, pointerPositionSnapshot: desktopStates.relativePositionPointer});
+}
+
+function updateActionEventResize() {
+
+}
+
+function updateActionEventNull() {
+
+}
 </script>
 
 <template>
