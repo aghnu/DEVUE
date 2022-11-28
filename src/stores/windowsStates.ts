@@ -36,7 +36,7 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
   actions: {
     updateMovingWindowAction(
       movingWindowID: MovingWindowID,
-      actionEvent: MovingWindowActionEvent
+      actionEvent: MovingWindowActionEvent | null
     ) {
       if (this.movingWindows.has(movingWindowID)) {
         this.movingWindows.get(movingWindowID)!.action = actionEvent;

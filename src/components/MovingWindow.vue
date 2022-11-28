@@ -6,7 +6,10 @@ import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
-import { MovingWindowActionEvent } from "../types/TypeWindows";
+import {
+  MovingWindowActionEvent,
+  MovingWindowResizeDirection,
+} from "../types/TypeWindows";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -53,15 +56,38 @@ const handlerTouchStart = (e: TouchEvent) => {
 };
 
 function updateActionEventMoving() {
-  windowsStates.updateMovingWindowAction(props.id, {id: props.id, type: 'move', windowPositionSnapshot: desktopStates.positionWindowsManager, windowSizeSnapshot: desktopStates.sizeWindowsManager, pointerPositionSnapshot: desktopStates.relativePositionPointer});
+  windowsStates.updateMovingWindowAction(props.id, {
+    id: props.id,
+    type: "move",
+    windowPositionSnapshot: desktopStates.positionWindowsManager,
+    windowSizeSnapshot: desktopStates.sizeWindowsManager,
+    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+  });
 }
 
-function updateActionEventResize() {
-
+function updateActionEventFocus() {
+  windowsStates.updateMovingWindowAction(props.id, {
+    id: props.id,
+    type: "focus",
+    windowPositionSnapshot: desktopStates.positionWindowsManager,
+    windowSizeSnapshot: desktopStates.sizeWindowsManager,
+    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+  });
 }
 
-function updateActionEventNull() {
+function updateActionEventResize(direction: MovingWindowResizeDirection) {
+  windowsStates.updateMovingWindowAction(props.id, {
+    id: props.id,
+    direction: direction,
+    type: "resize",
+    windowPositionSnapshot: desktopStates.positionWindowsManager,
+    windowSizeSnapshot: desktopStates.sizeWindowsManager,
+    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+  });
+}
 
+function resetActionEvent() {
+  windowsStates.updateMovingWindowAction(props.id, null);
 }
 </script>
 
@@ -76,27 +102,17 @@ function updateActionEventNull() {
         @mousedown.stop="
           (e) => {
             handlerMouseDown(e);
-            emits('movingWindowActionEventStart', {
-              id: props.id,
-              type: 'move',
-            });
+            updateActionEventMoving();
           }
         "
         @touchstart.stop="
           (e) => {
             handlerTouchStart(e);
-            emits('movingWindowActionEventStart', {
-              id: props.id,
-              type: 'move',
-            });
+            updateActionEventMoving();
           }
         "
-        @mouseup.stop="
-          emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
-        "
-        @touchend.stop="
-          emits('movingWindowActionEventEnd', { id: props.id, type: 'move' })
-        "
+        @mouseup.stop="resetActionEvent()"
+        @touchend.stop="resetActionEvent()"
       >
         <MovingWindowTitleBar :focused="props.focused" />
       </div>
@@ -105,27 +121,17 @@ function updateActionEventNull() {
         @mousedown.stop="
           (e) => {
             handlerMouseDown(e);
-            emits('movingWindowActionEventStart', {
-              id: props.id,
-              type: 'focus',
-            });
+            updateActionEventFocus();
           }
         "
         @touchstart.stop="
           (e) => {
             handlerTouchStart(e);
-            emits('movingWindowActionEventStart', {
-              id: props.id,
-              type: 'focus',
-            });
+            updateActionEventFocus();
           }
         "
-        @mouseup.stop="
-          emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
-        "
-        @touchend.stop="
-          emits('movingWindowActionEventEnd', { id: props.id, type: 'focus' })
-        "
+        @mouseup.stop="resetActionEvent()"
+        @touchend.stop="resetActionEvent()"
       >
         <MovingWindowContent />
       </div>
@@ -136,37 +142,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'se',
-            type: 'resize',
-          });
+          updateActionEventResize('se');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'se',
-            type: 'resize',
-          });
+          updateActionEventResize('se');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'se',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'se',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -174,37 +160,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'sw',
-            type: 'resize',
-          });
+          updateActionEventResize('sw');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'sw',
-            type: 'resize',
-          });
+          updateActionEventResize('sw');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'sw',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'sw',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -212,37 +178,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'ne',
-            type: 'resize',
-          });
+          updateActionEventResize('ne');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'ne',
-            type: 'resize',
-          });
+          updateActionEventResize('ne');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'ne',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'ne',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -250,37 +196,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'nw',
-            type: 'resize',
-          });
+          updateActionEventResize('nw');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'nw',
-            type: 'resize',
-          });
+          updateActionEventResize('nw');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'nw',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'nw',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -288,37 +214,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'n',
-            type: 'resize',
-          });
+          updateActionEventResize('n');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'n',
-            type: 'resize',
-          });
+          updateActionEventResize('n');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'n',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'n',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -326,37 +232,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'w',
-            type: 'resize',
-          });
+          updateActionEventResize('w');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'w',
-            type: 'resize',
-          });
+          updateActionEventResize('w');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'w',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'w',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -364,37 +250,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 's',
-            type: 'resize',
-          });
+          updateActionEventResize('s');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 's',
-            type: 'resize',
-          });
+          updateActionEventResize('s');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 's',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 's',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
 
     <div
@@ -402,37 +268,17 @@ function updateActionEventNull() {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'e',
-            type: 'resize',
-          });
+          updateActionEventResize('e');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          emits('movingWindowActionEventStart', {
-            id: props.id,
-            direction: 'e',
-            type: 'resize',
-          });
+          updateActionEventResize('e');
         }
       "
-      @mouseup.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'e',
-          type: 'resize',
-        })
-      "
-      @touchend.stop="
-        emits('movingWindowActionEventEnd', {
-          id: props.id,
-          direction: 'e',
-          type: 'resize',
-        })
-      "
+      @mouseup.stop="resetActionEvent()"
+      @touchend.stop="resetActionEvent()"
     ></div>
   </div>
 </template>
