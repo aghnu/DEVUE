@@ -37,6 +37,7 @@ const styleWindowPositionTop = computed(() => String(props.position[1]) + "px");
 const styleWindowSizeWidth = computed(() => String(props.size[0]) + "px");
 const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
 const styleWindowZIndex = computed(() => String(props.order));
+const movingWindowDirections: MovingWindowResizeDirection[] = ['se', 'sw', 'ne', 'nw', 'e', 'n', 'w', 's'];
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -137,148 +138,24 @@ function resetActionEvent() {
     </div>
 
     <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-se"
+    v-for="direction in movingWindowDirections"
+      :class="`MovingWindow__panel_resize MovingWindow__panel_resize--direction-${direction}`"
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
-          updateActionEventResize('se');
+          updateActionEventResize(direction);
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
-          updateActionEventResize('se');
+          updateActionEventResize(direction);
         }
       "
       @mouseup.stop="resetActionEvent()"
       @touchend.stop="resetActionEvent()"
     ></div>
 
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-sw"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('sw');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('sw');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-ne"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('ne');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('ne');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-nw"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('nw');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('nw');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-n"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('n');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('n');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-w"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('w');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('w');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-s"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('s');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('s');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
-
-    <div
-      class="MovingWindow__panel_resize MovingWindow__panel_resize--direction-e"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize('e');
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize('e');
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
   </div>
 </template>
 
