@@ -30,7 +30,6 @@ export interface MovingWindowLocation {
 export interface MovingWindowLocalState extends MovingWindowLocation {
   id: string;
   order: number;
-  action: MovingWindowActionEvent | null;
 }
 
 export type MovingWindowID = string;
