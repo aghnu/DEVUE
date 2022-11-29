@@ -17,127 +17,18 @@ import { storeToRefs } from "pinia";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
 // variables
-const desktopStates = useDesktopStatesStore();
 const windowsState = useWindowsStatesStore();
 const {
   movingWindows,
-  movingWindowsOrderStack,
   topWindow,
-  topWindowActionEvent,
+  actionEvent
 } = storeToRefs(windowsState);
 const windowsManagerElement = ref<HTMLDivElement>();
 
-// handlers
-function handlerWindowResizeUpdateWindowsManagerState() {
-  if (
-    windowsManagerElement.value !== undefined &&
-    windowsManagerElement.value !== null
-  ) {
-    const rect = windowsManagerElement.value.getBoundingClientRect();
-    desktopStates.updateSizeWindowsManager([
-      windowsManagerElement.value.offsetWidth,
-      windowsManagerElement.value.offsetHeight,
-    ]);
-    desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
-  }
-}
+// connect logics
 
-function spreadDesktopSizeStateChangeToMovingWindows(
-  newDesktopSize: Tuple<number>,
-  oldDesktopSize: Tuple<number>
-) {
-  const changeIndividualMovingWindowState = (
-    movingWindowState: MovingWindowLocalState
-  ) => {
-    const movingWindowPosition = movingWindowState.position;
-    const movingWindowSize = movingWindowState.size;
 
-    const newWindowPosX =
-      movingWindowPosition[0] >= 0
-        ? (movingWindowPosition[0] / oldDesktopSize[0]) * newDesktopSize[0]
-        : (() => {
-            // special case left is out of desktop's left edge
-            // make the change reverse
-            const posXDiff =
-              (movingWindowPosition[0] / oldDesktopSize[0]) *
-                newDesktopSize[0] -
-              movingWindowPosition[0];
-            return movingWindowPosition[0] - posXDiff;
-          })();
-    const newWindowPosY =
-      (movingWindowPosition[1] / oldDesktopSize[1]) * newDesktopSize[1];
 
-    // const newWindowSizeX =
-    //   (movingWindowSize[0] / oldDesktopSize[0]) * newDesktopSize[0];
-    // const newWindowSizeY =
-    //   (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
-
-    updateMovingWindowPosition(movingWindowState.id, [
-      newWindowPosX,
-      newWindowPosY,
-    ]);
-  };
-
-  movingWindows.value.forEach((movingWindowState, id) => {
-    new Promise(() => {
-      changeIndividualMovingWindowState(movingWindowState);
-    });
-  });
-}
-
-// life cycle
-onMounted(() => {
-  // init
-  handlerWindowResizeUpdateWindowsManagerState();
-  window.addEventListener(
-    "resize",
-    handlerWindowResizeUpdateWindowsManagerState
-  );
-  window.addEventListener("blur", resetWindowActionState);
-  document.addEventListener("touchend", resetWindowActionState);
-  document.addEventListener("mouseup", resetWindowActionState);
-
-  // reactive watch
-  // watch pointer state update
-  watch(
-    () => desktopStates.relativePositionPointer,
-    () => {
-      executeWindowAction();
-    }
-  );
-  // watch desktop window manager state update
-  watch(
-    () => desktopStates.sizeWindowsManager,
-    (newSize, oldSize) => {
-      spreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
-    }
-  );
-
-  // watch window order change
-  watch(movingWindowsOrderStack, () => {
-    for (let i = 0; i < movingWindowsOrderStack.value.length; i++) {
-      const movingWindowStateID = movingWindowsOrderStack.value[i];
-      updateMovingWindowOrder(movingWindowStateID, i);
-    }
-  });
-
-  // init done, window creation
-
-  // MOCKUP, REMOVE LATER
-  trackMovingWindowState(createMovingWindowState());
-  trackMovingWindowState(createMovingWindowState());
-  trackMovingWindowState(createMovingWindowState());
-});
-
-onUnmounted(() => {
-  window.removeEventListener(
-    "resize",
-    handlerWindowResizeUpdateWindowsManagerState
-  );
-  window.removeEventListener("blur", resetWindowActionState);
-  document.removeEventListener("touchend", resetWindowActionState);
-  document.removeEventListener("mouseup", resetWindowActionState);
-});
 </script>
 
 <template>
@@ -145,8 +36,8 @@ onUnmounted(() => {
     <WindowsManagerGhostPanel
       :focused-moving-window-state="(topWindow !== null) ? movingWindows.get(topWindow.id)! : null"
       :ghost-panel-enabled="
-        currentWindowAction !== null
-          ? currentWindowAction.event.type === 'move'
+        actionEvent !== null
+          ? actionEvent.type === 'move'
           : false
       "
     />
@@ -158,8 +49,6 @@ onUnmounted(() => {
       :size="mvState.size"
       :order="mvState.order"
       :focused="topWindow !== null && mvState.id === topWindow.id"
-      @moving-window-action-event-start="handlerWindowActionStart"
-      @moving-window-action-event-end="handlerWindowActionEnd"
     />
   </div>
 </template>
