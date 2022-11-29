@@ -5,13 +5,13 @@ import {
   calculateWindowPositionWithConstrain,
   calculateWindowSizeWithConstrain,
 } from "./doWindowCreation";
-import { MovingWindowID } from "../types/TypeWindows";
-import { onMounted } from "vue";
+import { MovingWindowActionEvent, MovingWindowID, MovingWindowLocalState, MovingWindowResizeDirection } from "../types/TypeWindows";
+import { onMounted, onUnmounted, Ref, watch } from "vue";
 
 const windowsStates = useWindowsStatesStore();
 const desktopStates = useDesktopStatesStore();
 
-function updateMovingWindowPosition(
+export function updateMovingWindowPosition(
   movingWindowID: MovingWindowID,
   position: Tuple<number>
 ) {
@@ -33,7 +33,7 @@ function updateMovingWindowPosition(
   }
 }
 
-function updateMovingWindowSize(movingWindowID: string, size: Tuple<number>) {
+export function updateMovingWindowSize(movingWindowID: string, size: Tuple<number>) {
   const movingWindowState = windowsStates.getMovingWindowFromID(movingWindowID);
   if (movingWindowState !== null) {
     const newSize = calculateWindowSizeWithConstrain(movingWindowState, size);
@@ -49,17 +49,15 @@ function updateMovingWindowSize(movingWindowID: string, size: Tuple<number>) {
   }
 }
 
-function executeWindowsActionEvent() {
+export function executeWindowsActionEvent() {
   const helperWindowActionExecuteFuncMove = (
-    currentWindowActionState: CurrentWindowActionState,
+    actionEvent: MovingWindowActionEvent,
     movingWindowState: MovingWindowLocalState
   ) => {
     // move window relative to original pointer snapshot
-    const windowPositionSnapshot =
-      currentWindowActionState.windowPositionSnapshot;
+    const windowPositionSnapshot = actionEvent.windowPositionSnapshot;
     const pointerPositionCurrent = desktopStates.relativePositionPointer;
-    const pointerPositionSnapshot =
-      currentWindowActionState.pointerPositionSnapshot;
+    const pointerPositionSnapshot = actionEvent.pointerPositionSnapshot;
 
     const windowsPosXNew =
       windowPositionSnapshot[0] +
@@ -76,8 +74,9 @@ function executeWindowsActionEvent() {
       windowsPosYNew,
     ]);
   };
+  
   const helperWindowActionExecuteFuncResize = (
-    currentWindowActionState: CurrentWindowActionState,
+    actionEvent: MovingWindowActionEvent,
     movingWindowState: MovingWindowLocalState
   ) => {
     // direction
@@ -87,11 +86,11 @@ function executeWindowsActionEvent() {
     ) => {
       // port code from the old project, may need refactor later
       const windowStateSnapshotPosition =
-        currentWindowActionState.windowPositionSnapshot;
+        actionEvent.windowPositionSnapshot;
       const windowStateSnapshotSize =
-        currentWindowActionState.windowSizeSnapshot;
+        actionEvent.windowSizeSnapshot;
       const pointerStateSnapshotPosition =
-        currentWindowActionState.pointerPositionSnapshot;
+        actionEvent.pointerPositionSnapshot;
 
       const windowStateCurrentPosition = movingWindowState.position;
       const windowStateCurrentSize = movingWindowState.size;
@@ -190,7 +189,7 @@ function executeWindowsActionEvent() {
     };
 
     // execute the operation
-    switch (currentWindowActionState.event.direction!) {
+    switch (actionEvent.direction!) {
       case "se":
         helperFuncResizeToDirection("s");
         helperFuncResizeToDirection("e");
@@ -222,36 +221,124 @@ function executeWindowsActionEvent() {
         break;
     }
   };
-  const helperExecuteWindowAction = () => {
-    if (currentWindowAction.value !== null) {
-      const movingWindowState: MovingWindowLocalState | undefined =
-        movingWindows.value.get(currentWindowAction.value.event.id);
 
-      if (movingWindowState !== undefined) {
-        // move window to top
-        windowOrderStackOperationMoveToTop(movingWindowState.id);
-        switch (currentWindowAction.value.event.type) {
+  const helperExecuteWindowAction = () => {
+    
+    const actionEvent = windowsStates.actionEvent;
+
+    if (actionEvent !== null) {
+      windowsStates.focusMovingWindow(actionEvent.id);
+      const targetWindow = windowsStates.getMovingWindowFromID(actionEvent.id);
+      if (targetWindow !== null) {
+        switch (actionEvent.type) {
           case "move":
-            windowActionExecuteFuncMove(
-              currentWindowAction.value,
-              movingWindowState
+            helperWindowActionExecuteFuncMove(
+              actionEvent,
+              targetWindow,
             );
             break;
           case "resize":
-            windowActionExecuteFuncResize(
-              currentWindowAction.value,
-              movingWindowState
+            helperWindowActionExecuteFuncResize(
+              actionEvent,
+              targetWindow
             );
             break;
-        }
-      } else {
-        console.error(
-          `Error: window action requested on MovingWindow object id:${currentWindowAction.value.event.id}, but its state is not tracked inside WindowsManager`
-        );
-        resetWindowActionState();
+        }        
       }
     }
   };
 
-  onMounted(() => {});
+  const handlerResetWindowActionEvent = () => {
+    windowsStates.resetMovingWindowAction();
+  };
+
+  onMounted(() => {
+    // clear action when some events happends 
+    window.addEventListener("blur", handlerResetWindowActionEvent);
+    document.addEventListener("touchend", handlerResetWindowActionEvent);
+    document.addEventListener("mouseup", handlerResetWindowActionEvent);
+
+    // when potential action event depended event happends, process action event
+    watch(
+      () => desktopStates.relativePositionPointer, 
+      () => {
+        helperExecuteWindowAction(); 
+      }     
+    )
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener("blur", handlerResetWindowActionEvent);
+    document.removeEventListener("touchend", handlerResetWindowActionEvent);
+    document.removeEventListener("mouseup", handlerResetWindowActionEvent);
+  })
+}
+
+
+export function trackWindowResizeStateUpdate(desktopElement: Ref<HTMLDivElement>) {
+
+  const helperHandlerWindowResizeUpdateWindowsManagerState = () => {
+    if (
+      desktopElement.value !== undefined &&
+      desktopElement.value !== null
+    ) {
+      const rect = desktopElement.value.getBoundingClientRect();
+      desktopStates.updateSizeWindowsManager([
+        desktopElement.value.offsetWidth,
+        desktopElement.value.offsetHeight,
+      ]);
+      desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
+    }
+  }
+
+  const helperSpreadDesktopSizeStateChangeToMovingWindows = (
+    newDesktopSize: Tuple<number>,
+    oldDesktopSize: Tuple<number>
+  ) => {
+    const changeIndividualMovingWindowState = (
+      movingWindowState: MovingWindowLocalState
+    ) => {
+      const movingWindowPosition = movingWindowState.position;
+      // const movingWindowSize = movingWindowState.size;
+
+      const newWindowPosX =
+        movingWindowPosition[0] >= 0
+          ? (movingWindowPosition[0] / oldDesktopSize[0]) * newDesktopSize[0]
+          : (() => {
+              // special case left is out of desktop's left edge
+              // make the change reverse
+              const posXDiff =
+                (movingWindowPosition[0] / oldDesktopSize[0]) *
+                  newDesktopSize[0] -
+                movingWindowPosition[0];
+              return movingWindowPosition[0] - posXDiff;
+            })();
+      const newWindowPosY =
+        (movingWindowPosition[1] / oldDesktopSize[1]) * newDesktopSize[1];
+
+      // const newWindowSizeX =
+      //   (movingWindowSize[0] / oldDesktopSize[0]) * newDesktopSize[0];
+      // const newWindowSizeY =
+      //   (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
+
+      return {position: [newWindowPosX, newWindowPosY] as Tuple<number>};
+    };
+
+    windowsStates.updateAllMovingWindowsStateMap((s) => changeIndividualMovingWindowState(s));
+  }
+
+  onMounted(() => {
+    // resize event handler
+    desktopElement.value.addEventListener("resize", helperHandlerWindowResizeUpdateWindowsManagerState);
+
+    // update size for all moving windows
+    watch(() => desktopStates.sizeWindowsManager, (newSize, oldSize) => {
+      helperSpreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
+    });
+  });
+
+  onUnmounted(() => {
+    desktopElement.value.addEventListener("resize", helperHandlerWindowResizeUpdateWindowsManagerState);
+
+  })
 }
