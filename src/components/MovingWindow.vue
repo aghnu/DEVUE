@@ -7,7 +7,6 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
 import {
-  MovingWindowActionEvent,
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
 

@@ -1,18 +1,9 @@
 <script setup lang="ts">
-import { Tuple } from "../types/TypeBasic";
-import { ref, Ref, onMounted, onUnmounted, watch, computed } from "vue";
-import { useDesktopStatesStore } from "../stores/desktopStates";
-import { v4 as uuid } from "uuid";
+import { ref } from "vue";
 
 import MovingWindow from "./MovingWindow.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 
-import {
-  MovingWindowResizeDirection,
-  MovingWindowActionEvent,
-  MovingWindowLocalState,
-} from "../types/TypeWindows";
-import { WINDOW_CONFIG } from "../constants/WindowManager";
 import { storeToRefs } from "pinia";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
