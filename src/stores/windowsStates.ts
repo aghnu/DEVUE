@@ -11,6 +11,7 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
     return {
       movingWindows: new Map<MovingWindowID, MovingWindowLocalState>(),
       movingWindowsOrderStack: [] as MovingWindowID[],
+      actionEvent: null,
     };
   },
   getters: {
@@ -24,29 +25,14 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
         )!;
       }
     },
-
-    topWindowActionEvent(): MovingWindowActionEvent | null {
-      if (this.topWindow === null) {
-        return null;
-      } else {
-        return this.topWindow.action;
-      }
-    },
   },
   actions: {
-    updateMovingWindowAction(
-      movingWindowID: MovingWindowID,
-      actionEvent: MovingWindowActionEvent | null
-    ) {
-      if (this.movingWindows.has(movingWindowID)) {
-        this.movingWindows.get(movingWindowID)!.action = actionEvent;
-      }
+    updateMovingWindowAction(actionEvent: MovingWindowActionEvent) {
+      this.actionEvent = actionEvent;
     },
 
-    resetMovingWindowAction(movingWindowID: MovingWindowID) {
-      if (this.movingWindows.has(movingWindowID)) {
-        this.movingWindows.get(movingWindowID)!.action = null;
-      }
+    resetMovingWindowAction() {
+      this.actionEvent = null;
     },
 
     addMovingWindow(movingWindow: MovingWindowLocalState) {
@@ -97,5 +83,15 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
         return null;
       }
     },
+
+    updateAllMovingWindowsStateMap(updateFunc: (movingWindowState: MovingWindowLocalState) => Partial<MovingWindowLocalState>) {
+
+      this.movingWindows.forEach((movingWindowState, id) => {
+        new Promise(() => {
+          const partialState = updateFunc(movingWindowState);
+          Object.assign(this.movingWindows.get(id)!, partialState);
+        });
+      });
+    }
   },
 });

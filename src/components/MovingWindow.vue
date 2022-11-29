@@ -56,7 +56,7 @@ const handlerTouchStart = (e: TouchEvent) => {
 };
 
 function updateActionEventMoving() {
-  windowsStates.updateMovingWindowAction(props.id, {
+  windowsStates.updateMovingWindowAction({
     id: props.id,
     type: "move",
     windowPositionSnapshot: desktopStates.positionWindowsManager,
@@ -66,7 +66,7 @@ function updateActionEventMoving() {
 }
 
 function updateActionEventFocus() {
-  windowsStates.updateMovingWindowAction(props.id, {
+  windowsStates.updateMovingWindowAction({
     id: props.id,
     type: "focus",
     windowPositionSnapshot: desktopStates.positionWindowsManager,
@@ -76,7 +76,7 @@ function updateActionEventFocus() {
 }
 
 function updateActionEventResize(direction: MovingWindowResizeDirection) {
-  windowsStates.updateMovingWindowAction(props.id, {
+  windowsStates.updateMovingWindowAction({
     id: props.id,
     direction: direction,
     type: "resize",
@@ -87,7 +87,7 @@ function updateActionEventResize(direction: MovingWindowResizeDirection) {
 }
 
 function resetActionEvent() {
-  windowsStates.updateMovingWindowAction(props.id, null);
+  windowsStates.resetMovingWindowAction();
 }
 </script>
 
