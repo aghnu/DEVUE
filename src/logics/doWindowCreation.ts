@@ -58,7 +58,6 @@ export function calculateWindowSizeWithConstrain(
 
   return [newSizeX, newSizeY] as Tuple<number>;
 }
-
 export function createMovingWindowMockup() {
   const movingWindowState: MovingWindowLocalState = initMovingWindowState({
     id: uuid(),
@@ -67,7 +66,6 @@ export function createMovingWindowMockup() {
     size: [0, 0],
     sizeMin: null,
     sizeMax: null,
-    action: null,
   });
 
   return movingWindowState;
