@@ -5,16 +5,19 @@ import {
   calculateWindowPositionWithConstrain,
   calculateWindowSizeWithConstrain,
 } from "./doWindowCreation";
-import { MovingWindowActionEvent, MovingWindowID, MovingWindowLocalState, MovingWindowResizeDirection } from "../types/TypeWindows";
+import {
+  MovingWindowActionEvent,
+  MovingWindowID,
+  MovingWindowLocalState,
+  MovingWindowResizeDirection,
+} from "../types/TypeWindows";
 import { onMounted, onUnmounted, Ref, watch } from "vue";
-
-const windowsStates = useWindowsStatesStore();
-const desktopStates = useDesktopStatesStore();
 
 export function updateMovingWindowPosition(
   movingWindowID: MovingWindowID,
   position: Tuple<number>
 ) {
+  const windowsStates = useWindowsStatesStore();
   const movingWindowState = windowsStates.getMovingWindowFromID(movingWindowID);
   if (movingWindowState !== null) {
     // update position
@@ -33,7 +36,11 @@ export function updateMovingWindowPosition(
   }
 }
 
-export function updateMovingWindowSize(movingWindowID: string, size: Tuple<number>) {
+export function updateMovingWindowSize(
+  movingWindowID: string,
+  size: Tuple<number>
+) {
+  const windowsStates = useWindowsStatesStore();
   const movingWindowState = windowsStates.getMovingWindowFromID(movingWindowID);
   if (movingWindowState !== null) {
     const newSize = calculateWindowSizeWithConstrain(movingWindowState, size);
@@ -49,7 +56,10 @@ export function updateMovingWindowSize(movingWindowID: string, size: Tuple<numbe
   }
 }
 
-export function executeWindowsActionEvent() {
+export function connectWindowsActionEvent() {
+  const windowsStates = useWindowsStatesStore();
+  const desktopStates = useDesktopStatesStore();
+
   const helperWindowActionExecuteFuncMove = (
     actionEvent: MovingWindowActionEvent,
     movingWindowState: MovingWindowLocalState
@@ -74,7 +84,7 @@ export function executeWindowsActionEvent() {
       windowsPosYNew,
     ]);
   };
-  
+
   const helperWindowActionExecuteFuncResize = (
     actionEvent: MovingWindowActionEvent,
     movingWindowState: MovingWindowLocalState
@@ -85,12 +95,9 @@ export function executeWindowsActionEvent() {
       direction: MovingWindowResizeDirection
     ) => {
       // port code from the old project, may need refactor later
-      const windowStateSnapshotPosition =
-        actionEvent.windowPositionSnapshot;
-      const windowStateSnapshotSize =
-        actionEvent.windowSizeSnapshot;
-      const pointerStateSnapshotPosition =
-        actionEvent.pointerPositionSnapshot;
+      const windowStateSnapshotPosition = actionEvent.windowPositionSnapshot;
+      const windowStateSnapshotSize = actionEvent.windowSizeSnapshot;
+      const pointerStateSnapshotPosition = actionEvent.pointerPositionSnapshot;
 
       const windowStateCurrentPosition = movingWindowState.position;
       const windowStateCurrentSize = movingWindowState.size;
@@ -223,7 +230,6 @@ export function executeWindowsActionEvent() {
   };
 
   const helperExecuteWindowAction = () => {
-    
     const actionEvent = windowsStates.actionEvent;
 
     if (actionEvent !== null) {
@@ -232,18 +238,12 @@ export function executeWindowsActionEvent() {
       if (targetWindow !== null) {
         switch (actionEvent.type) {
           case "move":
-            helperWindowActionExecuteFuncMove(
-              actionEvent,
-              targetWindow,
-            );
+            helperWindowActionExecuteFuncMove(actionEvent, targetWindow);
             break;
           case "resize":
-            helperWindowActionExecuteFuncResize(
-              actionEvent,
-              targetWindow
-            );
+            helperWindowActionExecuteFuncResize(actionEvent, targetWindow);
             break;
-        }        
+        }
       }
     }
   };
@@ -253,35 +253,35 @@ export function executeWindowsActionEvent() {
   };
 
   onMounted(() => {
-    // clear action when some events happends 
+    // clear action when some events happends
     window.addEventListener("blur", handlerResetWindowActionEvent);
     document.addEventListener("touchend", handlerResetWindowActionEvent);
     document.addEventListener("mouseup", handlerResetWindowActionEvent);
 
     // when potential action event depended event happends, process action event
     watch(
-      () => desktopStates.relativePositionPointer, 
+      () => desktopStates.relativePositionPointer,
       () => {
-        helperExecuteWindowAction(); 
-      }     
-    )
+        helperExecuteWindowAction();
+      }
+    );
   });
 
   onUnmounted(() => {
     window.removeEventListener("blur", handlerResetWindowActionEvent);
     document.removeEventListener("touchend", handlerResetWindowActionEvent);
     document.removeEventListener("mouseup", handlerResetWindowActionEvent);
-  })
+  });
 }
 
-
-export function trackWindowResizeStateUpdate(desktopElement: Ref<HTMLDivElement>) {
+export function connectWindowResizeStateUpdate(
+  desktopElement: Ref<HTMLDivElement | undefined>
+) {
+  const windowsStates = useWindowsStatesStore();
+  const desktopStates = useDesktopStatesStore();
 
   const helperHandlerWindowResizeUpdateWindowsManagerState = () => {
-    if (
-      desktopElement.value !== undefined &&
-      desktopElement.value !== null
-    ) {
+    if (desktopElement.value !== undefined && desktopElement.value !== null) {
       const rect = desktopElement.value.getBoundingClientRect();
       desktopStates.updateSizeWindowsManager([
         desktopElement.value.offsetWidth,
@@ -289,7 +289,7 @@ export function trackWindowResizeStateUpdate(desktopElement: Ref<HTMLDivElement>
       ]);
       desktopStates.updatePositionWindowsManager([rect.left, rect.top]);
     }
-  }
+  };
 
   const helperSpreadDesktopSizeStateChangeToMovingWindows = (
     newDesktopSize: Tuple<number>,
@@ -321,24 +321,39 @@ export function trackWindowResizeStateUpdate(desktopElement: Ref<HTMLDivElement>
       // const newWindowSizeY =
       //   (movingWindowSize[1] / oldDesktopSize[1]) * newDesktopSize[1];
 
-      return {position: [newWindowPosX, newWindowPosY] as Tuple<number>};
+      return { position: [newWindowPosX, newWindowPosY] as Tuple<number> };
     };
 
-    windowsStates.updateAllMovingWindowsStateMap((s) => changeIndividualMovingWindowState(s));
-  }
+    windowsStates.updateAllMovingWindowsStateMap((s) =>
+      changeIndividualMovingWindowState(s)
+    );
+  };
 
   onMounted(() => {
-    // resize event handler
-    desktopElement.value.addEventListener("resize", helperHandlerWindowResizeUpdateWindowsManagerState);
+    if (desktopElement.value !== undefined && desktopElement.value !== null) {
+      helperHandlerWindowResizeUpdateWindowsManagerState();
+      // resize event handler
+      desktopElement.value.addEventListener(
+        "resize",
+        helperHandlerWindowResizeUpdateWindowsManagerState
+      );
 
-    // update size for all moving windows
-    watch(() => desktopStates.sizeWindowsManager, (newSize, oldSize) => {
-      helperSpreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
-    });
+      // update size for all moving windows
+      watch(
+        () => desktopStates.sizeWindowsManager,
+        (newSize, oldSize) => {
+          helperSpreadDesktopSizeStateChangeToMovingWindows(newSize, oldSize);
+        }
+      );
+    }
   });
 
   onUnmounted(() => {
-    desktopElement.value.addEventListener("resize", helperHandlerWindowResizeUpdateWindowsManagerState);
-
-  })
+    if (desktopElement.value !== undefined && desktopElement.value !== null) {
+      desktopElement.value.addEventListener(
+        "resize",
+        helperHandlerWindowResizeUpdateWindowsManagerState
+      );
+    }
+  });
 }

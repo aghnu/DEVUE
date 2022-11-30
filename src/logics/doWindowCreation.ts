@@ -5,15 +5,12 @@ import { WINDOW_CONFIG } from "../constants/WindowManager";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { v4 as uuid } from "uuid";
 
-// var
-const desktopStates = useDesktopStatesStore();
-const windowsStates = useWindowsStatesStore();
-
 export function calculateWindowPositionWithConstrain(
   movingWindowState: MovingWindowLocalState,
   position: Tuple<number>
 ): Tuple<number> {
   // porting the original logic here. change later?
+  const desktopStates = useDesktopStatesStore();
   const desktopSize = desktopStates.sizeWindowsManager;
   const movingWindowSize = movingWindowState.size;
 
@@ -68,11 +65,14 @@ export function createMovingWindowMockup() {
     sizeMax: null,
   });
 
-  return movingWindowState;
+  return initMovingWindowState(movingWindowState);
 }
 export function initMovingWindowState(
   movingWindowStateDetached: MovingWindowLocalState
 ): MovingWindowLocalState {
+  const desktopStates = useDesktopStatesStore();
+  const windowsStates = useWindowsStatesStore();
+
   const topWindow = windowsStates.topWindow;
   const areaSize = desktopStates.sizeWindowsManager;
 

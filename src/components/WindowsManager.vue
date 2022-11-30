@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 import MovingWindow from "./MovingWindow.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 
 import { storeToRefs } from "pinia";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import {
+  connectWindowResizeStateUpdate,
+  connectWindowsActionEvent,
+} from "../logics/doWindowAction";
+import { createMovingWindowMockup } from "../logics/doWindowCreation";
+import { useDesktopStatesStore } from "../stores/desktopStates";
 
 // variables
 const windowsState = useWindowsStatesStore();
-const {
-  movingWindows,
-  topWindow,
-  actionEvent
-} = storeToRefs(windowsState);
+const desktopState = useDesktopStatesStore();
+const { movingWindows, topWindow, actionEvent } = storeToRefs(windowsState);
 const windowsManagerElement = ref<HTMLDivElement>();
 
 // connect logics
+connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
+connectWindowsActionEvent();
 
-
-
+onMounted(() => {
+  // mockup
+  windowsState.addMovingWindow(createMovingWindowMockup());
+  windowsState.addMovingWindow(createMovingWindowMockup());
+  windowsState.addMovingWindow(createMovingWindowMockup());
+});
 </script>
 
 <template>
@@ -27,9 +36,7 @@ const windowsManagerElement = ref<HTMLDivElement>();
     <WindowsManagerGhostPanel
       :focused-moving-window-state="(topWindow !== null) ? movingWindows.get(topWindow.id)! : null"
       :ghost-panel-enabled="
-        actionEvent !== null
-          ? actionEvent.type === 'move'
-          : false
+        actionEvent !== null ? actionEvent.type === 'move' : false
       "
     />
     <MovingWindow
