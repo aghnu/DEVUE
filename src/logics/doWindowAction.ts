@@ -26,7 +26,7 @@ export function updateMovingWindowPosition(
       position
     );
     windowsStates.updateMovingWindowState(movingWindowState.id, {
-      size: newPosition,
+      position: newPosition,
     });
     return position;
   } else {
@@ -333,7 +333,7 @@ export function connectWindowResizeStateUpdate(
     if (desktopElement.value !== undefined && desktopElement.value !== null) {
       helperHandlerWindowResizeUpdateWindowsManagerState();
       // resize event handler
-      desktopElement.value.addEventListener(
+      window.addEventListener(
         "resize",
         helperHandlerWindowResizeUpdateWindowsManagerState
       );
@@ -350,7 +350,7 @@ export function connectWindowResizeStateUpdate(
 
   onUnmounted(() => {
     if (desktopElement.value !== undefined && desktopElement.value !== null) {
-      desktopElement.value.addEventListener(
+      window.addEventListener(
         "resize",
         helperHandlerWindowResizeUpdateWindowsManagerState
       );

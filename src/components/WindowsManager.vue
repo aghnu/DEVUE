@@ -11,11 +11,9 @@ import {
   connectWindowsActionEvent,
 } from "../logics/doWindowAction";
 import { createMovingWindowMockup } from "../logics/doWindowCreation";
-import { useDesktopStatesStore } from "../stores/desktopStates";
 
 // variables
 const windowsState = useWindowsStatesStore();
-const desktopState = useDesktopStatesStore();
 const { movingWindows, topWindow, actionEvent } = storeToRefs(windowsState);
 const windowsManagerElement = ref<HTMLDivElement>();
 
