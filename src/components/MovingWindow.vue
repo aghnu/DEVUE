@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { toRaw } from "vue";
 import { Tuple } from "../types/TypeBasic";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
@@ -6,9 +7,7 @@ import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
-import {
-  MovingWindowResizeDirection,
-} from "../types/TypeWindows";
+import { MovingWindowResizeDirection } from "../types/TypeWindows";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -37,7 +36,16 @@ const styleWindowPositionTop = computed(() => String(props.position[1]) + "px");
 const styleWindowSizeWidth = computed(() => String(props.size[0]) + "px");
 const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
 const styleWindowZIndex = computed(() => String(props.order));
-const movingWindowDirections: MovingWindowResizeDirection[] = ['se', 'sw', 'ne', 'nw', 'e', 'n', 'w', 's'];
+const movingWindowDirections: MovingWindowResizeDirection[] = [
+  "se",
+  "sw",
+  "ne",
+  "nw",
+  "e",
+  "n",
+  "w",
+  "s",
+];
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -59,9 +67,9 @@ function updateActionEventMoving() {
   windowsStates.updateMovingWindowAction({
     id: props.id,
     type: "move",
-    windowPositionSnapshot: desktopStates.positionWindowsManager,
-    windowSizeSnapshot: desktopStates.sizeWindowsManager,
-    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+    windowPositionSnapshot: toRaw(props.position),
+    windowSizeSnapshot: toRaw(props.size),
+    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
 
@@ -69,9 +77,9 @@ function updateActionEventFocus() {
   windowsStates.updateMovingWindowAction({
     id: props.id,
     type: "focus",
-    windowPositionSnapshot: desktopStates.positionWindowsManager,
-    windowSizeSnapshot: desktopStates.sizeWindowsManager,
-    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+    windowPositionSnapshot: toRaw(props.position),
+    windowSizeSnapshot: toRaw(props.size),
+    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
 
@@ -80,9 +88,9 @@ function updateActionEventResize(direction: MovingWindowResizeDirection) {
     id: props.id,
     direction: direction,
     type: "resize",
-    windowPositionSnapshot: desktopStates.positionWindowsManager,
-    windowSizeSnapshot: desktopStates.sizeWindowsManager,
-    pointerPositionSnapshot: desktopStates.relativePositionPointer,
+    windowPositionSnapshot: toRaw(props.position),
+    windowSizeSnapshot: toRaw(props.size),
+    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
 
@@ -138,7 +146,7 @@ function resetActionEvent() {
     </div>
 
     <div
-    v-for="direction in movingWindowDirections"
+      v-for="direction in movingWindowDirections"
       :class="`MovingWindow__panel_resize MovingWindow__panel_resize--direction-${direction}`"
       @mousedown.stop="
         (e) => {
@@ -155,7 +163,6 @@ function resetActionEvent() {
       @mouseup.stop="resetActionEvent()"
       @touchend.stop="resetActionEvent()"
     ></div>
-
   </div>
 </template>
 

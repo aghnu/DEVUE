@@ -1,3 +1,4 @@
+import { toRaw } from "vue";
 import { Tuple } from "../types/TypeBasic";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { useDesktopStatesStore } from "../stores/desktopStates";
@@ -66,7 +67,7 @@ export function connectWindowsActionEvent() {
   ) => {
     // move window relative to original pointer snapshot
     const windowPositionSnapshot = actionEvent.windowPositionSnapshot;
-    const pointerPositionCurrent = desktopStates.relativePositionPointer;
+    const pointerPositionCurrent = toRaw(desktopStates.relativePositionPointer);
     const pointerPositionSnapshot = actionEvent.pointerPositionSnapshot;
 
     const windowsPosXNew =
@@ -230,7 +231,7 @@ export function connectWindowsActionEvent() {
   };
 
   const helperExecuteWindowAction = () => {
-    const actionEvent = windowsStates.actionEvent;
+    const actionEvent = toRaw(windowsStates.actionEvent);
 
     if (actionEvent !== null) {
       windowsStates.focusMovingWindow(actionEvent.id);
