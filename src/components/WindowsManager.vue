@@ -24,8 +24,8 @@ connectWindowsActionEvent();
 onMounted(() => {
   // mockup
   windowsState.addMovingWindow(createMovingWindowMockup());
-  windowsState.addMovingWindow(createMovingWindowMockup());
-  windowsState.addMovingWindow(createMovingWindowMockup());
+  // windowsState.addMovingWindow(createMovingWindowMockup());
+  // windowsState.addMovingWindow(createMovingWindowMockup());
 });
 </script>
 
@@ -56,16 +56,8 @@ onMounted(() => {
   height: 100%;
   width: 100%;
 
-  border-radius: 0.75rem;
-  box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-  background-image: linear-gradient(
-    to left bottom,
-    #68b5f7,
-    #49c1fb,
-    #00d3fc,
-    #00e3f1,
-    #00f0db,
-    #5ffbbe
-  );
+  border-radius: 1rem;
+  // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
+  background-color: $color-block-bright;
 }
 </style>

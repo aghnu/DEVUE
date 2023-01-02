@@ -122,7 +122,7 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <MovingWindowTitleBar :focused="props.focused" />
+        <!-- <MovingWindowTitleBar :focused="props.focused" /> -->
       </div>
       <div
         class="MovingWindow__window_display__content"
@@ -141,7 +141,17 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <MovingWindowContent />
+        <!-- <MovingWindowContent /> -->
+        <!-- <iframe
+          src="https://www.aghnu.me"
+          frameborder="0"
+          style="
+             {
+              height: 100%;
+              width: 100%;
+            }
+          "
+        ></iframe> -->
       </div>
     </div>
 
@@ -185,18 +195,18 @@ function resetActionEvent() {
 
     overflow: hidden;
 
-    border-radius: 0.6rem;
-    box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-    background-color: #282828;
-    border: solid;
-    border-width: 2px;
-    border-color: #3c3a40;
+    border-radius: 0.75rem;
+    // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
+    background-color: $color-block-dark;
+    // border: solid;
+    // border-width: 2px;
+    // border-color: #3c3a40;
 
-    &--focused {
-      background-color: red;
-      box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-      background-color: #202020;
-    }
+    // &--focused {
+    //   background-color: red;
+    //   // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
+    //   background-color: #202020;
+    // }
 
     &__title_bar {
       height: var(--title-height);

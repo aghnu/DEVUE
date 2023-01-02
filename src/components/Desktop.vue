@@ -1,36 +1,3 @@
-<template>
-  <div class="Desktop">
-    <div class="Desktop__windows">
-      <WindowsManager />
-    </div>
-    <div class="Desktop__action_bar">
-      <ActionBar />
-    </div>
-  </div>
-</template>
-
-<style scoped lang="scss">
-.Desktop {
-  --action-bar-height: 4rem;
-
-  height: 100%;
-  width: 100%;
-  display: block;
-  flex-direction: column;
-
-  background-color: #222222;
-
-  &__windows {
-    height: calc(100% - var(--action-bar-height));
-    padding: 1rem;
-  }
-
-  &__action_bar {
-    height: var(--action-bar-height);
-  }
-}
-</style>
-
 <script setup lang="ts">
 import ActionBar from "./ActionBar.vue";
 import WindowsManager from "./WindowsManager.vue";
@@ -89,3 +56,36 @@ onUnmounted(() => {
   document.removeEventListener("touchstart", handlerTouchStart);
 });
 </script>
+
+<template>
+  <div class="Desktop">
+    <div class="Desktop__windows">
+      <WindowsManager />
+    </div>
+    <div class="Desktop__action_bar">
+      <ActionBar />
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.Desktop {
+  --action-bar-height: 5rem;
+
+  height: 100%;
+  width: 100%;
+  display: block;
+  flex-direction: column;
+
+  background-color: $color-block-dark;
+
+  &__windows {
+    height: calc(100% - var(--action-bar-height));
+    padding: 1.25rem;
+  }
+
+  &__action_bar {
+    height: var(--action-bar-height);
+  }
+}
+</style>

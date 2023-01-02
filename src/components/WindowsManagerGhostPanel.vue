@@ -116,14 +116,15 @@ onMounted(() => {
       height: 100%;
       width: 100%;
 
-      background-color: #282828;
-      border: solid;
-      border-width: 2px;
-      border-color: rgba(60, 58, 64, 0.2);
+      // border: solid;
+      // border-width: 2px;
+      // border-color: rgba(60, 58, 64, 0.2);
 
-      border-radius: 0.6rem;
+      border-radius: 0.75rem;
       box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-      background-color: rgba(0, 0, 0, 0.65);
+      background-color: $color-block-dark;
+
+      opacity: 0.85;
     }
   }
 }
