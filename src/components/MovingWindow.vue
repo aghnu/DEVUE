@@ -22,12 +22,6 @@ const props = defineProps<{
   focused: boolean;
 }>();
 
-// // define events
-// const emits = defineEmits<{
-//   (e: "movingWindowActionEventStart", eventInfo: MovingWindowActionEvent): void;
-//   (e: "movingWindowActionEventEnd", eventInfo: MovingWindowActionEvent): void;
-// }>();
-
 // compute styling string
 const styleWindowPositionLeft = computed(
   () => String(props.position[0]) + "px"
@@ -141,17 +135,7 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <!-- <MovingWindowContent /> -->
-        <!-- <iframe
-          src="https://www.aghnu.me"
-          frameborder="0"
-          style="
-             {
-              height: 100%;
-              width: 100%;
-            }
-          "
-        ></iframe> -->
+        <MovingWindowContent />
       </div>
     </div>
 
@@ -188,6 +172,8 @@ function resetActionEvent() {
   top: v-bind(styleWindowPositionTop);
 
   z-index: v-bind(styleWindowZIndex);
+
+  will-change: height, width, left, top, z-index;
 
   &__window_display {
     height: 100%;

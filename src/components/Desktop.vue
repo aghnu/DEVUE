@@ -70,22 +70,27 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .Desktop {
-  --action-bar-height: 5rem;
+  --action-bar-height: 8.5rem;
+
+  position: relative;
 
   height: 100%;
   width: 100%;
   display: block;
   flex-direction: column;
 
-  background-color: $color-block-dark;
+  background-color: $color-block-bright;
 
   &__windows {
+    position: relative;
     height: calc(100% - var(--action-bar-height));
-    padding: 1.25rem;
+    z-index: 0;
   }
 
   &__action_bar {
+    position: relative;
     height: var(--action-bar-height);
+    z-index: 1;
   }
 }
 </style>

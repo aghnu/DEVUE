@@ -24,8 +24,6 @@ connectWindowsActionEvent();
 onMounted(() => {
   // mockup
   windowsState.addMovingWindow(createMovingWindowMockup());
-  // windowsState.addMovingWindow(createMovingWindowMockup());
-  // windowsState.addMovingWindow(createMovingWindowMockup());
 });
 </script>
 
@@ -52,12 +50,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .WindowsManager {
   position: relative;
-  overflow: hidden;
   height: 100%;
   width: 100%;
-
-  border-radius: 1rem;
-  // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-  background-color: $color-block-bright;
 }
 </style>
