@@ -4,3 +4,37 @@ $color-block-bright: #f8f8f8;
 * {
   box-sizing: border-box;
 }
+
+@mixin mixin-center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin mixin-disable-pointer {
+  pointer-events: none;
+
+  & > * {
+    pointer-events: all;
+  }
+}
+
+@mixin mixin-clean-button-style {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
+
+  &:active {
+    outline: none;
+    border: none;
+  }
+}

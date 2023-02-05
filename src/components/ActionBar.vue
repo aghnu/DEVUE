@@ -1,17 +1,29 @@
 <script setup lang="ts">
-import Logo from "./Logo.vue";
+import AppButton from "./AppButton.vue";
+import { createMovingWindowMockup } from "../logics/doWindowCreation";
+import { useWindowsStatesStore } from "../stores/windowsStates";
+
+const windowsState = useWindowsStatesStore();
+
+function handlerClick() {
+  windowsState.addMovingWindow(createMovingWindowMockup());
+}
 </script>
 
 <template>
-  <!-- <Logo></Logo>
-  <div class="testing"></div> -->
+  <div class="ActionBar">
+    <AppButton name="terminal" :size="2.5" @click="handlerClick"></AppButton>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.testing {
-  width: 80%;
-  height: 3rem;
-  border-radius: 0.75rem;
-  background-color: #c4c8b2;
+.ActionBar {
+  @include mixin-center-children;
+  @include mixin-disable-pointer;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: red;
 }
 </style>
