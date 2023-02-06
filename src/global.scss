@@ -12,13 +12,12 @@ $color-block-transparent: rgba(28, 28, 28, 0.75);
 $shadow-block-float: 0.25rem 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
 $shadow-block-down: 0.25rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
 
-
 $color-terminal-plain: #7d7d7d;
 $color-terminal-focus: #f9ca8f;
 $color-terminal-desc: #7fc5d0;
 $color-terminal-background: #080808;
 
-
+$color-app-default-background: #080808;
 
 * {
   box-sizing: border-box;

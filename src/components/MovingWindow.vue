@@ -185,15 +185,13 @@ function resetActionEvent() {
 
     border-radius: 0.75rem;
     box-shadow: $shadow-block-float;
-    background-color: #080808;
-    // border: solid;
-    // border-width: 2px;
-    // border-color: #3c3a40;
+    background-color: $color-app-default-background;
+    border: solid;
+    border-width: 0.1rem;
+    border-color: $color-text-dark;
 
     &--focused {
-      // background-color: red;
       box-shadow: $shadow-block-down;
-      // background-color: #202020;
     }
 
     &__title_bar {

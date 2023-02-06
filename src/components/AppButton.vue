@@ -101,7 +101,7 @@ onUnmounted(() => {
 
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
-    box-shadow: $shadow-block-float;
+    box-shadow: $shadow-block-down;
 
     transition: height 0.3s, width 0.3s, box-shadow 0.3s;
 

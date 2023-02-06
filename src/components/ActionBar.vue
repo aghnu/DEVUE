@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import { createMovingWindowMockup } from "../logics/doWindowCreation";
-import { useWindowsStatesStore } from "../stores/windowsStates";
+import { openApp } from "../applications/openApplication";
+import { onMounted } from "vue";
 
-const windowsState = useWindowsStatesStore();
-
-function handlerClick() {
-  windowsState.addMovingWindow(createMovingWindowMockup());
-}
+onMounted(() => {
+  // TODO: animation + store control action buttons with there own state that can be used for trigger animation
+  openApp("terminal");
+});
 </script>
 
 <template>
@@ -15,21 +14,21 @@ function handlerClick() {
     <AppButton
       name="terminal"
       type="primary"
-      :size="3"
-      @click="handlerClick"
+      :size="2.8"
+      @click="() => openApp('terminal')"
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
       type="secondary"
-      :size="3"
-      @click="handlerClick"
+      :size="2.8"
+      @click="() => openApp('github')"
     ></AppButton>
     <AppButton
       name="linkedin"
       type="secondary"
-      :size="3"
-      @click="handlerClick"
+      :size="2.8"
+      @click="() => openApp('linkedin')"
     ></AppButton>
   </div>
 </template>
@@ -45,9 +44,8 @@ function handlerClick() {
   width: fit-content;
   height: fit-content;
 
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 1rem;
-  box-shadow: $shadow-block-down;
 
   background-color: $color-block-transparent;
 

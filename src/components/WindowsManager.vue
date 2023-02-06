@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 import MovingWindowApplications from "./MovingWindowApplications.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
@@ -10,7 +10,6 @@ import {
   connectWindowResizeStateUpdate,
   connectWindowsActionEvent,
 } from "../logics/doWindowAction";
-import { createMovingWindowMockup } from "../logics/doWindowCreation";
 
 // variables
 const windowsState = useWindowsStatesStore();
@@ -20,11 +19,6 @@ const windowsManagerElement = ref<HTMLDivElement>();
 // connect logics
 connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
 connectWindowsActionEvent();
-
-onMounted(() => {
-  // mockup
-  windowsState.addMovingWindow(createMovingWindowMockup());
-});
 </script>
 
 <template>
