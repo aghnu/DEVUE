@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import MovingWindow from "../../components/MovingWindow.vue";
-import { Tuple } from "../../types/TypeBasic";
-import { ref, Ref, onMounted } from "vue";
 import { TerminalDataInit } from "../../types/TypeMessage";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
 
