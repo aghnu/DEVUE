@@ -1,8 +1,32 @@
 $color-block-dark: #141414;
-$color-block-bright: #f8f8f8;
+$color-block-bright: #eab990;
+
+$color-text-bright: #c7c7c7;
+$color-text-dark: #2b2b2b;
+
+$color-icon-primary: #eab990;
+$color-icon-secondary: #8b8b8b;
+
+$color-block-transparent: rgba(28, 28, 28, 0.75);
+
+$shadow-block-float: 0.25rem 0.5rem 1.25rem rgba(0, 0, 0, 0.5);
+$shadow-block-down: 0.25rem 0.5rem 1rem rgba(0, 0, 0, 0.1);
+
+
+$color-terminal-plain: #7d7d7d;
+$color-terminal-focus: #f9ca8f;
+$color-terminal-desc: #7fc5d0;
+$color-terminal-background: #080808;
+
+
 
 * {
   box-sizing: border-box;
+}
+
+p {
+  padding: 0;
+  margin: 0;
 }
 
 @mixin mixin-center-children {

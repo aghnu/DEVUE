@@ -1,23 +1,62 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MovingWindow from "../../components/MovingWindow.vue";
+import { Tuple } from "../../types/TypeBasic";
+import { ref, Ref, onMounted } from "vue";
+import { TerminalDataInit } from "../../types/TypeMessage";
+
+defineProps<{
+  id: string;
+  order: number;
+  position: Tuple<number>;
+  size: Tuple<number>;
+  focused: boolean;
+}>();
+
+function terminalInit(element: HTMLIFrameElement) {
+  const data: TerminalDataInit = {
+    type: "init",
+    colorPlain: "#7d7d7d",
+    colorFocus: "#f9ca8f",
+    colorBackground: "#080808",
+    colorAppBackground: "transparent",
+    colorDesc: "#7fc5d0",
+    fontSize: "14px",
+  };
+  element.contentWindow?.postMessage(data, "*");
+}
+
+function handlerIframeload(e: Event) {
+  terminalInit(e.target as HTMLIFrameElement);
+}
+</script>
 
 <template>
-  <div class="AppTerminal">
-    <iframe
-      class="AppTerminal__external"
-      src="https://www.aghnu.me"
-      frameborder="0"
-    >
-    </iframe>
-  </div>
+  <MovingWindow
+    :id="id"
+    :position="position"
+    :size="size"
+    :order="order"
+    :focused="focused"
+  >
+    <div class="AppTerminal">
+      <iframe
+        class="AppTerminal__internal"
+        src="http://localhost:8080?options=desktop"
+        frameborder="0"
+        @load="handlerIframeload"
+      />
+    </div>
+  </MovingWindow>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .AppTerminal {
-  width: 100%;
   height: 100%;
-
-  &__external {
+  width: 100%;
+  &__internal {
     display: block;
+    height: 100%;
+    width: 100%;
     border: none;
   }
 }

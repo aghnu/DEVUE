@@ -1,5 +1,8 @@
-export type AppName = "terminal";
+import { AppTerminal } from "../applications/AppTerminal";
 
-export interface AppConfig {
+export type AppName = "terminal" | "github" | "linkedin";
+export type ApplicationInstance = AppTerminal;
+
+export interface Application {
   readonly name: AppName;
 }

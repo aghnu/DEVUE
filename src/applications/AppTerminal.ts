@@ -1,5 +1,7 @@
-import { AppConfig } from "../types/TypeApp";
+import { Application, AppName } from "../types/TypeApp";
 
-export const CONFIG: AppConfig = {
-  name: "terminal",
-};
+export class AppTerminal implements Application {
+  name: AppName = "terminal";
+
+  constructor() {}
+}

@@ -4,6 +4,7 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 import { WINDOW_CONFIG } from "../constants/WindowManager";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { v4 as uuid } from "uuid";
+import { AppTerminal } from "../applications/AppTerminal";
 
 export function calculateWindowPositionWithConstrain(
   movingWindowState: MovingWindowLocalState,
@@ -63,6 +64,7 @@ export function createMovingWindowMockup() {
     size: [0, 0],
     sizeMin: null,
     sizeMax: null,
+    appInstance: new AppTerminal(),
   });
 
   return initMovingWindowState(movingWindowState);
@@ -108,7 +110,7 @@ export function initMovingWindowState(
 
   const generateInitPos = () => {
     const initPosX = (areaSize[0] - movingWindowStateDetached.size[0]) / 2;
-    const initPosY = (areaSize[1] - movingWindowStateDetached.size[1]) / 3;
+    const initPosY = (areaSize[1] - movingWindowStateDetached.size[1]) / 1.5;
 
     movingWindowStateDetached.position = calculateWindowPositionWithConstrain(
       movingWindowStateDetached,
