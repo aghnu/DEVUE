@@ -14,20 +14,20 @@ onMounted(() => {
     <AppButton
       name="terminal"
       type="primary"
-      :size="2.8"
+      :size="3"
       @click="() => openApp('terminal')"
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
       type="secondary"
-      :size="2.8"
+      :size="3"
       @click="() => openApp('github')"
     ></AppButton>
     <AppButton
       name="linkedin"
       type="secondary"
-      :size="2.8"
+      :size="3"
       @click="() => openApp('linkedin')"
     ></AppButton>
   </div>
@@ -44,9 +44,12 @@ onMounted(() => {
   width: fit-content;
   height: fit-content;
 
-  padding: 0.75rem 1.5rem;
+  padding: 0.7rem 1.25rem;
   border-radius: 1rem;
 
+  border: solid;
+  border-width: 0.1rem;
+  border-color: $color-text-dark;
   background-color: $color-block-transparent;
 
   &__dividor {

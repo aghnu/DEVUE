@@ -74,10 +74,11 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .Desktop {
-  --height-action-bar: 7.5rem;
-  --height-footer: 3.5rem;
+  --height-action-bar: 6rem;
+  --height-footer: 3rem;
 
   @include mixin-center-children;
+  @include mixin-disable-pointer;
 
   display: flex;
   flex-direction: column;
@@ -97,14 +98,19 @@ onUnmounted(() => {
 
   &__action_bar {
     @include mixin-center-children;
+    @include mixin-disable-pointer;
+
+    margin: 0.75rem;
 
     position: relative;
-    height: var(--height-action-bar);
+    height: fit-content;
     width: 100%;
     z-index: 2;
   }
 
   &__footer {
+    @include mixin-disable-pointer;
+
     position: relative;
     height: var(--height-footer);
     width: 100%;

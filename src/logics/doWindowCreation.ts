@@ -95,7 +95,7 @@ export function initMovingWindowState(
 
   const generateInitPos = () => {
     const initPosX = (areaSize[0] - movingWindowStateDetached.size[0]) / 2;
-    const initPosY = (areaSize[1] - movingWindowStateDetached.size[1]) / 1.5;
+    const initPosY = (areaSize[1] - movingWindowStateDetached.size[1]) / 3;
 
     movingWindowStateDetached.position = calculateWindowPositionWithConstrain(
       movingWindowStateDetached,
