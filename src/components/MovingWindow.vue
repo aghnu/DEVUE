@@ -135,7 +135,9 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <slot></slot>
+        <MovingWindowContent>
+          <slot></slot>
+        </MovingWindowContent>
       </div>
     </div>
 
