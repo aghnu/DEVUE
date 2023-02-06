@@ -135,7 +135,7 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <MovingWindowContent />
+        <slot></slot>
       </div>
     </div>
 
@@ -162,7 +162,7 @@ function resetActionEvent() {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 2.5rem;
+  --title-height: 1.5rem;
 
   position: absolute;
 
@@ -182,17 +182,17 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.75rem;
-    // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-    background-color: $color-block-dark;
+    box-shadow: $shadow-block-float;
+    background-color: #080808;
     // border: solid;
     // border-width: 2px;
     // border-color: #3c3a40;
 
-    // &--focused {
-    //   background-color: red;
-    //   // box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.35);
-    //   background-color: #202020;
-    // }
+    &--focused {
+      // background-color: red;
+      box-shadow: $shadow-block-down;
+      // background-color: #202020;
+    }
 
     &__title_bar {
       height: var(--title-height);

@@ -12,7 +12,25 @@ function handlerClick() {
 
 <template>
   <div class="ActionBar">
-    <AppButton name="terminal" :size="2.5" @click="handlerClick"></AppButton>
+    <AppButton
+      name="terminal"
+      type="primary"
+      :size="3"
+      @click="handlerClick"
+    ></AppButton>
+    <div class="ActionBar__dividor"></div>
+    <AppButton
+      name="github"
+      type="secondary"
+      :size="3"
+      @click="handlerClick"
+    ></AppButton>
+    <AppButton
+      name="linkedin"
+      type="secondary"
+      :size="3"
+      @click="handlerClick"
+    ></AppButton>
   </div>
 </template>
 
@@ -21,9 +39,25 @@ function handlerClick() {
   @include mixin-center-children;
   @include mixin-disable-pointer;
 
-  width: 100%;
-  height: 100%;
+  display: flex;
+  gap: 1.5rem;
 
-  background-color: red;
+  width: fit-content;
+  height: fit-content;
+
+  padding: 0.75rem 2rem;
+  border-radius: 1rem;
+  box-shadow: $shadow-block-down;
+
+  background-color: $color-block-transparent;
+
+  &__dividor {
+    height: 1.75rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 0.1rem;
+    border-radius: 0.1rem;
+    background-color: $color-text-dark;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ActionBar from "./ActionBar.vue";
 import WindowsManager from "./WindowsManager.vue";
+import AppFooter from "./AppFooter.vue";
 import { onMounted, onUnmounted } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
@@ -65,32 +66,49 @@ onUnmounted(() => {
     <div class="Desktop__action_bar">
       <ActionBar />
     </div>
+    <div class="Desktop__footer">
+      <AppFooter />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .Desktop {
-  --action-bar-height: 8.5rem;
+  --height-action-bar: 7.5rem;
+  --height-footer: 3.5rem;
 
+  @include mixin-center-children;
+
+  display: flex;
+  flex-direction: column;
   position: relative;
 
   height: 100%;
   width: 100%;
-  display: block;
-  flex-direction: column;
 
-  background-color: $color-block-bright;
+  background-color: $color-block-dark;
 
   &__windows {
     position: relative;
-    height: calc(100% - var(--action-bar-height));
-    z-index: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
   }
 
   &__action_bar {
+    @include mixin-center-children;
+
     position: relative;
-    height: var(--action-bar-height);
-    z-index: 1;
+    height: var(--height-action-bar);
+    width: 100%;
+    z-index: 2;
+  }
+
+  &__footer {
+    position: relative;
+    height: var(--height-footer);
+    width: 100%;
+    z-index: 0;
   }
 }
 </style>

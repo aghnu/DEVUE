@@ -6,6 +6,7 @@ import { emit } from "process";
 
 const props = defineProps<{
   name: AppName;
+  type: "primary" | "secondary";
   size: number;
 }>();
 
@@ -13,16 +14,20 @@ const emits = defineEmits<{
   (e: "click"): void;
 }>();
 
-const iconHTML = getAppIcon(props.name, { size: "100%", color: "white" });
+const iconHTML = getAppIcon(props.name, {
+  size: "100%",
+  color: "var(--color-text-dark)",
+});
 const pointerDown = ref(false);
 const pointerHover = ref(false);
 
+const containerSize = computed(() => `${props.size}rem`);
 const buttonSize = computed(() =>
   pointerDown.value
-    ? `${props.size * 0.8}rem`
+    ? `${props.size * 0.6}rem`
     : pointerHover.value
-    ? `${props.size * 1.1}rem`
-    : `${props.size}rem`
+    ? `${props.size}rem`
+    : `${props.size * 0.8}rem`
 );
 
 function handlerPointerDown() {
@@ -56,42 +61,63 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <button
-    class="AppButton"
-    :class="[{ 'AppButton--down': pointerDown }]"
-    @mousedown="handlerPointerDown"
-    @touchstart="handlerPointerDown"
-    @mouseup="handlerPointerUp"
-    @touchend="handlerPointerUp"
-    @mouseover="handlerHover"
-    @mouseleave="handlerLeave"
-  >
-    <div class="AppButton__icon" v-html="iconHTML"></div>
-  </button>
+  <div class="AppButton">
+    <button
+      class="AppButton__inner"
+      :class="[
+        { 'AppButton__inner--down': pointerDown },
+        { 'AppButton__inner--secondary': type === 'secondary' },
+      ]"
+      @mousedown="handlerPointerDown"
+      @touchstart="handlerPointerDown"
+      @mouseup="handlerPointerUp"
+      @touchend="handlerPointerUp"
+      @mouseover="handlerHover"
+      @mouseleave="handlerLeave"
+    >
+      <div class="AppButton__inner__icon" v-html="iconHTML"></div>
+    </button>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .AppButton {
-  @include mixin-clean-button-style;
   @include mixin-center-children;
 
-  background-color: black;
-  border-radius: 50%;
+  overflow: visible;
+  position: relative;
 
-  height: v-bind(buttonSize);
-  width: v-bind(buttonSize);
-  box-shadow: 0rem 0rem 0.75rem rgba(0, 0, 0, 0.75);
+  height: v-bind(containerSize);
+  width: fit-content;
 
-  transition: height 0.3s, width 0.3s, box-shadow 0.3s;
-
-  &--down {
-    box-shadow: 0rem 0rem 0.75rem rgba(0, 0, 0, 0.5);
-  }
-
-  &__icon {
+  &__inner {
+    @include mixin-clean-button-style;
     @include mixin-center-children;
-    height: 50%;
-    widows: 50%;
+
+    position: relative;
+
+    background-color: $color-icon-primary;
+    border-radius: 50%;
+
+    height: v-bind(buttonSize);
+    width: v-bind(buttonSize);
+    box-shadow: $shadow-block-float;
+
+    transition: height 0.3s, width 0.3s, box-shadow 0.3s;
+
+    &--down {
+      box-shadow: $shadow-block-down;
+    }
+
+    &--secondary {
+      background-color: $color-icon-secondary;
+    }
+
+    &__icon {
+      @include mixin-center-children;
+      height: 57%;
+      widows: 57%;
+    }
   }
 }
 </style>

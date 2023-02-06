@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-import MovingWindow from "./MovingWindow.vue";
+import MovingWindowApplications from "./MovingWindowApplications.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 
 import { storeToRefs } from "pinia";
@@ -35,15 +35,7 @@ onMounted(() => {
         actionEvent !== null ? actionEvent.type === 'move' : false
       "
     />
-    <MovingWindow
-      v-for="[id, mvState] in movingWindows"
-      :key="id"
-      :id="id"
-      :position="mvState.position"
-      :size="mvState.size"
-      :order="mvState.order"
-      :focused="topWindow !== null && mvState.id === topWindow.id"
-    />
+    <MovingWindowApplications></MovingWindowApplications>
   </div>
 </template>
 

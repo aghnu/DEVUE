@@ -101,7 +101,7 @@ onMounted(() => {
 .WindowsManagerGhostPanel {
   &__window {
     position: absolute;
-    padding: 0.25rem;
+    padding: 1rem;
 
     width: v-bind(stylePanelToWidth);
     height: v-bind(stylePanelToHeight);
@@ -110,21 +110,20 @@ onMounted(() => {
 
     z-index: v-bind(stylePanelZIndex);
 
+    will-change: height, width, left, top, z-index;
+
     transition: all 0.4s;
 
     &__inner {
       height: 100%;
       width: 100%;
 
-      // border: solid;
-      // border-width: 2px;
-      // border-color: rgba(60, 58, 64, 0.2);
+      border: solid;
+      border-width: 0.1rem;
+      border-color: $color-text-dark;
+      background-color: $color-block-transparent;
 
-      border-radius: 0.75rem;
-      box-shadow: 0 0 0.55rem rgba(0, 0, 0, 0.2);
-      background-color: $color-block-dark;
-
-      opacity: 0.85;
+      border-radius: 1rem;
     }
   }
 }
