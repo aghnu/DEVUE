@@ -3,12 +3,10 @@ import MovingWindow from "../../components/MovingWindow.vue";
 import { Tuple } from "../../types/TypeBasic";
 import { ref, Ref, onMounted } from "vue";
 import { TerminalDataInit } from "../../types/TypeMessage";
+import { MovingWindowLocalState } from "../../types/TypeWindows";
 
 defineProps<{
-  id: string;
-  order: number;
-  position: Tuple<number>;
-  size: Tuple<number>;
+  state: MovingWindowLocalState;
   focused: boolean;
 }>();
 
@@ -32,10 +30,10 @@ function handlerIframeload(e: Event) {
 
 <template>
   <MovingWindow
-    :id="id"
-    :position="position"
-    :size="size"
-    :order="order"
+    :id="state.id"
+    :position="state.position"
+    :size="state.size"
+    :order="state.order"
     :focused="focused"
   >
     <div class="AppTerminal">
