@@ -63,8 +63,8 @@ const handlerTouchStart = (e: TouchEvent) => {
           'MovingWindowTitleBar__button',
           { 'MovingWindowTitleBar__button--focused': props.focused },
         ]"
-        @mousedown.stop="() => emits('action:close')"
-        @touchstart.stop="() => emits('action:close')"
+        @mousedown.prevent.stop="() => emits('action:close')"
+        @touchstart.prevent.stop="() => emits('action:close')"
         v-html="iconClose"
       />
     </div>

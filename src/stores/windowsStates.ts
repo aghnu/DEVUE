@@ -63,7 +63,10 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       // update order
       for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
         const itemID = this.movingWindowsOrderStack[i];
-        this.movingWindows.get(itemID)!.order = i;
+        const item = this.movingWindows.get(itemID);
+        if (item !== undefined) {
+          item.order = i;
+        }
       }
     },
 

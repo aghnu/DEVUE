@@ -24,7 +24,9 @@ connectWindowsActionEvent();
 <template>
   <div class="WindowsManager" ref="windowsManagerElement">
     <WindowsManagerGhostPanel
-      :focused-moving-window-state="(topWindow !== null) ? movingWindows.get(topWindow.id)! : null"
+      :focused-moving-window-state="
+        topWindow !== null ? movingWindows.get(topWindow.id) ?? null : null
+      "
       :ghost-panel-enabled="
         actionEvent !== null ? actionEvent.type === 'move' : false
       "
