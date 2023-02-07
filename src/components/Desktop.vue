@@ -74,9 +74,6 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .Desktop {
-  --height-action-bar: 6rem;
-  --height-footer: 3rem;
-
   @include mixin-center-children;
   @include mixin-disable-pointer;
 
@@ -112,7 +109,7 @@ onUnmounted(() => {
     @include mixin-disable-pointer;
 
     position: relative;
-    height: var(--height-footer);
+    height: fit-content;
     width: 100%;
     z-index: 0;
   }

@@ -57,6 +57,10 @@ const handlerTouchStart = (e: TouchEvent) => {
   ]);
 };
 
+const handlerCloseWindow = () => {
+  windowsStates.removeMovingWindow(props.id);
+};
+
 function updateActionEventMoving() {
   windowsStates.updateMovingWindowAction({
     id: props.id,
@@ -116,7 +120,10 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <!-- <MovingWindowTitleBar :focused="props.focused" /> -->
+        <MovingWindowTitleBar
+          :focused="props.focused"
+          @action:close="handlerCloseWindow"
+        />
       </div>
       <div
         class="MovingWindow__window_display__content"
@@ -164,7 +171,7 @@ function resetActionEvent() {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 1.5rem;
+  --title-height: 2.25rem;
 
   position: absolute;
 

@@ -42,6 +42,31 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       this.movingWindowsOrderStack.push(movingWindow.id);
     },
 
+    removeMovingWindow(movingWindowID: MovingWindowID) {
+      if (this.movingWindows.has(movingWindowID)) {
+        this.movingWindows.delete(movingWindowID);
+
+        // delete movingWindows from order stack
+        const movingWindowsOrderStackTemp: MovingWindowID[] = [];
+        for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
+          const itemID = this.movingWindowsOrderStack[i];
+          if (itemID !== movingWindowID) {
+            movingWindowsOrderStackTemp.push(itemID);
+          }
+        }
+        this.movingWindowsOrderStack = movingWindowsOrderStackTemp;
+        this.refreshMovingWindowOrder();
+      }
+    },
+
+    refreshMovingWindowOrder() {
+      // update order
+      for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
+        const itemID = this.movingWindowsOrderStack[i];
+        this.movingWindows.get(itemID)!.order = i;
+      }
+    },
+
     focusMovingWindow(movingWindowID: MovingWindowID) {
       const movingWindowsOrderStackTemp: MovingWindowID[] = [];
 
@@ -54,12 +79,7 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       }
       movingWindowsOrderStackTemp.push(movingWindowID);
       this.movingWindowsOrderStack = movingWindowsOrderStackTemp;
-
-      // update order
-      for (let i = 0; i < movingWindowsOrderStackTemp.length; i++) {
-        const itemID = this.movingWindowsOrderStack[i];
-        this.movingWindows.get(itemID)!.order = i;
-      }
+      this.refreshMovingWindowOrder();
     },
 
     updateMovingWindowState(
@@ -84,14 +104,17 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       }
     },
 
-    updateAllMovingWindowsStateMap(updateFunc: (movingWindowState: MovingWindowLocalState) => Partial<MovingWindowLocalState>) {
-
+    updateAllMovingWindowsStateMap(
+      updateFunc: (
+        movingWindowState: MovingWindowLocalState
+      ) => Partial<MovingWindowLocalState>
+    ) {
       this.movingWindows.forEach((movingWindowState, id) => {
         new Promise(() => {
           const partialState = updateFunc(movingWindowState);
           Object.assign(this.movingWindows.get(id)!, partialState);
         });
       });
-    }
+    },
   },
 });

@@ -2,7 +2,6 @@
 import { getAppIcon } from "../utilities/factorySVG";
 import { AppName } from "../types/TypeApp";
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { emit } from "process";
 
 const props = defineProps<{
   name: AppName;
