@@ -103,26 +103,12 @@ function resetActionEvent() {
       class="MovingWindow__window_display"
       :class="{ 'MovingWindow__window_display--focused': props.focused }"
     >
-      <div
-        class="MovingWindow__window_display__title_bar"
-        @mousedown.stop="
-          (e) => {
-            handlerMouseDown(e);
-            updateActionEventMoving();
-          }
-        "
-        @touchstart.stop="
-          (e) => {
-            handlerTouchStart(e);
-            updateActionEventMoving();
-          }
-        "
-        @mouseup.stop="resetActionEvent()"
-        @touchend.stop="resetActionEvent()"
-      >
+      <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
           :focused="props.focused"
           @action:close="handlerCloseWindow"
+          @action:movestart="updateActionEventMoving"
+          @action:moveover="resetActionEvent"
         />
       </div>
       <div
