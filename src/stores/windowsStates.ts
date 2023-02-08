@@ -42,6 +42,10 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
     },
 
     focusMovingWindow(movingWindowID: MovingWindowID) {
+      if (this.topWindow && this.topWindow.id === movingWindowID) {
+        return;
+      }
+
       const movingWindow = this.movingWindows.get(movingWindowID);
       if (movingWindow) {
         movingWindow.order = this.topWindow ? this.topWindow.order + 1 : 0;
