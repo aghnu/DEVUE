@@ -177,14 +177,14 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.75rem;
-    box-shadow: $shadow-block-float;
+    box-shadow: $shadow-block-down;
     background-color: $color-app-default-background;
     border: solid;
     border-width: 0.1rem;
     border-color: $color-text-dark;
 
     &--focused {
-      box-shadow: $shadow-block-down;
+      box-shadow: $shadow-block-float;
     }
 
     &__title_bar {
