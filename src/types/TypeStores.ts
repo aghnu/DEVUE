@@ -1,6 +1,10 @@
 import { Tuple } from "../types/TypeBasic";
 import { PointerOperation } from "./TypeDesktop";
-import { MovingWindowLocalState, MovingWindowID, MovingWindowActionEvent } from "./TypeWindows";
+import {
+  MovingWindowLocalState,
+  MovingWindowID,
+  MovingWindowActionEvent,
+} from "./TypeWindows";
 
 export interface DesktopStatesStore {
   positionPointer: Tuple<number>;
@@ -11,6 +15,5 @@ export interface DesktopStatesStore {
 
 export interface WindowsStatesStore {
   movingWindows: Map<MovingWindowID, MovingWindowLocalState>;
-  movingWindowsOrderStack: MovingWindowID[];
   actionEvent: MovingWindowActionEvent | null;
 }

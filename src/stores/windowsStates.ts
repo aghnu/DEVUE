@@ -10,20 +10,17 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
   state: (): WindowsStatesStore => {
     return {
       movingWindows: new Map<MovingWindowID, MovingWindowLocalState>(),
-      movingWindowsOrderStack: [] as MovingWindowID[],
       actionEvent: null,
     };
   },
   getters: {
+    movingWindowsOrderStack(): MovingWindowID[] {
+      return Array.from(this.movingWindows.values())
+        .sort((a, b) => b.order - a.order)
+        .map((e) => e.id);
+    },
     topWindow(): MovingWindowLocalState | null {
-      const numWindows = this.movingWindowsOrderStack.length;
-      if (numWindows === 0) {
-        return null;
-      } else {
-        return this.movingWindows.get(
-          this.movingWindowsOrderStack[numWindows - 1]
-        )!;
-      }
+      return this.movingWindows.get(this.movingWindowsOrderStack[0]) ?? null;
     },
   },
   actions: {
@@ -36,53 +33,19 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
     },
 
     addMovingWindow(movingWindow: MovingWindowLocalState) {
-      movingWindow.order = this.movingWindowsOrderStack.length;
-
+      movingWindow.order = this.topWindow ? this.topWindow.order + 1 : 0;
       this.movingWindows.set(movingWindow.id, movingWindow);
-      this.movingWindowsOrderStack.push(movingWindow.id);
     },
 
     removeMovingWindow(movingWindowID: MovingWindowID) {
-      if (this.movingWindows.has(movingWindowID)) {
-        this.movingWindows.delete(movingWindowID);
-
-        // delete movingWindows from order stack
-        const movingWindowsOrderStackTemp: MovingWindowID[] = [];
-        for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
-          const itemID = this.movingWindowsOrderStack[i];
-          if (itemID !== movingWindowID) {
-            movingWindowsOrderStackTemp.push(itemID);
-          }
-        }
-        this.movingWindowsOrderStack = movingWindowsOrderStackTemp;
-        this.refreshMovingWindowOrder();
-      }
-    },
-
-    refreshMovingWindowOrder() {
-      // update order
-      for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
-        const itemID = this.movingWindowsOrderStack[i];
-        const item = this.movingWindows.get(itemID);
-        if (item !== undefined) {
-          item.order = i;
-        }
-      }
+      this.movingWindows.delete(movingWindowID);
     },
 
     focusMovingWindow(movingWindowID: MovingWindowID) {
-      const movingWindowsOrderStackTemp: MovingWindowID[] = [];
-
-      // update order stack
-      for (let i = 0; i < this.movingWindowsOrderStack.length; i++) {
-        const itemID = this.movingWindowsOrderStack[i];
-        if (itemID !== movingWindowID) {
-          movingWindowsOrderStackTemp.push(itemID);
-        }
+      const movingWindow = this.movingWindows.get(movingWindowID);
+      if (movingWindow) {
+        movingWindow.order = this.topWindow ? this.topWindow.order + 1 : 0;
       }
-      movingWindowsOrderStackTemp.push(movingWindowID);
-      this.movingWindowsOrderStack = movingWindowsOrderStackTemp;
-      this.refreshMovingWindowOrder();
     },
 
     updateMovingWindowState(
