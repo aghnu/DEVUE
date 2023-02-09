@@ -98,6 +98,10 @@ onUnmounted(() => {
     background-color: $color-icon-primary;
     border-radius: 50%;
 
+    border: solid;
+    border-width: 0.1rem;
+    border-color: $color-text-dark;
+
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
     box-shadow: $shadow-block-down;

@@ -52,6 +52,8 @@ onMounted(() => {
   border-color: $color-text-dark;
   background-color: $color-block-transparent;
 
+  box-shadow: $shadow-block-float;
+
   &__dividor {
     height: 1.75rem;
     margin-left: 0.5rem;

@@ -157,7 +157,7 @@ function resetActionEvent() {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 2.25rem;
+  --title-height: 1.75rem;
 
   position: absolute;
 
