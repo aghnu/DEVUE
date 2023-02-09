@@ -101,7 +101,7 @@ onMounted(() => {
 .WindowsManagerGhostPanel {
   &__window {
     position: absolute;
-    padding: 1rem;
+    padding: 0.5rem;
 
     width: v-bind(stylePanelToWidth);
     height: v-bind(stylePanelToHeight);
