@@ -187,6 +187,8 @@ function resetActionEvent() {
     border-width: 0.1rem;
     border-color: $color-text-dark;
 
+    transition: box-shadow 0.15s;
+
     &--focused {
       box-shadow: $shadow-block-float;
     }

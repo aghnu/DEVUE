@@ -39,12 +39,12 @@ onMounted(() => {
   @include mixin-disable-pointer;
 
   display: flex;
-  gap: 1.5rem;
+  gap: 1.75rem;
 
   width: fit-content;
   height: fit-content;
 
-  padding: 0.55rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
 
   border: solid;
@@ -56,8 +56,8 @@ onMounted(() => {
 
   &__dividor {
     height: 1.75rem;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    // margin-left: 0.5rem;
+    // margin-right: 0.5rem;
     width: 0.1rem;
     border-radius: 0.1rem;
     background-color: $color-text-dark;

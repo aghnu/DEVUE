@@ -11,7 +11,7 @@ defineProps<{
 function terminalInit(element: HTMLIFrameElement) {
   const data: TerminalDataInit = {
     type: "init",
-    colorPlain: "#7d7d7d",
+    colorPlain: "#8e8e8e",
     colorFocus: "#f9ca8f",
     colorBackground: "#080808",
     colorAppBackground: "transparent",
