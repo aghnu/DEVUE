@@ -10,13 +10,15 @@
 
   height: fit-content;
   width: 100%;
+
   &__text {
     color: $color-text-footer;
     font-weight: 300;
-    font-size: 0.75rem;
+    font-size: 0.6rem;
     letter-spacing: 0.65rem;
     white-space: nowrap;
     margin-bottom: 1rem;
+    pointer-events: none;
   }
 }
 </style>
