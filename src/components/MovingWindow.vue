@@ -7,7 +7,10 @@ import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 
-import { MovingWindowResizeDirection } from "../types/TypeWindows";
+import {
+  MovingWindowID,
+  MovingWindowResizeDirection,
+} from "../types/TypeWindows";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -15,7 +18,7 @@ const windowsStates = useWindowsStatesStore();
 
 // define props
 const props = defineProps<{
-  id: string;
+  id: MovingWindowID;
   order: number;
   position: Tuple<number>;
   size: Tuple<number>;
@@ -105,6 +108,7 @@ function resetActionEvent() {
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
+          :windowid="id"
           :focused="props.focused"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"

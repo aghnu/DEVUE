@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { storeToRefs } from "pinia";
+import { computed } from "vue";
 import { getIconClose } from "../utilities/factorySVG";
+import { MovingWindowID } from "../types/TypeWindows";
+
 const props = defineProps<{
   focused: boolean;
+  windowid: MovingWindowID;
 }>();
 
 const emits = defineEmits<{
@@ -19,6 +24,24 @@ const iconClose = getIconClose({
 
 // store
 const desktopStates = useDesktopStatesStore();
+const windowsState = useWindowsStatesStore();
+const { actionEvent, topWindow } = storeToRefs(windowsState);
+
+const windowIsMoving = computed(() => {
+  if (
+    topWindow.value &&
+    topWindow.value.id === props.windowid &&
+    actionEvent.value !== null
+  ) {
+    switch (actionEvent.value.type) {
+      case "move":
+        return true;
+    }
+    return false;
+  }
+
+  return false;
+});
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -38,7 +61,12 @@ const handlerTouchStart = (e: TouchEvent) => {
 </script>
 
 <template>
-  <div class="MovingWindowTitleBar">
+  <div
+    :class="[
+      'MovingWindowTitleBar',
+      { 'MovingWindowTitleBar--moving': windowIsMoving },
+    ]"
+  >
     <div
       class="MovingWindowTitleBar__drag"
       @mousedown.stop="
@@ -83,7 +111,6 @@ const handlerTouchStart = (e: TouchEvent) => {
 <style scoped lang="scss">
 .MovingWindowTitleBar {
   --MovingWindowTitleBar__control_section--gap: 0.45rem;
-  --MovingWindowTitleBar__dragbar--height: 100%;
 
   height: 100%;
   width: 100%;
@@ -140,16 +167,37 @@ const handlerTouchStart = (e: TouchEvent) => {
     @include mixin-center-children;
     position: absolute;
     top: 0;
-    height: var(--MovingWindowTitleBar__dragbar--height);
+    height: 100%;
     width: 100%;
 
     &__content {
       height: 0.1rem;
-      border-radius: 0.5rem;
+      border-radius: 0.05rem;
       width: 10%;
       max-width: 7.5rem;
       min-width: 2.5rem;
       background-color: $color-text-dark;
+      transition: all 0.3s;
+    }
+  }
+}
+
+.MovingWindowTitleBar {
+  &--moving {
+    .MovingWindowTitleBar {
+      &__drag {
+        cursor: move;
+      }
+
+      &__dragbar {
+        &__content {
+          height: 0.2rem;
+          width: calc(10% * 1.25);
+          max-width: calc(7.5rem * 1.25);
+          min-width: calc(2.5rem * 1.25);
+          border-radius: 0.1rem;
+        }
+      }
     }
   }
 }
