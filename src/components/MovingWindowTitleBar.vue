@@ -173,8 +173,8 @@ const handlerTouchStart = (e: TouchEvent) => {
     &__content {
       @include mixin-disable-pointer;
 
-      height: 0.2rem;
-      border-radius: 0.1rem;
+      height: 0.15rem;
+      border-radius: 0.75rem;
       width: 10%;
       max-width: 7.5rem;
       min-width: 2.5rem;
@@ -193,11 +193,11 @@ const handlerTouchStart = (e: TouchEvent) => {
 
       &__dragbar {
         &__content {
-          height: 0.25rem;
-          border-radius: 0.125rem;
-          width: calc(10% * 1.25);
-          max-width: calc(7.5rem * 1.25);
-          min-width: calc(2.5rem * 1.25);
+          height: 0.2rem;
+          border-radius: 0.1rem;
+          width: calc(10% * 1.35);
+          max-width: calc(7.5rem * 1.35);
+          min-width: calc(2.5rem * 1.35);
         }
       }
     }
