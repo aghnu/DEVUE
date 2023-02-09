@@ -171,6 +171,8 @@ const handlerTouchStart = (e: TouchEvent) => {
     width: 100%;
 
     &__content {
+      @include mixin-disable-pointer;
+
       height: 0.1rem;
       border-radius: 0.05rem;
       width: 10%;
