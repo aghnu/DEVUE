@@ -17,7 +17,7 @@
     font-size: 0.6rem;
     letter-spacing: 0.65rem;
     white-space: nowrap;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     pointer-events: none;
   }
 }
