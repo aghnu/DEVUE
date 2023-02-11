@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "@vue/reactivity";
 import { onMounted, watch } from "vue";
-import { MovingWindowLocalState } from "../types/TypeWindows";
 import { usePointerLocation } from "../composables/usePointerLocation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
@@ -11,14 +10,14 @@ const windowsState = useWindowsStatesStore();
 const { actionEvent, topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
 
-const isGhostPanelEnabledWindowMoved = ref(false);
+var isGhostPanelEnabledWindowMoved: boolean = false;
 const ghostPanelEnabled = computed(() => {
   if (
     actionEvent.value !== null &&
     actionEvent.value.type === "move" &&
     topWindow.value
   ) {
-    if (isGhostPanelEnabledWindowMoved.value) {
+    if (isGhostPanelEnabledWindowMoved) {
       return true;
     }
 
@@ -28,11 +27,11 @@ const ghostPanelEnabled = computed(() => {
       topWindow.value.position[1] !==
         actionEvent.value.windowPositionSnapshot[1]
     ) {
-      isGhostPanelEnabledWindowMoved.value = true;
+      isGhostPanelEnabledWindowMoved = true;
       return true;
     }
   }
-  isGhostPanelEnabledWindowMoved.value = false;
+  isGhostPanelEnabledWindowMoved = false;
   return false;
 });
 const ghostPanelShow = computed(() => {
@@ -70,8 +69,6 @@ onMounted(() => {
     },
     { immediate: true }
   );
-
-  watch(actionEvent, (newValue, oldValue) => {});
 
   watch(
     pointerLocation,
