@@ -11,10 +11,28 @@ const windowsState = useWindowsStatesStore();
 const { actionEvent, topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
 
+const isGhostPanelEnabledWindowMoved = ref(false);
 const ghostPanelEnabled = computed(() => {
-  if (actionEvent.value !== null && actionEvent.value.type === "move") {
-    return true;
+  if (
+    actionEvent.value !== null &&
+    actionEvent.value.type === "move" &&
+    topWindow.value
+  ) {
+    if (isGhostPanelEnabledWindowMoved.value) {
+      return true;
+    }
+
+    if (
+      topWindow.value.position[0] !==
+        actionEvent.value.windowPositionSnapshot[0] ||
+      topWindow.value.position[1] !==
+        actionEvent.value.windowPositionSnapshot[1]
+    ) {
+      isGhostPanelEnabledWindowMoved.value = true;
+      return true;
+    }
   }
+  isGhostPanelEnabledWindowMoved.value = false;
   return false;
 });
 const ghostPanelShow = computed(() => {
