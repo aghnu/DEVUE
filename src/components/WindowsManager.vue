@@ -4,16 +4,12 @@ import { ref } from "vue";
 import MovingWindowApplications from "./MovingWindowApplications.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 
-import { storeToRefs } from "pinia";
-import { useWindowsStatesStore } from "../stores/windowsStates";
 import {
   connectWindowResizeStateUpdate,
   connectWindowsActionEvent,
 } from "../logics/doWindowAction";
 
 // variables
-const windowsState = useWindowsStatesStore();
-const { topWindow, actionEvent } = storeToRefs(windowsState);
 const windowsManagerElement = ref<HTMLDivElement>();
 
 // connect logics
