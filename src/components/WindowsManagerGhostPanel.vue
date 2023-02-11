@@ -77,6 +77,13 @@ onMounted(() => {
         topWindow.value.snapped = pointerLocation.value;
       }
     }
+
+    // start moving
+    if (newValue || !oldValue) {
+      if (topWindow.value !== null) {
+        topWindow.value.snapped = "center";
+      }
+    }
   });
 
   watch(
