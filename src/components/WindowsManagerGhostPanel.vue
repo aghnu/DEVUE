@@ -3,28 +3,29 @@ import { computed, ref } from "@vue/reactivity";
 import { onMounted, watch } from "vue";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { usePointerLocation } from "../composables/usePointerLocation";
-
-const props = defineProps<{
-  focusedMovingWindowState: MovingWindowLocalState | null; // get focused window order and its state
-  ghostPanelEnabled: boolean;
-}>();
+import { useWindowsStatesStore } from "../stores/windowsStates";
+import { storeToRefs } from "pinia";
 
 // vairables
+const windowsState = useWindowsStatesStore();
+const { actionEvent, topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
 
+const ghostPanelEnabled = computed(() => {
+  if (actionEvent.value !== null && actionEvent.value.type === "move") {
+    return true;
+  }
+  return false;
+});
 const ghostPanelShow = computed(() => {
   return (
-    props.ghostPanelEnabled &&
+    ghostPanelEnabled.value &&
     pointerLocation.value !== "center" &&
-    props.focusedMovingWindowState !== null
+    topWindow.value !== null
   );
 });
 const stylePanelZIndex = computed(() => {
-  return String(
-    props.focusedMovingWindowState !== null
-      ? props.focusedMovingWindowState.order
-      : 0
-  );
+  return String(topWindow.value !== null ? topWindow.value.order : 0);
 });
 
 const stylePanelFromWidth = ref("unset");
@@ -42,19 +43,17 @@ onMounted(() => {
   watch(
     ghostPanelShow,
     () => {
-      if (props.focusedMovingWindowState !== null) {
-        stylePanelFromWidth.value =
-          String(props.focusedMovingWindowState!.size[0]) + "px";
-        stylePanelFromHeight.value =
-          String(props.focusedMovingWindowState!.size[1]) + "px";
-        stylePanelFromLeft.value =
-          String(props.focusedMovingWindowState!.position[0]) + "px";
-        stylePanelFromTop.value =
-          String(props.focusedMovingWindowState!.position[1]) + "px";
+      if (topWindow.value !== null) {
+        stylePanelFromWidth.value = String(topWindow.value.size[0]) + "px";
+        stylePanelFromHeight.value = String(topWindow.value.size[1]) + "px";
+        stylePanelFromLeft.value = String(topWindow.value.position[0]) + "px";
+        stylePanelFromTop.value = String(topWindow.value.position[1]) + "px";
       }
     },
     { immediate: true }
   );
+
+  watch(actionEvent, (newValue, oldValue) => {});
 
   watch(
     pointerLocation,

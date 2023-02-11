@@ -13,7 +13,7 @@ import {
 
 // variables
 const windowsState = useWindowsStatesStore();
-const { movingWindows, topWindow, actionEvent } = storeToRefs(windowsState);
+const { topWindow, actionEvent } = storeToRefs(windowsState);
 const windowsManagerElement = ref<HTMLDivElement>();
 
 // connect logics
@@ -23,15 +23,8 @@ connectWindowsActionEvent();
 
 <template>
   <div class="WindowsManager" ref="windowsManagerElement">
-    <WindowsManagerGhostPanel
-      :focused-moving-window-state="
-        topWindow !== null ? movingWindows.get(topWindow.id) ?? null : null
-      "
-      :ghost-panel-enabled="
-        actionEvent !== null ? actionEvent.type === 'move' : false
-      "
-    />
-    <MovingWindowApplications></MovingWindowApplications>
+    <WindowsManagerGhostPanel />
+    <MovingWindowApplications />
   </div>
 </template>
 
