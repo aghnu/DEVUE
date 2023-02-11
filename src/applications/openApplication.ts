@@ -30,6 +30,7 @@ function openAppTerminal() {
     size: [0, 0],
     sizeMin: null,
     sizeMax: null,
+    snapped: "center",
     appInstance: appInstance,
   });
 

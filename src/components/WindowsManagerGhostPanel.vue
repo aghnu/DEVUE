@@ -70,6 +70,15 @@ onMounted(() => {
     { immediate: true }
   );
 
+  watch(ghostPanelEnabled, (newValue, oldValue) => {
+    // stop moving, pointer released by user
+    if (!newValue || oldValue) {
+      if (topWindow.value !== null) {
+        topWindow.value.snapped = pointerLocation.value;
+      }
+    }
+  });
+
   watch(
     pointerLocation,
     () => {

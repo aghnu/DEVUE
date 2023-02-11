@@ -1,5 +1,6 @@
 import { Tuple } from "../types/TypeBasic";
 import { ApplicationInstance } from "./TypeApp";
+import { PointerLocation } from "./TypeDesktop";
 
 // type
 export type MovingWindowResizeDirection =
@@ -31,6 +32,7 @@ export interface MovingWindowLocation {
 export interface MovingWindowLocalState extends MovingWindowLocation {
   id: string;
   order: number;
+  snapped: PointerLocation;
   appInstance: ApplicationInstance;
 }
 
