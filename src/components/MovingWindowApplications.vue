@@ -4,7 +4,7 @@ import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 
 const windowsState = useWindowsStatesStore();
-const { movingWindows, topWindow } = storeToRefs(windowsState);
+const { movingWindows } = storeToRefs(windowsState);
 </script>
 
 <template>
@@ -14,7 +14,6 @@ const { movingWindows, topWindow } = storeToRefs(windowsState);
         <AppTerminal
           v-if="mvState.appInstance.name === 'terminal'"
           :state="mvState"
-          :focused="topWindow !== null && mvState.id === topWindow.id"
         />
       </template>
     </TransitionGroup>

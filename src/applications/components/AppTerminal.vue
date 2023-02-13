@@ -5,7 +5,6 @@ import { MovingWindowLocalState } from "../../types/TypeWindows";
 
 defineProps<{
   state: MovingWindowLocalState;
-  focused: boolean;
 }>();
 
 function terminalInit(element: HTMLIFrameElement) {
@@ -27,10 +26,7 @@ function handlerIframeload(e: Event) {
 </script>
 
 <template>
-  <MovingWindow
-    :state="state"
-    :focused="focused"
-  >
+  <MovingWindow :state="state">
     <div class="AppTerminal">
       <iframe
         class="AppTerminal__internal"

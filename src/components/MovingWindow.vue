@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { toRaw } from "vue";
-import { Tuple } from "../types/TypeBasic";
+import { toRaw, ref } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
-import { computed } from "@vue/reactivity";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
+import { useMovingWindowConfig } from "../composables/useMovingWindowConfig";
 
 import {
-  MovingWindowID,
   MovingWindowLocalState,
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
@@ -20,27 +19,17 @@ const windowsStates = useWindowsStatesStore();
 // define props
 const props = defineProps<{
   state: MovingWindowLocalState;
-  focused: boolean;
 }>();
 
 // compute styling string
-const styleWindowPositionLeft = computed(
-  () => String(props.state.position[0]) + "px"
-);
-const styleWindowPositionTop = computed(() => String(props.state.position[1]) + "px");
-const styleWindowSizeWidth = computed(() => String(props.state.size[0]) + "px");
-const styleWindowSizeHeight = computed(() => String(props.state.size[1]) + "px");
-const styleWindowZIndex = computed(() => String(props.state.order));
-const movingWindowDirections: MovingWindowResizeDirection[] = [
-  "se",
-  "sw",
-  "ne",
-  "nw",
-  "e",
-  "n",
-  "w",
-  "s",
-];
+const {
+  styleWindowPositionLeft,
+  styleWindowPositionTop,
+  styleWindowSizeWidth,
+  styleWindowSizeHeight,
+  styleWindowZIndex,
+  isWindowFocused,
+} = useMovingWindowConfig(ref(props.state));
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -102,12 +91,12 @@ function resetActionEvent() {
   <div class="MovingWindow">
     <div
       class="MovingWindow__window_display"
-      :class="{ 'MovingWindow__window_display--focused': focused }"
+      :class="{ 'MovingWindow__window_display--focused': isWindowFocused }"
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
           :windowid="state.id"
-          :focused="focused"
+          :focused="isWindowFocused"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
@@ -137,7 +126,7 @@ function resetActionEvent() {
     </div>
 
     <div
-      v-for="direction in movingWindowDirections"
+      v-for="direction in MOVING_WINDOW_DIRECTIONS"
       :class="`MovingWindow__panel_resize MovingWindow__panel_resize--direction-${direction}`"
       @mousedown.stop="
         (e) => {
