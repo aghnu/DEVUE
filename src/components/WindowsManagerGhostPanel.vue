@@ -10,7 +10,6 @@ import { storeToRefs } from "pinia";
 const windowsState = useWindowsStatesStore();
 const { topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
-
 const { isTopWindowStartedMoving } = useTopWindowStartedMoving();
 
 const ghostPanelShow = computed(() => {
@@ -48,22 +47,6 @@ onMounted(() => {
     },
     { immediate: true }
   );
-
-  watch(isTopWindowStartedMoving, (newValue, oldValue) => {
-    // stop moving, pointer released by user
-    if (!newValue || oldValue) {
-      if (topWindow.value !== null) {
-        topWindow.value.snapped = pointerLocation.value;
-      }
-    }
-
-    // start moving
-    if (newValue || !oldValue) {
-      if (topWindow.value !== null) {
-        topWindow.value.snapped = "center";
-      }
-    }
-  });
 
   watch(
     pointerLocation,

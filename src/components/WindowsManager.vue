@@ -8,6 +8,7 @@ import {
   connectWindowResizeStateUpdate,
   connectWindowsActionEvent,
 } from "../logics/doWindowAction";
+import { connectWindowSnapping } from "../logics/doWindowSnapping";
 
 // variables
 const windowsManagerElement = ref<HTMLDivElement>();
@@ -15,6 +16,7 @@ const windowsManagerElement = ref<HTMLDivElement>();
 // connect logics
 connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
 connectWindowsActionEvent();
+connectWindowSnapping();
 </script>
 
 <template>
