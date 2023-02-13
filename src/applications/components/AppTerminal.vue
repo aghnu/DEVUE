@@ -28,10 +28,7 @@ function handlerIframeload(e: Event) {
 
 <template>
   <MovingWindow
-    :id="state.id"
-    :position="state.position"
-    :size="state.size"
-    :order="state.order"
+    :state="state"
     :focused="focused"
   >
     <div class="AppTerminal">

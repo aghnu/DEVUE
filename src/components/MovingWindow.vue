@@ -9,6 +9,7 @@ import { useWindowsStatesStore } from "../stores/windowsStates";
 
 import {
   MovingWindowID,
+  MovingWindowLocalState,
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
 
@@ -18,21 +19,18 @@ const windowsStates = useWindowsStatesStore();
 
 // define props
 const props = defineProps<{
-  id: MovingWindowID;
-  order: number;
-  position: Tuple<number>;
-  size: Tuple<number>;
+  state: MovingWindowLocalState;
   focused: boolean;
 }>();
 
 // compute styling string
 const styleWindowPositionLeft = computed(
-  () => String(props.position[0]) + "px"
+  () => String(props.state.position[0]) + "px"
 );
-const styleWindowPositionTop = computed(() => String(props.position[1]) + "px");
-const styleWindowSizeWidth = computed(() => String(props.size[0]) + "px");
-const styleWindowSizeHeight = computed(() => String(props.size[1]) + "px");
-const styleWindowZIndex = computed(() => String(props.order));
+const styleWindowPositionTop = computed(() => String(props.state.position[1]) + "px");
+const styleWindowSizeWidth = computed(() => String(props.state.size[0]) + "px");
+const styleWindowSizeHeight = computed(() => String(props.state.size[1]) + "px");
+const styleWindowZIndex = computed(() => String(props.state.order));
 const movingWindowDirections: MovingWindowResizeDirection[] = [
   "se",
   "sw",
@@ -61,36 +59,36 @@ const handlerTouchStart = (e: TouchEvent) => {
 };
 
 const handlerCloseWindow = () => {
-  windowsStates.removeMovingWindow(props.id);
+  windowsStates.removeMovingWindow(props.state.id);
 };
 
 function updateActionEventMoving() {
   windowsStates.updateMovingWindowAction({
-    id: props.id,
+    id: props.state.id,
     type: "move",
-    windowPositionSnapshot: toRaw(props.position),
-    windowSizeSnapshot: toRaw(props.size),
+    windowPositionSnapshot: toRaw(props.state.position),
+    windowSizeSnapshot: toRaw(props.state.size),
     pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
 
 function updateActionEventFocus() {
   windowsStates.updateMovingWindowAction({
-    id: props.id,
+    id: props.state.id,
     type: "focus",
-    windowPositionSnapshot: toRaw(props.position),
-    windowSizeSnapshot: toRaw(props.size),
+    windowPositionSnapshot: toRaw(props.state.position),
+    windowSizeSnapshot: toRaw(props.state.size),
     pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
 
 function updateActionEventResize(direction: MovingWindowResizeDirection) {
   windowsStates.updateMovingWindowAction({
-    id: props.id,
+    id: props.state.id,
     direction: direction,
     type: "resize",
-    windowPositionSnapshot: toRaw(props.position),
-    windowSizeSnapshot: toRaw(props.size),
+    windowPositionSnapshot: toRaw(props.state.position),
+    windowSizeSnapshot: toRaw(props.state.size),
     pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
   });
 }
@@ -104,12 +102,12 @@ function resetActionEvent() {
   <div class="MovingWindow">
     <div
       class="MovingWindow__window_display"
-      :class="{ 'MovingWindow__window_display--focused': props.focused }"
+      :class="{ 'MovingWindow__window_display--focused': focused }"
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
-          :windowid="id"
-          :focused="props.focused"
+          :windowid="state.id"
+          :focused="focused"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
