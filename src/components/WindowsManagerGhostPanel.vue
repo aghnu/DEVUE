@@ -3,40 +3,19 @@ import { computed, ref } from "@vue/reactivity";
 import { onMounted, watch } from "vue";
 import { usePointerLocation } from "../composables/usePointerLocation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { useTopWindowStartedMoving } from "../composables/useTopWindowStartedMoving";
 import { storeToRefs } from "pinia";
 
 // vairables
 const windowsState = useWindowsStatesStore();
-const { actionEvent, topWindow } = storeToRefs(windowsState);
+const { topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
 
-var isGhostPanelEnabledWindowMoved: boolean = false;
-const ghostPanelEnabled = computed(() => {
-  if (
-    actionEvent.value !== null &&
-    actionEvent.value.type === "move" &&
-    topWindow.value
-  ) {
-    if (isGhostPanelEnabledWindowMoved) {
-      return true;
-    }
+const { isTopWindowStartedMoving } = useTopWindowStartedMoving();
 
-    if (
-      topWindow.value.position[0] !==
-        actionEvent.value.windowPositionSnapshot[0] ||
-      topWindow.value.position[1] !==
-        actionEvent.value.windowPositionSnapshot[1]
-    ) {
-      isGhostPanelEnabledWindowMoved = true;
-      return true;
-    }
-  }
-  isGhostPanelEnabledWindowMoved = false;
-  return false;
-});
 const ghostPanelShow = computed(() => {
   return (
-    ghostPanelEnabled.value &&
+    isTopWindowStartedMoving.value &&
     pointerLocation.value !== "center" &&
     topWindow.value !== null
   );
@@ -70,7 +49,7 @@ onMounted(() => {
     { immediate: true }
   );
 
-  watch(ghostPanelEnabled, (newValue, oldValue) => {
+  watch(isTopWindowStartedMoving, (newValue, oldValue) => {
     // stop moving, pointer released by user
     if (!newValue || oldValue) {
       if (topWindow.value !== null) {
