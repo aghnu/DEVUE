@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
 const windowsState = useWindowsStatesStore();
 const { actionEvent } = storeToRefs(windowsState);
+const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 
 const lockInteraction = computed(() => {
   if (actionEvent.value !== null) {
@@ -20,13 +22,15 @@ const lockInteraction = computed(() => {
 </script>
 
 <template>
-  <div
-    :class="[
-      'MovingWindowContent',
-      { 'MovingWindowContent--locked': lockInteraction },
-    ]"
-  >
-    <slot></slot>
+  <div class="MovingWindowContent">
+    <div
+      :class="[
+        'MovingWindowContent__container',
+        { 'MovingWindowContent__container--locked': lockInteraction },
+      ]"
+    >
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -34,8 +38,15 @@ const lockInteraction = computed(() => {
 .MovingWindowContent {
   height: 100%;
   width: 100%;
-  &--locked {
-    pointer-events: none;
+
+  cursor: v-bind(styleWindowCursor);
+
+  &__container {
+    height: 100%;
+    width: 100%;
+    &--locked {
+      pointer-events: none;
+    }
   }
 }
 </style>

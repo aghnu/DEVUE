@@ -6,6 +6,7 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
 import { useMovingWindowConfig } from "../composables/useMovingWindowConfig";
+import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
 
 import {
   MovingWindowLocalState,
@@ -22,6 +23,7 @@ const props = defineProps<{
 }>();
 
 // compute styling string
+const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const {
   styleWindowPositionLeft,
   styleWindowPositionTop,
@@ -131,6 +133,10 @@ function resetActionEvent() {
         'MovingWindow__panel_resize',
         `MovingWindow__panel_resize--direction-${direction}`,
         { 'MovingWindow__panel_resize--disabled': state.snapped !== 'center' },
+        {
+          'MovingWindow__panel_resize--global-pointer':
+            styleWindowCursor !== 'auto',
+        },
       ]"
       @mousedown.stop="
         (e) => {
@@ -195,10 +201,6 @@ function resetActionEvent() {
 
   &__panel_resize {
     position: absolute;
-
-    &--disabled {
-      pointer-events: none;
-    }
 
     &--direction {
       @mixin MovingWindow__panel_resize--corner {
@@ -281,6 +283,14 @@ function resetActionEvent() {
         transform: translate(50%, 0);
         cursor: ew-resize;
       }
+    }
+
+    &--disabled {
+      pointer-events: none;
+    }
+
+    &--global-pointer {
+      cursor: v-bind(styleWindowCursor);
     }
   }
 }
