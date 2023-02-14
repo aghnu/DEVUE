@@ -39,6 +39,24 @@ export function getSnappedWindowSize(
   }
 }
 
+export function getSnapReleasedWindowPosition(
+  windowState: MovingWindowLocalState,
+  pointerPosition: Tuple<number>
+): Tuple<number> {
+  // before leaving snap, change position of the window
+  const windowCurrentSize = getSnappedWindowSize(windowState);
+  const windowCurrentPosition = getSnappedWindowPosition(windowState);
+  const windowOriginalSize = windowState.size;
+
+  const posX =
+    pointerPosition[0] -
+    ((pointerPosition[0] - windowCurrentPosition[0]) / windowCurrentSize[0]) *
+      windowOriginalSize[0];
+  const posY = windowCurrentPosition[1];
+
+  return [posX, posY];
+}
+
 export function connectWindowSnapping() {
   const desktopState = useDesktopStatesStore();
   const windowsState = useWindowsStatesStore();
@@ -57,23 +75,12 @@ export function connectWindowSnapping() {
     if (topWindow.value === null || topWindow.value.snapped === "center") {
       return;
     }
-    if (actionEvent.value !== null && actionEvent.value.type === 'move') {
-      // before leaving snap, change position of the window
-      const pointerPosition = desktopState.relativePositionPointer;
-      const topWindowCurrentSize = getSnappedWindowSize(topWindow.value);
-      const topWindowCurrentPosition = getSnappedWindowPosition(topWindow.value);
-      const topWindowOriginalSize = topWindow.value.size;
-
-      const posX =
-        pointerPosition[0] -
-        ((pointerPosition[0] - topWindowCurrentPosition[0]) /
-          topWindowCurrentSize[0]) *
-          topWindowOriginalSize[0];
-      const posY = topWindowCurrentPosition[1];   
-      
-      actionEvent.value.windowPositionSnapshot = [posX, posY];
+    if (actionEvent.value !== null && actionEvent.value.type === "move") {
+      actionEvent.value.windowPositionSnapshot = getSnapReleasedWindowPosition(
+        topWindow.value,
+        desktopState.relativePositionPointer
+      );
     }
-
 
     // leaving snap
     topWindow.value.snapped = "center";

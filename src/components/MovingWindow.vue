@@ -127,7 +127,11 @@ function resetActionEvent() {
 
     <div
       v-for="direction in MOVING_WINDOW_DIRECTIONS"
-      :class="`MovingWindow__panel_resize MovingWindow__panel_resize--direction-${direction}`"
+      :class="[
+        'MovingWindow__panel_resize',
+        `MovingWindow__panel_resize--direction-${direction}`,
+        { 'MovingWindow__panel_resize--disabled': state.snapped !== 'center' },
+      ]"
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
@@ -191,6 +195,10 @@ function resetActionEvent() {
 
   &__panel_resize {
     position: absolute;
+
+    &--disabled {
+      pointer-events: none;
+    }
 
     &--direction {
       @mixin MovingWindow__panel_resize--corner {

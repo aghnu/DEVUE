@@ -90,8 +90,12 @@ export function connectWindowsActionEvent() {
     actionEvent: MovingWindowActionEvent,
     movingWindowState: MovingWindowLocalState
   ) => {
-    // direction
+    // disable resize if window is snapped
+    if (movingWindowState.snapped !== "center") {
+      return;
+    }
 
+    // direction
     const helperFuncResizeToDirection = (
       direction: MovingWindowResizeDirection
     ) => {
