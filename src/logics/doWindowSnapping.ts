@@ -88,7 +88,6 @@ export function connectWindowSnapping() {
 
   onMounted(() => {
     watch(isTopWindowStartedMoving, (newValue, oldValue) => {
-      console.log("ok");
       if (!newValue || oldValue) {
         // stop moving, pointer released by user
         doSnapping();
