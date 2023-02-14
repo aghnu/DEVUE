@@ -1,9 +1,11 @@
 import { computed } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { useDesktopStatesStore } from "../stores/desktopStates";
 import { storeToRefs } from "pinia";
 
 export function useTopWindowStartedMoving() {
   const windowsState = useWindowsStatesStore();
+  const desktopState = useDesktopStatesStore();
   const { topWindow, actionEvent } = storeToRefs(windowsState);
 
   var isWindowMoved: boolean = false;
@@ -16,12 +18,12 @@ export function useTopWindowStartedMoving() {
       if (isWindowMoved) {
         return true;
       }
-  
+
       if (
-        topWindow.value.position[0] !==
-          actionEvent.value.windowPositionSnapshot[0] ||
-        topWindow.value.position[1] !==
-          actionEvent.value.windowPositionSnapshot[1]
+        desktopState.relativePosXPointer !==
+          actionEvent.value.pointerPositionSnapshot[0] ||
+        desktopState.relativePosYPointer !==
+          actionEvent.value.pointerPositionSnapshot[1]
       ) {
         isWindowMoved = true;
         return true;
