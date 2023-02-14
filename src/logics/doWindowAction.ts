@@ -8,6 +8,7 @@ import {
 } from "./doWindowCreation";
 import {
   MovingWindowActionEvent,
+  MovingWindowActionEventResize,
   MovingWindowID,
   MovingWindowLocalState,
   MovingWindowResizeDirection,
@@ -87,7 +88,7 @@ export function connectWindowsActionEvent() {
   };
 
   const helperWindowActionExecuteFuncResize = (
-    actionEvent: MovingWindowActionEvent,
+    actionEvent: MovingWindowActionEventResize,
     movingWindowState: MovingWindowLocalState
   ) => {
     // disable resize if window is snapped
@@ -201,7 +202,7 @@ export function connectWindowsActionEvent() {
     };
 
     // execute the operation
-    switch (actionEvent.direction!) {
+    switch (actionEvent.direction) {
       case "se":
         helperFuncResizeToDirection("s");
         helperFuncResizeToDirection("e");

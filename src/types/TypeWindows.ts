@@ -13,14 +13,40 @@ export type MovingWindowResizeDirection =
   | "s"
   | "e";
 
-export interface MovingWindowActionEvent {
+export type MovingWindowCursorType =
+  | "nwse-resize"
+  | "nesw-resize"
+  | "ns-resize"
+  | "ew-resize"
+  | "move";
+
+export interface MovingWindowActionEventBase {
   id: string;
-  type: "resize" | "move" | "focus";
-  direction?: MovingWindowResizeDirection;
   windowPositionSnapshot: Tuple<number>;
   windowSizeSnapshot: Tuple<number>;
   pointerPositionSnapshot: Tuple<number>;
 }
+
+export interface MovingWindowActionEventResize
+  extends MovingWindowActionEventBase {
+  type: "resize";
+  direction: MovingWindowResizeDirection;
+}
+
+export interface MovingWindowActionEventMove
+  extends MovingWindowActionEventBase {
+  type: "move";
+}
+
+export interface MovingWindowActionEventFocus
+  extends MovingWindowActionEventBase {
+  type: "focus";
+}
+
+export type MovingWindowActionEvent =
+  | MovingWindowActionEventFocus
+  | MovingWindowActionEventResize
+  | MovingWindowActionEventMove;
 
 export interface MovingWindowLocation {
   position: Tuple<number>;
