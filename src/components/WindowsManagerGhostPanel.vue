@@ -38,11 +38,16 @@ onMounted(() => {
   watch(
     ghostPanelShow,
     () => {
-      if (topWindow.value !== null) {
+      if (topWindow.value !== null && topWindow.value.snapped === "center") {
         stylePanelFromWidth.value = String(topWindow.value.size[0]) + "px";
         stylePanelFromHeight.value = String(topWindow.value.size[1]) + "px";
         stylePanelFromLeft.value = String(topWindow.value.position[0]) + "px";
         stylePanelFromTop.value = String(topWindow.value.position[1]) + "px";
+      } else {
+        stylePanelFromWidth.value = stylePanelToWidth.value;
+        stylePanelFromHeight.value = stylePanelToHeight.value;
+        stylePanelFromLeft.value = stylePanelToLeft.value;
+        stylePanelFromTop.value = stylePanelToTop.value;
       }
     },
     { immediate: true }
