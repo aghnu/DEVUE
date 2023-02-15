@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { getIconClose } from "../utilities/factorySVG";
 import { MovingWindowID } from "../types/TypeWindows";
+import { DoubleClickDetector } from "../logics/doDetectionDoubleClick";
 
 const props = defineProps<{
   focused: boolean;
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: "action:close"): void;
+  (e: "action:max"): void;
   (e: "action:movestart"): void;
   (e: "action:moveover"): void;
 }>();
@@ -26,6 +28,9 @@ const iconClose = getIconClose({
 const desktopStates = useDesktopStatesStore();
 const windowsState = useWindowsStatesStore();
 const { actionEvent, topWindow } = storeToRefs(windowsState);
+
+// var
+const doubleClickDetector = new DoubleClickDetector(() => emits('action:max'));
 
 const windowIsMoving = computed(() => {
   if (
@@ -72,12 +77,14 @@ const handlerTouchStart = (e: TouchEvent) => {
       @mousedown.stop="
         (e) => {
           handlerMouseDown(e);
+          doubleClickDetector.click();
           emits('action:movestart');
         }
       "
       @touchstart.stop="
         (e) => {
           handlerTouchStart(e);
+          doubleClickDetector.click();
           emits('action:movestart');
         }
       "

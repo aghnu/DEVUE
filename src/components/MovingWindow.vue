@@ -53,6 +53,14 @@ const handlerCloseWindow = () => {
   windowsStates.removeMovingWindow(props.state.id);
 };
 
+const handlerMaxWindow = () => {
+  if (props.state.snapped === 'center') {
+    props.state.snapped = 'top';
+  } else if (props.state.snapped === 'top') {
+    props.state.snapped = 'center';
+  }
+}
+
 function updateActionEventMoving() {
   windowsStates.updateMovingWindowAction({
     id: props.state.id,
@@ -102,6 +110,7 @@ function resetActionEvent() {
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
+          @action:max="handlerMaxWindow"
         />
       </div>
       <div

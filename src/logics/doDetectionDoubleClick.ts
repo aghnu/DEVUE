@@ -3,7 +3,7 @@ export class DoubleClickDetector {
   clicked: boolean;
   delayms: number;
   clickedTimeout: number;
-  constructor(callBackFunc: () => void, delayms: number = 50) {
+  constructor(callBackFunc: () => void, delayms: number = 250) {
     this.callBackFunc = callBackFunc;
     this.clicked = false;
     this.clickedTimeout = 0;
@@ -14,7 +14,7 @@ export class DoubleClickDetector {
     if (this.clicked) {
       clearTimeout(this.clickedTimeout);
       this.clicked = false;
-      this.callBackFunc;
+      this.callBackFunc();
     } else {
       this.clicked = true;
       this.clickedTimeout = window.setTimeout(() => {
