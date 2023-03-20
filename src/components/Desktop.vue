@@ -84,7 +84,7 @@ onUnmounted(() => {
   height: 100%;
   width: 100%;
 
-  background-color: $color-block-dark;
+  background-color: $color-background-dark;
 
   &__windows {
     position: relative;
@@ -97,7 +97,7 @@ onUnmounted(() => {
     @include mixin-center-children;
     @include mixin-disable-pointer;
 
-    margin: 0.75rem;
+    margin: 2rem 1rem 2.5rem 1rem;
 
     position: relative;
     height: fit-content;

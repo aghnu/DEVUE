@@ -1,16 +1,21 @@
 $color-block-dark: #101010;
 $color-block-bright: #eab990;
+$color-background-dark: #050505;
 
 $color-text-footer: #393939;
 $color-text-bright: #c7c7c7;
 $color-text-dark: #2b2b2b;
 
 $color-icon-primary: #f9ca8f;
-$color-icon-secondary: #8e8e8e;
+$color-icon-secondary: #090909;
+$color-icon-dividor: #212121;
+$color-icon-inner: #cbcbcb;
+$color-icon-inner-dark: #070707;
+
 
 $color-button-close: #f9ca8f;
 
-$color-block-transparent: rgba(28, 28, 28, 0.75);
+$color-block-transparent: rgba(25, 25, 25, 0.5);
 
 $shadow-block-float: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.65);
 $shadow-block-down: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
@@ -18,9 +23,9 @@ $shadow-block-down: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
 $color-terminal-plain: #8e8e8e;
 $color-terminal-focus: #f9ca8f;
 $color-terminal-desc: #7fc5d0;
-$color-terminal-background: #080808;
+$color-terminal-background: #020202;
 
-$color-app-default-background: #080808;
+$color-app-default-background: #020202;
 
 * {
   box-sizing: border-box;

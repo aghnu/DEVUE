@@ -13,21 +13,31 @@ const emits = defineEmits<{
   (e: "click"): void;
 }>();
 
-const iconHTML = getAppIcon(props.name, {
-  size: "100%",
-  color: "var(--color-text-dark)",
-});
 const pointerDown = ref(false);
 const pointerHover = ref(false);
 
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSize = computed(() =>
   pointerDown.value
-    ? `${props.size * 0.6}rem`
+    ? `${props.size * 0.75}rem`
     : pointerHover.value
     ? `${props.size}rem`
     : `${props.size * 0.8}rem`
 );
+
+const iconHTML = computed(() => {
+  if (props.type === "secondary") {
+    return getAppIcon(props.name, {
+      size: "100%",
+      color: "var(--color-icon-inner)",
+    });
+  }
+
+  return getAppIcon(props.name, {
+    size: "100%",
+    color: "var(--color-icon-inner-dark)",
+  });
+});
 
 function handlerPointerDown() {
   pointerDown.value = true;
@@ -98,18 +108,18 @@ onUnmounted(() => {
     background-color: $color-icon-primary;
     border-radius: 50%;
 
-    border: solid;
-    border-width: 0.1rem;
-    border-color: $color-text-dark;
+    // border: solid;
+    // border-width: 0.1rem;
+    // border-color: $color-text-dark;
 
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
-    box-shadow: $shadow-block-down;
+    // box-shadow: $shadow-block-down;
 
     transition: height 0.3s, width 0.3s, box-shadow 0.3s;
 
     &--down {
-      box-shadow: $shadow-block-down;
+      // box-shadow: $shadow-block-down;
     }
 
     &--secondary {
@@ -118,8 +128,8 @@ onUnmounted(() => {
 
     &__icon {
       @include mixin-center-children;
-      height: 57%;
-      widows: 57%;
+      height: 35%;
+      widows: 35%;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <footer class="AppFooter">
-    <p class="AppFooter__text">© 2022 AGHNU.ME</p>
+    <!-- <p class="AppFooter__text">© 2022 AGHNU.ME</p> -->
   </footer>
 </template>
 
