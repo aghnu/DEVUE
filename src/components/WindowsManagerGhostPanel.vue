@@ -120,7 +120,7 @@ onMounted(() => {
       // border-color: $color-text-dark;
       background-color: $color-block-transparent;
 
-      border-radius: 1rem;
+      border-radius: 0.6rem;
     }
   }
 }

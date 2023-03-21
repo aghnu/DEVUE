@@ -2,6 +2,8 @@
   --color-block-dark: #{$color-block-dark};
   --color-block-bright: #{$color-block-bright};
 
+  --color-taskbar-text-bright: #{$color-taskbar-text-bright};
+
   --color-text-bright: #{$color-text-bright};
   --color-text-dark: #{$color-text-dark};
   --color-icon-inner: #{$color-icon-inner};
@@ -9,6 +11,13 @@
 
   --color-button-close: #{$color-button-close};
 
+  --color-terminal-plain: #{$color-terminal-plain};
+  --color-terminal-focus: #{$color-terminal-focus};
+  --color-terminal-desc: #{$color-terminal-desc};
+  --color-terminal-background: #{$color-terminal-background};
+
+  --color-app-default-background: #{$color-app-default-background};
+  
   font-size: 16px;
   font-family: "Roboto Mono", sans-serif;
 }

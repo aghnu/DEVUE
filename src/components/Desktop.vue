@@ -97,7 +97,7 @@ onUnmounted(() => {
     @include mixin-center-children;
     @include mixin-disable-pointer;
 
-    margin: 2rem 1rem 2.5rem 1rem;
+    margin: 0.85rem 1rem 2rem 1rem;
 
     position: relative;
     height: fit-content;

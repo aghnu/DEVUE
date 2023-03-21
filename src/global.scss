@@ -2,12 +2,14 @@ $color-block-dark: #101010;
 $color-block-bright: #eab990;
 $color-background-dark: #050505;
 
+$color-taskbar-text-bright: #6d6d6d;
+
 $color-text-footer: #393939;
 $color-text-bright: #c7c7c7;
-$color-text-dark: #2b2b2b;
+$color-text-dark: #161616;
 
 $color-icon-primary: #f9ca8f;
-$color-icon-secondary: #090909;
+$color-icon-secondary: #080808;
 $color-icon-dividor: #212121;
 $color-icon-inner: #cbcbcb;
 $color-icon-inner-dark: #070707;
@@ -15,12 +17,12 @@ $color-icon-inner-dark: #070707;
 
 $color-button-close: #f9ca8f;
 
-$color-block-transparent: rgba(25, 25, 25, 0.5);
+$color-block-transparent: rgba(25, 25, 25, 0.7);
 
-$shadow-block-float: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.65);
+$shadow-block-float: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.5);
 $shadow-block-down: 0rem 0.25rem 1rem rgba(0, 0, 0, 0.25);
 
-$color-terminal-plain: #8e8e8e;
+$color-terminal-plain: #a9a9a9;
 $color-terminal-focus: #f9ca8f;
 $color-terminal-desc: #7fc5d0;
 $color-terminal-background: #020202;

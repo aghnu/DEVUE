@@ -2,6 +2,7 @@
 import MovingWindow from "../../components/MovingWindow.vue";
 import { TerminalDataInit } from "../../types/TypeMessage";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
+import { getGlobalCSSVarValue } from "../../utilities/getGlobalCSSVarValue";
 
 defineProps<{
   state: MovingWindowLocalState;
@@ -10,11 +11,11 @@ defineProps<{
 function terminalInit(element: HTMLIFrameElement) {
   const data: TerminalDataInit = {
     type: "init",
-    colorPlain: "#8e8e8e",
-    colorFocus: "#f9ca8f",
-    colorBackground: "#080808",
+    colorPlain: getGlobalCSSVarValue("--color-terminal-plain") ?? "#a9a9a9",
+    colorFocus: getGlobalCSSVarValue("--color-terminal-focus") ?? "#f9ca8f",
+    colorBackground: getGlobalCSSVarValue("--color-terminal-background") ?? "#020202",
     colorAppBackground: "transparent",
-    colorDesc: "#7fc5d0",
+    colorDesc: getGlobalCSSVarValue("--color-terminal-desc") ?? "#7fc5d0",
     fontSize: "14px",
   };
   element.contentWindow?.postMessage(data, "*");

@@ -167,7 +167,7 @@ function resetActionEvent() {
 
 <style scoped lang="scss">
 .MovingWindow {
-  --title-height: 1.75rem;
+  --title-height: 2rem;
 
   position: absolute;
 
@@ -186,7 +186,7 @@ function resetActionEvent() {
 
     overflow: hidden;
 
-    border-radius: 0.75rem;
+    border-radius: 0.6rem;
     box-shadow: $shadow-block-down;
     background-color: $color-app-default-background;
     border: solid;

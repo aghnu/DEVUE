@@ -61,6 +61,7 @@ onMounted(() => {
     // margin-left: 0.5rem;
     // margin-right: 0.5rem;
     width: 0.1rem;
+    opacity: 0.75;
     border-radius: 0.1rem;
     background-color: $color-icon-dividor;
   }

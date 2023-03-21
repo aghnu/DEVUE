@@ -20,7 +20,7 @@ const emits = defineEmits<{
 }>();
 
 const iconClose = getIconClose({
-  color: "var(--color-text-dark)",
+  color: "var(--color-taskbar-text-bright)",
   size: "100%",
 });
 
@@ -163,8 +163,8 @@ const handlerTouchStart = (e: TouchEvent) => {
       &__button {
         @include mixin-clean-button-style;
 
-        height: 1rem;
-        width: 1rem;
+        height: 0.9rem;
+        width: 0.9rem;
       }
     }
   }
@@ -180,12 +180,12 @@ const handlerTouchStart = (e: TouchEvent) => {
     &__content {
       @include mixin-disable-pointer;
 
-      height: 0.15rem;
-      border-radius: 0.75rem;
-      width: 10%;
+      height: 0.125rem;
+      border-radius: 1rem;
+      width: 8%;
       max-width: 7.5rem;
       min-width: 2.5rem;
-      background-color: $color-text-dark;
+      background-color: $color-taskbar-text-bright;
       transition: all 0.3s;
     }
   }
@@ -200,8 +200,8 @@ const handlerTouchStart = (e: TouchEvent) => {
 
       &__dragbar {
         &__content {
-          height: 0.2rem;
-          border-radius: 0.1rem;
+          height: cal(0.125rem * 1.35);
+          border-radius: 1rem;
           width: calc(10% * 1.35);
           max-width: calc(7.5rem * 1.35);
           min-width: calc(2.5rem * 1.35);
