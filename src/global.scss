@@ -36,6 +36,11 @@ p {
   margin: 0;
 }
 
+@mixin mixin-glassblur {
+  backdrop-filter: blur(0.5rem);
+  -webkit-backdrop-filter: blur(0.5rem);
+}
+
 @mixin mixin-center-children {
   display: flex;
   justify-content: center;

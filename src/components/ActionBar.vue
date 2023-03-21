@@ -54,6 +54,8 @@ onMounted(() => {
 
   box-shadow: $shadow-block-float;
 
+  @include mixin-glassblur;
+
   &__dividor {
     height: 1.5rem;
     // margin-left: 0.5rem;
