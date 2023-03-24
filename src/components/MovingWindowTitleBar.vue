@@ -70,6 +70,7 @@ const handlerTouchStart = (e: TouchEvent) => {
     :class="[
       'MovingWindowTitleBar',
       { 'MovingWindowTitleBar--moving': windowIsMoving },
+      { 'MovingWindowTitleBar--unfocused': !props.focused },
     ]"
   >
     <div
@@ -208,6 +209,10 @@ const handlerTouchStart = (e: TouchEvent) => {
         }
       }
     }
+  }
+
+  &--unfocused {
+    opacity: 0.4;
   }
 }
 </style>
