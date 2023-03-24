@@ -130,7 +130,7 @@ function resetActionEvent() {
         @mouseup.stop="resetActionEvent()"
         @touchend.stop="resetActionEvent()"
       >
-        <MovingWindowContent>
+        <MovingWindowContent :focused="isWindowFocused">
           <slot></slot>
         </MovingWindowContent>
       </div>

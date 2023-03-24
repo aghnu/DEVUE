@@ -4,11 +4,19 @@ import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindow
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
 
+const props = defineProps<{
+  focused: boolean;
+}>();
+
 const windowsState = useWindowsStatesStore();
 const { actionEvent } = storeToRefs(windowsState);
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 
 const lockInteraction = computed(() => {
+  if (props.focused) {
+    return true;
+  }
+
   if (actionEvent.value !== null) {
     switch (actionEvent.value.type) {
       case "resize":
