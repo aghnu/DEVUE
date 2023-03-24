@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import { WindowsStatesStore } from "../types/TypeStores";
+import { AppName } from "../types/TypeApp";
+import {
+  ApplicationWindowsStatesID,
+  WindowsStatesStore,
+} from "../types/TypeStores";
 import {
   MovingWindowActionEvent,
   MovingWindowID,
@@ -14,16 +18,37 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
     };
   },
   getters: {
-    movingWindowsOrderStack(): MovingWindowID[] {
-      return Array.from(this.movingWindows.values())
+    movingWindowsOrderStack(state): MovingWindowID[] {
+      return Array.from(state.movingWindows.values())
         .sort((a, b) => b.order - a.order)
         .map((e) => e.id);
     },
-    topWindow(): MovingWindowLocalState | null {
-      return this.movingWindows.get(this.movingWindowsOrderStack[0]) ?? null;
+    topWindow(state): MovingWindowLocalState | null {
+      return state.movingWindows.get(this.movingWindowsOrderStack[0]) ?? null;
     },
+    applicationWindowsStates(state): ApplicationWindowsStatesID {
+      const appToStatesID = new Map() as ApplicationWindowsStatesID;
+      Array.from(state.movingWindows.values()).forEach((s) => {
+        const name = s.appInstance.name;
+        const movingWindowID = s.id;
+
+        const movingWindowIDArray =
+          appToStatesID.get(name) ?? ([] as MovingWindowID[]);
+        movingWindowIDArray.push(movingWindowID);
+        appToStatesID.set(name, movingWindowIDArray);
+      });
+
+      return appToStatesID;
+    },
+    getApplicationsInstanceCount() {
+      return (name: AppName): Number => {
+        const movingWindowIDArray = this.applicationWindowsStates.get(name) ?? [];
+        return movingWindowIDArray.length;
+      }
+    }
   },
   actions: {
+
     updateMovingWindowAction(actionEvent: MovingWindowActionEvent) {
       this.actionEvent = actionEvent;
     },

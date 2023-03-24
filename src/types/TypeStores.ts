@@ -1,4 +1,5 @@
 import { Tuple } from "../types/TypeBasic";
+import { AppName } from "./TypeApp";
 import { PointerOperation } from "./TypeDesktop";
 import {
   MovingWindowLocalState,
@@ -17,3 +18,5 @@ export interface WindowsStatesStore {
   movingWindows: Map<MovingWindowID, MovingWindowLocalState>;
   actionEvent: MovingWindowActionEvent | null;
 }
+
+export type ApplicationWindowsStatesID = Map<AppName, MovingWindowID[]>;
