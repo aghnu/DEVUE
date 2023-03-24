@@ -54,7 +54,7 @@ export function useMovingWindowConfig(state: Ref<MovingWindowLocalState>) {
   });
   const styleWindowZIndex = computed(() => String(state.value.order));
   const isWindowFocused = computed(
-    () => topWindow !== null && state.value.id === state.value.id
+    () => topWindow.value !== null && state.value.id === topWindow.value.id
   );
 
   return {

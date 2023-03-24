@@ -13,7 +13,7 @@ const { actionEvent } = storeToRefs(windowsState);
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 
 const lockInteraction = computed(() => {
-  if (props.focused) {
+  if (props.focused === false) {
     return true;
   }
 
