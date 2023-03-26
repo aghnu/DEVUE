@@ -1,7 +1,11 @@
-import { Application, AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApp";
+import { ApplicationInternal } from "./ApplicationInternal";
 
-export class AppTerminal implements Application {
-  name: AppName = "terminal";
+export class AppTerminal extends ApplicationInternal {
+  readonly name: AppName;
 
-  constructor() {}
+  constructor() {
+    super();
+    this.name = "terminal";
+  }
 }

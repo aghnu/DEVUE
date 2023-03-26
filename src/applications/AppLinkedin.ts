@@ -1,12 +1,13 @@
-import { Application, AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApp";
+import { ApplicationExternal } from "./ApplicationExternal";
 
-export class AppLinkedin implements Application {
-  name: AppName = "linkedin";
-  link = "https://www.linkedin.com/in/gengyuanh";
+export class AppLinkedin extends ApplicationExternal {
+  readonly name: AppName;
+  readonly link;
 
-  constructor() {}
-
-  getLink() {
-    return this.link;
+  constructor() {
+    super();
+    this.name = "linkedin";
+    this.link = "https://www.linkedin.com/in/gengyuanh"
   }
 }

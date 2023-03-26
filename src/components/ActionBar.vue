@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import { openApp } from "../applications/openApplication";
 import { onMounted } from "vue";
+import { AppTerminal } from "../applications/AppTerminal";
+import { AppGithub } from "../applications/AppGithub";
+import { AppLinkedin } from "../applications/AppLinkedin";
 
 onMounted(() => {
   // TODO: animation + store control action buttons with there own state that can be used for trigger animation
-  openApp("terminal");
+  new AppTerminal().open();
 });
 </script>
 
@@ -15,20 +17,20 @@ onMounted(() => {
       name="terminal"
       type="primary"
       :size="3.2"
-      @click="() => openApp('terminal')"
+      @click="() => new AppTerminal().open()"
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
       type="secondary"
       :size="3.2"
-      @click="() => openApp('github')"
+      @click="() => new AppGithub().open()"
     ></AppButton>
     <AppButton
       name="linkedin"
       type="secondary"
       :size="3.2"
-      @click="() => openApp('linkedin')"
+      @click="() => new AppLinkedin().open()"
     ></AppButton>
   </div>
 </template>

@@ -47,3 +47,20 @@ export function getIconClose(style: AppIconStyle): AppIconHTML {
     </svg>
   `;
 }
+
+export function getIconApplicationMenu(style: AppIconStyle): AppIconHTML {
+  return `
+    <svg height="${style.size}" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15.8333 9H9V15.8333H15.8333V9Z" fill="${style.color}"/>
+      <path d="M15.8333 21.5278H9V28.3611H15.8333V21.5278Z" fill="${style.color}"/>
+      <path d="M15.8333 34.0556H9V40.8889H15.8333V34.0556Z" fill="${style.color}"/>
+      <path d="M28.3611 9H21.5278V15.8333H28.3611V9Z" fill="${style.color}"/>
+      <path d="M28.3611 21.5278H21.5278V28.3611H28.3611V21.5278Z" fill="${style.color}"/>
+      <path d="M28.3611 34.0556H21.5278V40.8889H28.3611V34.0556Z" fill="${style.color}"/>
+      <path d="M40.8889 9H34.0556V15.8333H40.8889V9Z" fill="${style.color}"/>
+      <path d="M40.8889 21.5278H34.0556V28.3611H40.8889V21.5278Z" fill="${style.color}"/>
+      <path d="M40.8889 34.0556H34.0556V40.8889H40.8889V34.0556Z" fill="${style.color}"/>
+    </svg>
+
+  `;
+}
