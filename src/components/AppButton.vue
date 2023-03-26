@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 const props = defineProps<{
   name: AppName;
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "action";
   size: number;
 }>();
 
@@ -27,17 +27,19 @@ const buttonSizeFactor = computed(() =>
 );
 const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
 const iconHTML = computed(() => {
-  if (props.type === "secondary") {
-    return getAppIcon(props.name, {
-      size: "100%",
-      color: "var(--color-icon-inner)",
-    });
+  switch (props.type) {
+    case "primary":
+      return getAppIcon(props.name, {
+        size: "100%",
+        color: "var(--color-icon-inner-dark)",
+      });
+    case "secondary":
+    case "action":
+      return getAppIcon(props.name, {
+        size: "100%",
+        color: "var(--color-icon-inner)",
+      });
   }
-
-  return getAppIcon(props.name, {
-    size: "100%",
-    color: "var(--color-icon-inner-dark)",
-  });
 });
 
 const appInstancesCount = computed(() => {
@@ -81,6 +83,7 @@ onUnmounted(() => {
       :class="[
         { 'AppButton__inner--down': pointerDown },
         { 'AppButton__inner--secondary': type === 'secondary' },
+        { 'AppButton__inner--action': type === 'action' },
       ]"
       @mousedown="handlerPointerDown"
       @touchstart="handlerPointerDown"
@@ -134,7 +137,8 @@ onUnmounted(() => {
     //   box-shadow: $shadow-block-down;
     // }
 
-    &--secondary {
+    &--secondary,
+    &--action {
       background-color: $color-icon-secondary;
     }
 
@@ -163,7 +167,7 @@ onUnmounted(() => {
     background-color: rgba(255, 255, 255, 0.75);
 
     color: rgba(34, 34, 34, 0.5);
-    font-size: calc(v-bind(buttonSizeFactor) * 100%);
+    font-size: calc(v-bind(buttonSize) * 0.2);
     padding: 0.25em 0.5em;
 
     font-weight: 500;

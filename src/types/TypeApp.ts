@@ -1,6 +1,12 @@
 import { ApplicationInternal } from "../applications/ApplicationInternal";
 
-export type AppName = "terminal" | "github" | "linkedin";
+export type AppName =
+  | "terminal"
+  | "github"
+  | "linkedin"
+  | "welcome"
+  | "app_menu"
+  | "doc_pdf";
 export type AppType = "external" | "internal" | "action";
 export type ApplicationInstance = ApplicationInternal;
 

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { AppTerminal } from "../applications/AppTerminal";
 import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
+
+const buttonSize = ref(2.9);
 
 onMounted(() => {
   // TODO: animation + store control action buttons with there own state that can be used for trigger animation
@@ -13,23 +15,25 @@ onMounted(() => {
 
 <template>
   <div class="ActionBar">
+    <AppButton name="app_menu" type="action" :size="buttonSize"></AppButton>
+    <div class="ActionBar__dividor"></div>
     <AppButton
       name="terminal"
       type="primary"
-      :size="3.2"
+      :size="buttonSize"
       @click="() => new AppTerminal().open()"
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
       type="secondary"
-      :size="3.2"
+      :size="buttonSize"
       @click="() => new AppGithub().open()"
     ></AppButton>
     <AppButton
       name="linkedin"
       type="secondary"
-      :size="3.2"
+      :size="buttonSize"
       @click="() => new AppLinkedin().open()"
     ></AppButton>
   </div>
@@ -41,30 +45,29 @@ onMounted(() => {
   @include mixin-disable-pointer;
 
   display: flex;
-  gap: 1.5rem;
+  gap: calc(v-bind(buttonSize) * 0.35rem);
 
   width: fit-content;
   height: fit-content;
 
-  padding: 0.45rem 0.9rem;
-  border-radius: 2rem;
+  padding: calc(v-bind(buttonSize) * 0.15rem) calc(v-bind(buttonSize) * 0.3rem);
+  border-radius: calc(v-bind(buttonSize) * 100rem);
 
-  // border: solid;
-  // border-width: 0.1rem;
-  // border-color: $color-text-dark;
-  background-color: $color-block-transparent;
+  border: solid;
+  border-width: 1px;
+  border-color: $color-border-actionbar;
+  background-color: $color-block-transparent-actionbar;
 
   box-shadow: $shadow-block-float;
 
   @include mixin-glassblur;
 
   &__dividor {
-    height: 1.5rem;
+    height: calc(v-bind(buttonSize) * 0.45rem);
     // margin-left: 0.5rem;
     // margin-right: 0.5rem;
-    width: 0.1rem;
-    opacity: 0.75;
-    border-radius: 0.1rem;
+    width: 2px;
+    border-radius: calc(v-bind(buttonSize) * 100rem);
     background-color: $color-icon-dividor;
   }
 }

@@ -356,7 +356,7 @@ export function connectWindowResizeStateUpdate(
 
   onUnmounted(() => {
     if (desktopElement.value !== undefined && desktopElement.value !== null) {
-      window.addEventListener(
+      window.removeEventListener(
         "resize",
         helperHandlerWindowResizeUpdateWindowsManagerState
       );
