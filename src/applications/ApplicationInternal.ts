@@ -1,32 +1,33 @@
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import {
-  Application,
   ApplicationInternalnterface,
   ApplicationStyle,
-  AppName,
   AppType,
 } from "../types/TypeApp";
+import { Application } from "./Application";
 
 export abstract class ApplicationInternal
-  implements Application, ApplicationInternalnterface
+  extends Application
+  implements ApplicationInternalnterface
 {
-  abstract readonly name: AppName;
   abstract applicationStyle: ApplicationStyle;
 
   readonly type: AppType;
   movingWindowID: string | null;
 
   constructor() {
+    super();
     this.type = "internal";
     this.movingWindowID = null;
   }
 
-  public open(): void {
+  public open(): this {
     const windowsState = useWindowsStatesStore();
     const movingWindowState = initMovingWindowState(this);
     this.movingWindowID = movingWindowState.id;
     windowsState.addMovingWindow(movingWindowState);
+    return this;
   }
 
   public close(): void {

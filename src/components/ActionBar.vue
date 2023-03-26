@@ -16,20 +16,20 @@ const buttonSize = ref(2.9);
       name="terminal"
       type="primary"
       :size="buttonSize"
-      @click="() => new AppTerminal().open()"
+      @click="AppTerminal.build().open()"
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
       type="secondary"
       :size="buttonSize"
-      @click="() => new AppGithub().open()"
+      @click="AppGithub.build().open()"
     ></AppButton>
     <AppButton
       name="linkedin"
       type="secondary"
       :size="buttonSize"
-      @click="() => new AppLinkedin().open()"
+      @click="AppLinkedin.build().open()"
     ></AppButton>
   </div>
 </template>

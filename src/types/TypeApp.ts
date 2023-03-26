@@ -15,13 +15,6 @@ export interface ApplicationStyle {
   colorTitleText: string | null;
 }
 
-export interface Application {
-  readonly name: AppName;
-  readonly type: AppType;
-
-  open(): void;
-}
-
 export interface ApplicationExternalInterface {
   readonly link: string;
 }

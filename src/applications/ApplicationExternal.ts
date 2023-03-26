@@ -1,16 +1,20 @@
-import { Application, ApplicationExternalInterface, AppName, AppType } from "../types/TypeApp";
+import { ApplicationExternalInterface, AppType } from "../types/TypeApp";
+import { Application } from "./Application";
 
-export abstract class ApplicationExternal implements Application, ApplicationExternalInterface {
-    abstract readonly name: AppName;
-    abstract readonly link: string;
+export abstract class ApplicationExternal
+  extends Application
+  implements ApplicationExternalInterface
+{
+  abstract readonly link: string;
+  readonly type: AppType;
 
-    readonly type: AppType;
-    
-    constructor() {
-        this.type = "external";
-    }
+  constructor() {
+    super();
+    this.type = "external";
+  }
 
-    public open(): void {
-        window.open(this.link);
-    }
+  public open(): this {
+    window.open(this.link);
+    return this;
+  }
 }
