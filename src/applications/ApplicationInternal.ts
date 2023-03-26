@@ -3,6 +3,7 @@ import { useWindowsStatesStore } from "../stores/windowsStates";
 import {
   Application,
   ApplicationInternalnterface,
+  ApplicationStyle,
   AppName,
   AppType,
 } from "../types/TypeApp";
@@ -11,6 +12,7 @@ export abstract class ApplicationInternal
   implements Application, ApplicationInternalnterface
 {
   abstract readonly name: AppName;
+  abstract applicationStyle: ApplicationStyle;
 
   readonly type: AppType;
   movingWindowID: string | null;

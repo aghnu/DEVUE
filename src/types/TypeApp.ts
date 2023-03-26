@@ -10,6 +10,11 @@ export type AppName =
 export type AppType = "external" | "internal" | "action";
 export type ApplicationInstance = ApplicationInternal;
 
+export interface ApplicationStyle {
+  colorBackground: string | null;
+  colorTitleText: string | null;
+}
+
 export interface Application {
   readonly name: AppName;
   readonly type: AppType;
@@ -23,6 +28,7 @@ export interface ApplicationExternalInterface {
 
 export interface ApplicationInternalnterface {
   movingWindowID: string | null;
+  applicationStyle: ApplicationStyle;
 
   close(): void;
 }

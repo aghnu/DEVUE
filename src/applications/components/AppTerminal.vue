@@ -1,28 +1,15 @@
 <script setup lang="ts">
 import MovingWindow from "../../components/MovingWindow.vue";
-import { TerminalDataInit } from "../../types/TypeMessage";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
-import { getGlobalCSSVarValue } from "../../utilities/getGlobalCSSVarValue";
+import { AppTerminal } from "../AppTerminal";
 
-defineProps<{
+const props = defineProps<{
   state: MovingWindowLocalState;
 }>();
 
-function terminalInit(element: HTMLIFrameElement) {
-  const data: TerminalDataInit = {
-    type: "init",
-    colorPlain: getGlobalCSSVarValue("--color-terminal-plain") ?? "#a9a9a9",
-    colorFocus: getGlobalCSSVarValue("--color-terminal-focus") ?? "#f9ca8f",
-    colorBackground: getGlobalCSSVarValue("--color-terminal-background") ?? "#020202",
-    colorAppBackground: "transparent",
-    colorDesc: getGlobalCSSVarValue("--color-terminal-desc") ?? "#7fc5d0",
-    fontSize: "14px",
-  };
-  element.contentWindow?.postMessage(data, "*");
-}
-
-function handlerIframeload(e: Event) {
-  terminalInit(e.target as HTMLIFrameElement);
+function handleIframeload(e: Event) {
+  const element = e.target as HTMLIFrameElement;
+  (props.state.appInstance as AppTerminal).initTerminal(element);
 }
 </script>
 
@@ -33,7 +20,7 @@ function handlerIframeload(e: Event) {
         class="AppTerminal__internal"
         src="https://www.aghnu.me?options=desktop"
         frameborder="0"
-        @load="handlerIframeload"
+        @load="handleIframeload"
       />
     </div>
   </MovingWindow>

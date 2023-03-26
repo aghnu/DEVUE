@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRaw, ref } from "vue";
+import { toRaw, ref, computed } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
@@ -32,6 +32,16 @@ const {
   styleWindowZIndex,
   isWindowFocused,
 } = useMovingWindowConfig(ref(props.state));
+const styleApplicationColorBackground = computed(
+  () =>
+    props.state.appInstance.applicationStyle.colorBackground ??
+    "var(--color-app-default-background)"
+);
+const styleApplicationColorTitleText = computed(
+  () =>
+    props.state.appInstance.applicationStyle.colorTitleText ??
+    "var(--color-taskbar-text-bright)"
+);
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -54,12 +64,12 @@ const handlerCloseWindow = () => {
 };
 
 const handlerMaxWindow = () => {
-  if (props.state.snapped === 'center') {
-    props.state.snapped = 'top';
-  } else if (props.state.snapped === 'top') {
-    props.state.snapped = 'center';
+  if (props.state.snapped === "center") {
+    props.state.snapped = "top";
+  } else if (props.state.snapped === "top") {
+    props.state.snapped = "center";
   }
-}
+};
 
 function updateActionEventMoving() {
   windowsStates.updateMovingWindowAction({
@@ -107,6 +117,7 @@ function resetActionEvent() {
         <MovingWindowTitleBar
           :windowid="state.id"
           :focused="isWindowFocused"
+          :text-color="styleApplicationColorTitleText"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
@@ -188,7 +199,7 @@ function resetActionEvent() {
 
     border-radius: 0.6rem;
     box-shadow: $shadow-block-down;
-    background-color: $color-app-default-background;
+    background-color: v-bind(styleApplicationColorBackground);
     border: solid;
     border-width: 0.1rem;
     border-color: $color-text-dark;

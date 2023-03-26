@@ -10,6 +10,7 @@ import { DoubleClickDetector } from "../logics/doDetectionDoubleClick";
 const props = defineProps<{
   focused: boolean;
   windowid: MovingWindowID;
+  textColor: string;
 }>();
 
 const emits = defineEmits<{
@@ -20,7 +21,7 @@ const emits = defineEmits<{
 }>();
 
 const iconClose = getIconClose({
-  color: "var(--color-taskbar-text-bright)",
+  color: props.textColor,
   size: "100%",
 });
 
@@ -30,7 +31,7 @@ const windowsState = useWindowsStatesStore();
 const { actionEvent, topWindow } = storeToRefs(windowsState);
 
 // var
-const doubleClickDetector = new DoubleClickDetector(() => emits('action:max'));
+const doubleClickDetector = new DoubleClickDetector(() => emits("action:max"));
 
 const windowIsMoving = computed(() => {
   if (
@@ -140,7 +141,7 @@ const handlerTouchStart = (e: TouchEvent) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.01);
+    background-color: rgba(255, 255, 255, 0.03);
 
     &__control_section {
       @include mixin-disable-pointer;
@@ -186,7 +187,7 @@ const handlerTouchStart = (e: TouchEvent) => {
       width: 8%;
       max-width: 7.5rem;
       min-width: 2.5rem;
-      background-color: $color-taskbar-text-bright;
+      background-color: v-bind(textColor);
       transition: all 0.3s;
     }
   }
