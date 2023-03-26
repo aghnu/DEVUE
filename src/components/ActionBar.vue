@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { AppTerminal } from "../applications/AppTerminal";
 import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
 
 const buttonSize = ref(2.9);
-
-onMounted(() => {
-  // TODO: animation + store control action buttons with there own state that can be used for trigger animation
-  new AppTerminal().open();
-});
 </script>
 
 <template>

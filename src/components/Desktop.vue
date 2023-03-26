@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import ActionBar from "./ActionBar.vue";
-import WindowsManager from "./WindowsManager.vue";
 import AppFooter from "./AppFooter.vue";
-import { onMounted, onUnmounted } from "vue";
+import MovingWindowApplications from "./MovingWindowApplications.vue";
+import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
+import {
+  connectWindowResizeStateUpdate,
+  connectWindowsActionEvent,
+} from "../logics/doWindowAction";
+import { connectWindowSnapping } from "../logics/doWindowSnapping";
+import { AppTerminal } from "../applications/AppTerminal";
+
+// variables
 const desktopStates = useDesktopStatesStore();
+const windowsManagerElement = ref<HTMLDivElement>();
 
 // handlers
 const handlerMouseMove = (e: MouseEvent) => {
@@ -38,6 +48,15 @@ const handlerTouchStart = (e: TouchEvent) => {
   ]);
 };
 
+const handlerInitDefaultApplications = () => {
+  new AppTerminal().open();
+};
+
+// connect logics
+connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
+connectWindowsActionEvent();
+connectWindowSnapping();
+
 // life cycle
 onMounted(() => {
   // update pointer position state
@@ -47,6 +66,7 @@ onMounted(() => {
   document.addEventListener("touchstart", handlerTouchStart, {
     passive: false,
   });
+  handlerInitDefaultApplications();
 });
 
 onUnmounted(() => {
@@ -60,8 +80,9 @@ onUnmounted(() => {
 
 <template>
   <div class="Desktop">
-    <div class="Desktop__windows">
-      <WindowsManager />
+    <div class="Desktop__windows" ref="windowsManagerElement">
+      <WindowsManagerGhostPanel />
+      <MovingWindowApplications />
     </div>
     <div class="Desktop__action_bar">
       <ActionBar />
@@ -97,7 +118,7 @@ onUnmounted(() => {
     @include mixin-center-children;
     @include mixin-disable-pointer;
 
-    margin: 0.85rem 1rem 2rem 1rem;
+    padding: 1rem 0.5rem;
 
     position: relative;
     height: fit-content;
