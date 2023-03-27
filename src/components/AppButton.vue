@@ -4,6 +4,7 @@ import { AppName } from "../types/TypeApp";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
+import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
 
 const props = defineProps<{
   name: AppName;
@@ -101,6 +102,17 @@ onUnmounted(() => {
         {{ appInstancesCount }}
       </div>
     </button>
+    <div
+      :class="[
+        'AppButton__desc',
+        {
+          'AppButton__desc--show': pointerHover && !pointerDown,
+        },
+      ]"
+      role="presentation"
+    >
+      <p>{{ APP_DISPLAY_NAME[name] }}</p>
+    </div>
   </div>
 </template>
 
@@ -114,6 +126,36 @@ onUnmounted(() => {
   height: v-bind(containerSize);
   width: fit-content;
 
+  &__desc {
+    @include mixin-center-children;
+    position: absolute;
+
+    top: calc(-1 * v-bind(buttonSize) * 0.6);
+
+    font-size: calc(v-bind(buttonSize) * 0.2);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+
+    line-height: 1em;
+
+    height: fit-content;
+    width: fit-content;
+
+    background-color: rgba(25, 25, 25, 0.95);
+    color: rgba(195, 195, 195, 0.75);
+
+    border-radius: calc(v-bind(buttonSize) * 100);
+    padding: calc(v-bind(buttonSize) * 0.12) calc(v-bind(buttonSize) * 0.22);
+
+    transition: all 0.15s;
+
+    opacity: 0;
+    &--show {
+      top: calc(-1 * v-bind(buttonSize) * 0.75);
+      opacity: 1;
+    }
+  }
+
   &__inner {
     @include mixin-clean-button-style;
     @include mixin-center-children;
@@ -123,19 +165,10 @@ onUnmounted(() => {
     background-color: $color-icon-primary;
     border-radius: 50%;
 
-    // border: solid;
-    // border-width: 0.1rem;
-    // border-color: $color-text-dark;
-
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
-    // box-shadow: $shadow-block-down;
 
-    transition: height 0.3s, width 0.3s, box-shadow 0.3s;
-
-    // &--down {
-    //   box-shadow: $shadow-block-down;
-    // }
+    transition: all 0.3s;
 
     &--secondary,
     &--action {
@@ -145,7 +178,7 @@ onUnmounted(() => {
     &__icon {
       @include mixin-center-children;
       height: 35%;
-      widows: 35%;
+      width: 35%;
     }
   }
 
@@ -158,6 +191,7 @@ onUnmounted(() => {
     right: 0;
 
     height: 35%;
+    line-height: 1em;
     width: fit-content;
     min-width: 35%;
 
