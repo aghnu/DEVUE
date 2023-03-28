@@ -46,7 +46,7 @@ const buttonSize = ref(2.9);
   height: fit-content;
 
   padding: calc(v-bind(buttonSize) * 0.15rem) calc(v-bind(buttonSize) * 0.3rem);
-  border-radius: calc(v-bind(buttonSize) * 100rem);
+  border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
   border: solid;
   border-width: 1px;

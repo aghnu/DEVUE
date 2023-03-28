@@ -8,7 +8,7 @@
 .AppFooter {
   @include mixin-center-children;
 
-  height: 1rem;
+  height: 1.75rem;
   width: 100%;
 
   &__text {
