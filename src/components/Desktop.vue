@@ -105,7 +105,7 @@ onUnmounted(() => {
   height: 100%;
   width: 100%;
 
-  background-color: $color-background-dark;
+  background-color: var(--color-background-dark);
 
   &__windows {
     position: relative;

@@ -50,10 +50,10 @@ const buttonSize = ref(2.9);
 
   border: solid;
   border-width: 1px;
-  border-color: $color-border-actionbar;
-  background-color: $color-block-transparent-actionbar;
+  border-color: var(--color-border-actionbar);
+  background-color: var(--color-block-transparent-actionbar);
 
-  box-shadow: $shadow-block-float;
+  box-shadow: var(--shadow-block-float);
 
   @include mixin-glassblur;
 
@@ -63,7 +63,7 @@ const buttonSize = ref(2.9);
     // margin-right: 0.5rem;
     width: 2px;
     border-radius: calc(v-bind(buttonSize) * 100rem);
-    background-color: $color-icon-dividor;
+    background-color: var(--color-icon-dividor);
   }
 }
 </style>

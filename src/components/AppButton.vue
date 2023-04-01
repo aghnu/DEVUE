@@ -162,7 +162,7 @@ onUnmounted(() => {
 
     position: relative;
 
-    background-color: $color-icon-primary;
+    background-color: var(--color-icon-primary);
     border-radius: 50%;
 
     height: v-bind(buttonSize);
@@ -172,7 +172,7 @@ onUnmounted(() => {
 
     &--secondary,
     &--action {
-      background-color: $color-icon-secondary;
+      background-color: var(--color-icon-secondary);
     }
 
     &__icon {

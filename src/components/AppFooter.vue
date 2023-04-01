@@ -12,7 +12,7 @@
   width: 100%;
 
   &__text {
-    color: $color-text-footer;
+    color: var(--color-text-footer);
     font-weight: 300;
     font-size: 0.6rem;
     letter-spacing: 0.65rem;

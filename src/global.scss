@@ -1,37 +1,35 @@
-$color-block-dark: #101010;
-$color-block-bright: #eab990;
-$color-background-dark: #050505;
-
-$color-taskbar-text-bright: #6d6d6d;
-
-$color-text-footer: #393939;
-$color-text-bright: #c7c7c7;
-$color-text-dark: #161616;
-
-$color-icon-primary: #c0c0c0;
-$color-icon-secondary: #080808;
-$color-icon-dividor: rgba(80, 80, 80, 0.3);
-$color-icon-inner: #cbcbcb;
-$color-icon-inner-dark: #070707;
-
-$color-block-transparent: rgba(25, 25, 25, 0.7);
-$color-block-transparent-actionbar: rgba(65, 65, 65, 0.275);
-$color-border-actionbar: rgba(125, 125, 125, 0.075);
-
-$shadow-block-float: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.15);
-$shadow-block-down: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.075);
-
-$color-app-default-background: #020202;
-
+// global sass variabls
 $font-family-main: "Roboto Mono", sans-serif;
 
-* {
-  box-sizing: border-box;
-}
+// mixins
+@mixin colors {
+  // base color
+  --color-block-dark: #101010;
+  --color-block-bright: #eab990;
+  --color-background-dark: #050505;
+  --color-text-bright:#c7c7c7;
+  --color-text-dark: #161616;
+  --color-block-transparent: rgba(25, 25, 25, 0.7);
+  --color-block-transparent-actionbar: rgba(65, 65, 65, 0.275);
 
-p {
-  padding: 0;
-  margin: 0;
+  // component color
+  --color-taskbar-text-bright: #6d6d6d;
+  --color-text-footer: #393939;
+  --color-border-actionbar: rgba(125, 125, 125, 0.075);
+
+  // icon color
+  --color-icon-primary: #c0c0c0;
+  --color-icon-secondary: #080808;
+  --color-icon-dividor: rgba(80, 80, 80, 0.3);
+  --color-icon-inner: #cbcbcb;
+  --color-icon-inner-dark: #070707;
+
+  // shadow
+  --shadow-block-float: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.15);
+  --shadow-block-down: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.075);
+
+  // APP
+  --color-app-default-background: #020202;
 }
 
 @mixin mixin-glassblur($blur-value: 0.5rem) {

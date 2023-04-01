@@ -198,16 +198,16 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.6rem;
-    box-shadow: $shadow-block-down;
+    box-shadow: var(--shadow-block-down);
     background-color: v-bind(styleApplicationColorBackground);
     border: solid;
     border-width: 0.1rem;
-    border-color: $color-text-dark;
+    border-color: var(--color-text-dark);
 
     transition: box-shadow 0.15s;
 
     &--focused {
-      box-shadow: $shadow-block-float;
+      box-shadow: var(--shadow-block-float);
     }
 
     &__title_bar {

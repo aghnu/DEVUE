@@ -115,10 +115,7 @@ onMounted(() => {
       height: 100%;
       width: 100%;
 
-      // border: solid;
-      // border-width: 0.1rem;
-      // border-color: $color-text-dark;
-      background-color: $color-block-transparent;
+      background-color: var(--color-block-transparent);
 
       border-radius: 0.6rem;
     }
