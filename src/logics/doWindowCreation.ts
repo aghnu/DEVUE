@@ -137,7 +137,7 @@ export function initMovingWindowState(
     );
   };
 
-  if (topWindow !== null) {
+  if ((topWindow !== null) && (topWindow.appInstance.name === application.name)) {
     // calculate size and pos from top window
     const initPosX =
       topWindow.position[0] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
