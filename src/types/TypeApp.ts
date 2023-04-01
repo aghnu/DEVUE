@@ -6,7 +6,8 @@ export type AppName =
   | "linkedin"
   | "welcome"
   | "app_menu"
-  | "doc_pdf";
+  | "doc_pdf"
+  | "calculator";
 export type AppType = "external" | "internal" | "action";
 export type ApplicationInstance = ApplicationInternal;
 

@@ -18,6 +18,7 @@ const buttonSize = ref(2.9);
       :size="buttonSize"
       @click="AppTerminal.build().open()"
     ></AppButton>
+    <AppButton name="calculator" type="primary" :size="buttonSize"></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"
