@@ -150,6 +150,8 @@ onUnmounted(() => {
     transition: all 0.15s;
 
     opacity: 0;
+    text-align: center;
+    white-space: nowrap;
     &--show {
       top: calc(-1 * v-bind(buttonSize) * 0.75);
       opacity: 1;

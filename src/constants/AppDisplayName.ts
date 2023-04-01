@@ -8,4 +8,5 @@ export const APP_DISPLAY_NAME: Record<AppName, string> = {
   doc_pdf: "Document",
   app_menu: "Menu",
   calculator: "Calculator",
+  reset: "Reset Desktop",
 };

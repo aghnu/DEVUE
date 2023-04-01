@@ -32,6 +32,7 @@ const buttonSize = ref(2.9);
       :size="buttonSize"
       @click="AppLinkedin.build().open()"
     ></AppButton>
+    <AppButton name="reset" type="secondary" :size="buttonSize"></AppButton>
   </div>
 </template>
 

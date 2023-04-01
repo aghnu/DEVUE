@@ -7,7 +7,8 @@ export type AppName =
   | "welcome"
   | "app_menu"
   | "doc_pdf"
-  | "calculator";
+  | "calculator"
+  | "reset";
 export type AppType = "external" | "internal" | "action";
 export type ApplicationInstance = ApplicationInternal;
 
