@@ -1,6 +1,8 @@
 import { ApplicationStyle, AppName } from "../types/TypeApp";
 import { ApplicationInternal } from "./ApplicationInternal";
 import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
+import { MovingWindowLocalState } from "../types/TypeWindows";
+import { initMovingWindowState } from "../logics/doWindowCreation";
 
 export class AppTerminal extends ApplicationInternal {
   readonly name: AppName;
@@ -16,6 +18,10 @@ export class AppTerminal extends ApplicationInternal {
       colorBackground: this.backgroundColor,
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
     };
+  }
+
+  getInitMovingWindowState(): MovingWindowLocalState {
+    return initMovingWindowState(this);
   }
 
   initTerminal(element: HTMLIFrameElement) {

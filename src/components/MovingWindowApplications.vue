@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import AppTerminal from "../applications/components/AppTerminal.vue";
+import AppCalculator from "../applications/components/AppCalculator.vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 
@@ -13,6 +14,10 @@ const { movingWindows } = storeToRefs(windowsState);
       <template v-for="[_, mvState] in movingWindows" :key="mvState.id">
         <AppTerminal
           v-if="mvState.appInstance.name === 'terminal'"
+          :state="mvState"
+        />
+        <AppCalculator
+          v-else-if="mvState.appInstance.name === 'calculator'"
           :state="mvState"
         />
       </template>

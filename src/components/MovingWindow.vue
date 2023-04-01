@@ -201,8 +201,8 @@ function resetActionEvent() {
     box-shadow: var(--shadow-block-down);
     background-color: v-bind(styleApplicationColorBackground);
     border: solid;
-    border-width: 0.1rem;
-    border-color: var(--color-text-dark);
+    border-width: 1px;
+    border-color: var(--color-border-window);
 
     transition: box-shadow 0.15s;
 

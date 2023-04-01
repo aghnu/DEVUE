@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { AppTerminal } from "../applications/AppTerminal";
 import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
+import { AppCalculator } from "../applications/AppCalculator";
 
 const buttonSize = ref(2.9);
 </script>
@@ -18,7 +19,12 @@ const buttonSize = ref(2.9);
       :size="buttonSize"
       @click="AppTerminal.build().open()"
     ></AppButton>
-    <AppButton name="calculator" type="primary" :size="buttonSize"></AppButton>
+    <AppButton
+      name="calculator"
+      type="primary"
+      :size="buttonSize"
+      @click="AppCalculator.build().open()"
+    ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="github"

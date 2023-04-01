@@ -141,7 +141,7 @@ const handlerTouchStart = (e: TouchEvent) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: rgba(255, 255, 255, 0.07);
 
     &__control_section {
       @include mixin-disable-pointer;

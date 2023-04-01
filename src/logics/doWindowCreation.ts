@@ -1,10 +1,18 @@
 import { Tuple } from "../types/TypeBasic";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { useDesktopStatesStore } from "../stores/desktopStates";
-import { WINDOW_CONFIG } from "../constants/WindowManager";
+import { WindowConfig, WINDOW_CONFIG } from "../constants/WindowManager";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { v4 as uuid } from "uuid";
 import { ApplicationInstance } from "../types/TypeApp";
+import { clone } from "../utilities/helpers";
+
+export interface InitMovingWindowStateOptions {
+  sizeMin: Tuple<number>;
+  SizeMax: Tuple<number>;
+  sizeInitPerc: Tuple<number>;
+  sizeInitRatio: number;
+}
 
 export function calculateWindowPositionWithConstrain(
   movingWindowState: MovingWindowLocalState,
@@ -33,9 +41,8 @@ export function calculateWindowSizeWithConstrain(
 ): Tuple<number> {
   // porting the original logic here. change later?
   const windowStateCurrentSizeMin =
-    movingWindowState.sizeMin !== null
-      ? movingWindowState.sizeMin
-      : WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW;
+    movingWindowState.sizeMin ?? WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW;
+
   const windowStateCurrentSizeMax = movingWindowState.sizeMax;
 
   const newSizeX =
@@ -57,18 +64,32 @@ export function calculateWindowSizeWithConstrain(
   return [newSizeX, newSizeY] as Tuple<number>;
 }
 export function initMovingWindowState(
-  application: ApplicationInstance
+  application: ApplicationInstance,
+  options: Partial<InitMovingWindowStateOptions> = {}
 ): MovingWindowLocalState {
+  // TODO: sizeMax is not finished, need to change window resize logic
+  // TODO: implment an option to turn off ghost window snapping
   const movingWindowStateDetached: MovingWindowLocalState = {
     id: uuid(),
     order: 0,
     position: [0, 0],
     size: [0, 0],
-    sizeMin: null,
-    sizeMax: null,
+    sizeMin: options.sizeMin ?? null,
+    sizeMax: options.SizeMax ?? null, 
     snapped: "center",
     appInstance: application,
   };
+
+  // set local WINDOW_CONFIG used for init window
+  const WINDOW_CONFIG_LOCAL: WindowConfig = {
+    MIN_WINDOW_VISIABLE_BOARDER: WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER,
+    DEFAULT_SIZE_MIN_WINDOW: WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW,
+    WIN_INIT_SIZE_PERC: options.sizeInitPerc ?? WINDOW_CONFIG.WIN_INIT_SIZE_PERC,
+    WIN_INIT_SIZE_RATIO: options.sizeInitRatio ?? WINDOW_CONFIG.WIN_INIT_SIZE_RATIO,
+    WIN_INIT_STACK_POSITION_OFFSET: WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET
+  }
+
+
 
   const desktopStates = useDesktopStatesStore();
   const windowsStates = useWindowsStatesStore();
@@ -94,10 +115,10 @@ export function initMovingWindowState(
   };
 
   const generateInitSize = () => {
-    const initSizeY = WINDOW_CONFIG.WIN_INIT_SIZE_PERC[1] * areaSize[1];
+    const initSizeY = WINDOW_CONFIG_LOCAL.WIN_INIT_SIZE_PERC[1] * areaSize[1];
     const initSizeX = Math.min(
-      WINDOW_CONFIG.WIN_INIT_SIZE_PERC[0] * areaSize[0],
-      WINDOW_CONFIG.WIN_INIT_SIZE_RATIO * initSizeY
+      WINDOW_CONFIG_LOCAL.WIN_INIT_SIZE_PERC[0] * areaSize[0],
+      WINDOW_CONFIG_LOCAL.WIN_INIT_SIZE_RATIO * initSizeY
     );
 
     movingWindowStateDetached.size = calculateWindowSizeWithConstrain(
@@ -119,9 +140,9 @@ export function initMovingWindowState(
   if (topWindow !== null) {
     // calculate size and pos from top window
     const initPosX =
-      topWindow.position[0] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[0];
+      topWindow.position[0] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
     const initPosY =
-      topWindow.position[1] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[1];
+      topWindow.position[1] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[1];
     const initSizeX = topWindow.size[0];
     const initSizeY = topWindow.size[1];
 
@@ -138,7 +159,7 @@ export function initMovingWindowState(
     if (helperCheckMovingWindowInsideDesktop() === false) {
       // calculate size and pos from top window
       const initPosX =
-        topWindow.position[0] + WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[0];
+        topWindow.position[0] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
       const initPosY = topWindow.position[1];
 
       // set size and pos
@@ -156,7 +177,7 @@ export function initMovingWindowState(
         const initPosX = topWindow.position[0];
         const initPosY =
           topWindow.position[1] +
-          WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET[1];
+          WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[1];
 
         // set size and pos
         movingWindowStateDetached.size = calculateWindowSizeWithConstrain(
