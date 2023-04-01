@@ -29,12 +29,12 @@ const { movingWindows } = storeToRefs(windowsState);
 .MovingWindowApplication__transition {
   &-enter-active,
   &-leave-active {
-    transition: all 0.3s;
+    transition: all 0.3s, opacity 0.2s;
   }
 
   &-enter-from,
   &-leave-to {
-    transform: scale(0.85);
+    transform: scale(0.9);
     opacity: 0;
   }
 }

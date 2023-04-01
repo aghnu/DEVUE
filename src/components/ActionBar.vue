@@ -5,8 +5,10 @@ import { AppTerminal } from "../applications/AppTerminal";
 import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
 import { AppCalculator } from "../applications/AppCalculator";
+import { useWindowsStatesStore } from "../stores/windowsStates";
 
 const buttonSize = ref(2.9);
+const windowsState = useWindowsStatesStore();
 </script>
 
 <template>
@@ -38,7 +40,7 @@ const buttonSize = ref(2.9);
       :size="buttonSize"
       @click="AppLinkedin.build().open()"
     ></AppButton>
-    <AppButton name="reset" type="secondary" :size="buttonSize"></AppButton>
+    <AppButton name="reset" type="secondary" :size="buttonSize" @click="windowsState.resetMovingWindow()"></AppButton>
   </div>
 </template>
 

@@ -66,6 +66,13 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       this.movingWindows.delete(movingWindowID);
     },
 
+    resetMovingWindow() {
+      Array.from(this.movingWindows.values()).forEach((state) => {
+        state.appInstance.close();
+      });
+      this.$reset();
+    },
+
     focusMovingWindow(movingWindowID: MovingWindowID) {
       if (this.topWindow && this.topWindow.id === movingWindowID) {
         return;
