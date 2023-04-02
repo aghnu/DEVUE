@@ -144,7 +144,7 @@ const appInstancesCount = computed(() => {
     position: relative;
 
     background-color: var(--color-icon-primary);
-    border-radius: 50%;
+    border-radius: calc(v-bind(buttonSize) * 0.42);
 
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
