@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 import { computed } from "vue";
 import { getIconClose } from "../utilities/factorySVG";
 import { MovingWindowID } from "../types/TypeWindows";
-import { DoubleClickDetector } from "../logics/doDetectionDoubleClick";
+import { DoubleClickDetector } from "../utilities/doubleClickDetector";
 
 const props = defineProps<{
   focused: boolean;

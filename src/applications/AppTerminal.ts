@@ -13,7 +13,7 @@ export class AppTerminal extends ApplicationInternal {
   constructor() {
     super();
     this.name = "terminal";
-    this.backgroundColor = "#020202";
+    this.backgroundColor = "#100f19";
     this.applicationStyle = {
       colorBackground: this.backgroundColor,
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),

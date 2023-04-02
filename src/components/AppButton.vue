@@ -5,6 +5,7 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
+import { useButtonAction } from "../composables/useButtonAction";
 
 const props = defineProps<{
   name: AppName;
@@ -18,9 +19,16 @@ const emits = defineEmits<{
 
 const windowsState = useWindowsStatesStore();
 const { getApplicationsInstanceCount } = storeToRefs(windowsState);
-
-const pointerDown = ref(false);
-const pointerHover = ref(false);
+const {
+  pointerDown,
+  pointerHover,
+  handlerPointerDown,
+  handlerPointerUp,
+  handlerHover,
+  handlerLeave,
+} = useButtonAction(() => {
+  emits("click");
+});
 
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSizeFactor = computed(() =>
@@ -45,35 +53,6 @@ const iconHTML = computed(() => {
 
 const appInstancesCount = computed(() => {
   return getApplicationsInstanceCount.value(props.name);
-});
-
-function handlerPointerDown() {
-  pointerDown.value = true;
-}
-
-function handlerPointerUp() {
-  if (pointerDown.value) {
-    pointerDown.value = false;
-    emits("click");
-  }
-}
-
-function handlerHover() {
-  pointerHover.value = true;
-}
-
-function handlerLeave() {
-  pointerHover.value = false;
-}
-
-onMounted(() => {
-  document.addEventListener("mouseup", handlerPointerUp);
-  document.addEventListener("touchend", handlerPointerUp);
-});
-
-onUnmounted(() => {
-  document.removeEventListener("mouseup", handlerPointerUp);
-  document.removeEventListener("touchend", handlerPointerUp);
 });
 </script>
 

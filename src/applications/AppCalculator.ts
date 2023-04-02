@@ -1,7 +1,7 @@
 import { ApplicationStyle, AppName } from "../types/TypeApp";
 import { ApplicationInternal } from "./ApplicationInternal";
 import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
-import { CalculatorKey } from "../types/TypeCalculator";
+import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 
@@ -9,7 +9,8 @@ export class AppCalculator extends ApplicationInternal {
   readonly name: AppName;
 
   applicationStyle: ApplicationStyle;
-  keys: CalculatorKey[];
+  textMain: string;
+  textSub: string;
 
   constructor() {
     super();
@@ -18,7 +19,10 @@ export class AppCalculator extends ApplicationInternal {
       colorBackground: "#202020",
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
     };
-    this.keys = this.getInitKeys();
+
+    this.textMain = '123456789';
+    this.textSub = '';
+    
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
@@ -28,33 +32,26 @@ export class AppCalculator extends ApplicationInternal {
     })
   }
 
-  private getInitKeys() {
-    return [
-      { text: "(", type: "function", handler: () => {} },
-      { text: ")", type: "function", handler: () => {} },
-      { text: "%", type: "function", handler: () => {} },
-      { text: "CE", type: "function", handler: () => {} },
-    
-      { text: "7", type: "value", handler: () => {} },
-      { text: "8", type: "value", handler: () => {} },
-      { text: "9", type: "value", handler: () => {} },
-      { text: "/", type: "function", handler: () => {} },
-    
-      { text: "4", type: "value", handler: () => {} },
-      { text: "5", type: "value", handler: () => {} },
-      { text: "6", type: "value", handler: () => {} },
-      { text: "*", type: "function", handler: () => {} },
-    
-      { text: "1", type: "value", handler: () => {} },
-      { text: "2", type: "value", handler: () => {} },
-      { text: "3", type: "value", handler: () => {} },
-      { text: "-", type: "function", handler: () => {} },
-    
-      { text: "0", type: "value", handler: () => {} },
-      { text: ".", type: "value", handler: () => {} },
-      { text: "=", type: "primary", handler: () => {} },
-      { text: "+", type: "function", handler: () => {} },
-    ] satisfies CalculatorKey[] as CalculatorKey[];
+  getInitKeys(): CalculatorKey[] {
+
+    const keyArrayText = '( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +'.split(' ');
+    const keySetIsFunc = new Set('( ) CE C / * - +'.split(' '));
+    const keySetIsPrim = new Set('='.split(' '));
+
+    const getKeyType = (key: string): CalculatorPadType => {
+      if (keySetIsFunc.has(key)) return 'function';
+      if (keySetIsPrim.has(key)) return 'primary';
+      
+      return 'value';
+    };
+
+    return keyArrayText.map((t) => Object({
+      text: t,
+      type: getKeyType(t),
+      handler: () => {
+        this.textMain += '0000';
+      }
+    }) satisfies CalculatorKey);
   }
 
 

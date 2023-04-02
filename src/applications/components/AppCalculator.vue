@@ -4,24 +4,33 @@ import MovingWindow from "../../components/MovingWindow.vue";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
 import AppCalculatorPad from "./AppCalculatorPad.vue";
 import { AppCalculator } from "../AppCalculator";
+import AppCalculatorDisplay from "./AppCalculatorDisplay.vue";
 
 const props = defineProps<{
   state: MovingWindowLocalState;
 }>();
 
-const keys = computed(() => (props.state.appInstance as AppCalculator).keys);
+const keys = computed(() =>
+  (props.state.appInstance as AppCalculator).getInitKeys()
+);
+const textMain = computed(
+  () => (props.state.appInstance as AppCalculator).textMain
+);
 </script>
 
 <template>
   <MovingWindow :state="state">
     <div class="AppCalculator">
-      <div class="AppCalculator__display"></div>
+      <div class="AppCalculator__display">
+        <AppCalculatorDisplay :main="textMain" />
+      </div>
       <div class="AppCalculator__pad">
         <AppCalculatorPad
           v-for="(key, index) in keys"
           :key="index"
           :text="key.text"
           :type="key.type"
+          :handler="key.handler"
         />
       </div>
     </div>
