@@ -1,57 +1,80 @@
 <script setup lang="ts">
+import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import ResponsiveText from "../../uikit/components/ResponsiveText.vue";
+import { ref, computed } from "vue";
+import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
 
 const props = defineProps<{
   main: string;
+  sub: string;
 }>();
+
+const appCalculatorDisplayElement = ref<HTMLDivElement>();
+
+const displayElementHeightStyle = useTrackComputedStyle(
+  appCalculatorDisplayElement,
+  "height"
+).propertyRef;
+
+const displayElementHeight = computed(() => {
+  if (!displayElementHeightStyle.value) return 0;
+  const height = convertStyleUnitPxToNumber(
+    displayElementHeightStyle.value as string
+  );
+  return height ? height / 200 : 0;
+});
 </script>
 
 <template>
-  <div class="AppCalculatorDisplay">
-    <div
-      :class="[
-        'AppCalculatorDisplay__line',
-        'AppCalculatorDisplay__line--first',
-      ]"
-    >
-      <!-- <p class="AppCalculatorDisplay__text">12 + (56 - 23)</p> -->
-      <ResponsiveText :text="main" :align="'left'" />
-    </div>
-    <div
-      :class="[
-        'AppCalculatorDisplay__line',
-        'AppCalculatorDisplay__line--second',
-      ]"
-    >
-      <!-- <p class="AppCalculatorDisplay__text">= 89</p> -->
+  <div class="AppCalculatorDisplay" ref="appCalculatorDisplayElement">
+    <div class="AppCalculatorDisplay__inner">
+      <div
+        :class="[
+          'AppCalculatorDisplay__line',
+          'AppCalculatorDisplay__line--first',
+        ]"
+      >
+        <ResponsiveText :text="sub" :align="'right'" />
+      </div>
+      <div
+        :class="[
+          'AppCalculatorDisplay__line',
+          'AppCalculatorDisplay__line--second',
+        ]"
+      >
+        <ResponsiveText :text="main" :align="'right'" />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
 .AppCalculatorDisplay {
+  position: relative;
   width: 100%;
   height: 100%;
 
-  padding: 0.5rem 0.5rem 2rem 0.5rem;
+  &__inner {
+    position: absolute;
+    top: 20%;
+    width: 100%;
+  }
 
   &__line {
     width: 100%;
-    height: 50%;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
 
     color: var(--color-icon-inner);
-    background-color: red;
 
     &--first {
-      font-size: 1.75rem;
+      font-size: calc(v-bind(displayElementHeight) * 1.5rem);
     }
 
     &--second {
-      font-size: 4rem;
+      font-size: calc(v-bind(displayElementHeight) * 4rem);
     }
   }
 

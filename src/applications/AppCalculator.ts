@@ -20,39 +20,38 @@ export class AppCalculator extends ApplicationInternal {
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
     };
 
-    this.textMain = '123456789';
-    this.textSub = '';
-    
+    this.textMain = "376";
+    this.textSub = "1 + 23 + (42 / 2)";
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
       sizeInitPerc: [0.95, 0.75],
-      sizeInitRatio: 2/3
-    })
+      sizeInitRatio: 2 / 3,
+    });
   }
 
   getInitKeys(): CalculatorKey[] {
-
-    const keyArrayText = '( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +'.split(' ');
-    const keySetIsFunc = new Set('( ) CE C / * - +'.split(' '));
-    const keySetIsPrim = new Set('='.split(' '));
+    const keyArrayText = "( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +".split(" ");
+    const keySetIsFunc = new Set("( ) CE C / * - +".split(" "));
+    const keySetIsPrim = new Set("=".split(" "));
 
     const getKeyType = (key: string): CalculatorPadType => {
-      if (keySetIsFunc.has(key)) return 'function';
-      if (keySetIsPrim.has(key)) return 'primary';
-      
-      return 'value';
+      if (keySetIsFunc.has(key)) return "function";
+      if (keySetIsPrim.has(key)) return "primary";
+
+      return "value";
     };
 
-    return keyArrayText.map((t) => Object({
-      text: t,
-      type: getKeyType(t),
-      handler: () => {
-        this.textMain += '0000';
-      }
-    }) satisfies CalculatorKey);
+    return keyArrayText.map(
+      (t) =>
+        Object({
+          text: t,
+          type: getKeyType(t),
+          handler: () => {
+            this.textMain += "0000";
+          },
+        }) satisfies CalculatorKey
+    );
   }
-
-
 }

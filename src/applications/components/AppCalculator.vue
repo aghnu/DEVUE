@@ -16,13 +16,16 @@ const keys = computed(() =>
 const textMain = computed(
   () => (props.state.appInstance as AppCalculator).textMain
 );
+const textSub = computed(
+  () => (props.state.appInstance as AppCalculator).textSub
+);
 </script>
 
 <template>
   <MovingWindow :state="state">
     <div class="AppCalculator">
       <div class="AppCalculator__display">
-        <AppCalculatorDisplay :main="textMain" />
+        <AppCalculatorDisplay :main="textMain" :sub="textSub" />
       </div>
       <div class="AppCalculator__pad">
         <AppCalculatorPad
@@ -46,10 +49,12 @@ const textMain = computed(
 
   &__display {
     height: 30%;
+    min-height: 10rem;
   }
 
   &__pad {
     height: 70%;
+    max-height: calc(100% - 10rem);
     width: 100%;
 
     display: grid;

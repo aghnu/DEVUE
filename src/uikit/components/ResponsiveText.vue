@@ -1,88 +1,47 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import GlobalAnimation from "../../utilities/globalAnimation";
+import { computed, ref } from "vue";
+import { useResponsiveFontSizeFactor } from "../../composables/useResponsiveFontSizeFactor";
+import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
+import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
 
 const props = defineProps<{
   text: string;
   align: "left" | "right" | "center";
 }>();
 
-const textContent = computed(() => props.text);
 const textElement = ref<HTMLParagraphElement>();
 const textContainerElement = ref<HTMLDivElement>();
 
-const widthText = ref(0);
-const widthContainer = ref(0);
-const styleTextFontSizeFactor = ref(1);
+const styleJustifyContent = computed(() => {
+  switch (props.align) {
+    case "left":
+      return "flex-start";
+    case "right":
+      return "flex-end";
+    case "center":
+      return "center";
+  }
+});
+const widthTextStyle = useTrackComputedStyle(textElement, "width").propertyRef;
+const widthContainerStyle = useTrackComputedStyle(
+  textContainerElement,
+  "width"
+).propertyRef;
 
-function computedPxToNumber(stylePx: string) {
-  const groups = stylePx.match(/^([0-9\.]*)px$/);
-  if (groups) return Number(groups[1]);
-  return null;
-}
-
-function updateWidthText() {
-  // undefined
-  if (textElement.value === undefined) return;
-
-  // computed width not exist or legal
-  const widthTextNew = computedPxToNumber(
-    getComputedStyle(textElement.value).width
-  );
-  if (widthTextNew === null) return;
-
-  // update refs
-  widthText.value = widthTextNew;
-}
-
-function updateWidthContainer() {
-  // undefined
-  if (textContainerElement.value === undefined) return;
-
-  // computed width not exist or legal
-  const widthContainerNew = computedPxToNumber(
-    getComputedStyle(textContainerElement.value).width
-  );
-  if (widthContainerNew === null) return;
-
-  // update refs
-  widthContainer.value = widthContainerNew;
-}
-
-let stopTextSize = false;
-function updateStyleTextFontSizeFactor(factor: number) {
-  if (factor === styleTextFontSizeFactor.value) return;
-
-  stopTextSize = true;
-  styleTextFontSizeFactor.value = factor;
-}
-
-function handleSizeChange(widthText: number, widthContainer: number) {
-  const newFactor =
-    widthContainer / (widthText / styleTextFontSizeFactor.value);
-  updateStyleTextFontSizeFactor(Math.min(newFactor, 1));
-  console.log("COOL");
-}
-
-onMounted(() => {
-  GlobalAnimation.getInstance().subscribe(updateWidthContainer);
-  GlobalAnimation.getInstance().subscribe(updateWidthText);
-  watch(widthContainer, (value) => {
-    handleSizeChange(widthText.value, value);
-  });
-  watch(widthText, (value) => {
-    if (stopTextSize) {
-      stopTextSize = false;
-      return;
-    }
-    handleSizeChange(value, widthContainer.value);
-  });
+const widthText = computed(() => {
+  if (!widthTextStyle.value) return 0;
+  return convertStyleUnitPxToNumber(widthTextStyle.value as string) ?? 0;
 });
 
-onUnmounted(() => {
-  GlobalAnimation.getInstance().unsubscribe(updateWidthText);
-  GlobalAnimation.getInstance().unsubscribe(updateWidthContainer);
+const widthContainer = computed(() => {
+  if (!widthContainerStyle.value) return 0;
+  return convertStyleUnitPxToNumber(widthContainerStyle.value as string) ?? 0;
 });
+
+const { fontSizeFactor } = useResponsiveFontSizeFactor(
+  widthText,
+  widthContainer
+);
 </script>
 
 <template>
@@ -94,11 +53,12 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .ResponsiveText {
   width: 100%;
-  background-color: green;
+  display: flex;
+  justify-content: v-bind(styleJustifyContent);
   &__text {
-    background-color: blue;
     width: fit-content;
-    font-size: calc(v-bind(styleTextFontSizeFactor) * 1em);
+    font-size: calc(v-bind(fontSizeFactor) * 1em);
+    white-space: nowrap;
   }
 }
 </style>
