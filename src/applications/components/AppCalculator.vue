@@ -49,12 +49,12 @@ const textSub = computed(
 
   &__display {
     height: 30%;
-    min-height: 10rem;
+    min-height: 7rem;
   }
 
   &__pad {
     height: 70%;
-    max-height: calc(100% - 10rem);
+    max-height: calc(100% - 7rem);
     width: 100%;
 
     display: grid;

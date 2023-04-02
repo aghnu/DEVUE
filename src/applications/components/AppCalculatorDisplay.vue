@@ -58,6 +58,9 @@ const displayElementHeight = computed(() => {
     position: absolute;
     top: 20%;
     width: 100%;
+
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
   }
 
   &__line {
