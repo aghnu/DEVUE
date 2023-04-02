@@ -20,6 +20,9 @@ export function useResponsiveFontSizeFactor(
 
     updateFontSizeFactor(Math.min(newFactor, 1));
   }
+  function refreshSizeFactor() {
+    handleSizeChange(widthText.value, widthContainer.value);
+  }
 
   onMounted(() => {
     watch(widthContainer, (value) => {
@@ -34,5 +37,5 @@ export function useResponsiveFontSizeFactor(
     });
   });
 
-  return { fontSizeFactor };
+  return { fontSizeFactor, refreshSizeFactor };
 }

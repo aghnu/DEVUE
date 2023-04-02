@@ -3,11 +3,18 @@ import { computed, ref } from "vue";
 import { useResponsiveFontSizeFactor } from "../../composables/useResponsiveFontSizeFactor";
 import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
+import { Trigger } from "../../utilities/trigger";
 
-const props = defineProps<{
-  text: string;
-  align: "left" | "right" | "center";
-}>();
+const props = withDefaults(
+  defineProps<{
+    text: string;
+    align: "left" | "right" | "center";
+    refreshTrigger: Trigger | null;
+  }>(),
+  {
+    refreshTrigger: null,
+  }
+);
 
 const textElement = ref<HTMLParagraphElement>();
 const textContainerElement = ref<HTMLDivElement>();
@@ -38,10 +45,17 @@ const widthContainer = computed(() => {
   return convertStyleUnitPxToNumber(widthContainerStyle.value as string) ?? 0;
 });
 
-const { fontSizeFactor } = useResponsiveFontSizeFactor(
+const { fontSizeFactor, refreshSizeFactor } = useResponsiveFontSizeFactor(
   widthText,
   widthContainer
 );
+
+// connect trigger
+if (props.refreshTrigger) {
+  props.refreshTrigger.listen(() => {
+    refreshSizeFactor();
+  });
+}
 </script>
 
 <template>

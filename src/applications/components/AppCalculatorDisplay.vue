@@ -1,27 +1,42 @@
 <script setup lang="ts">
 import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import ResponsiveText from "../../uikit/components/ResponsiveText.vue";
-import { ref, computed } from "vue";
-import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
+import { ref, computed, onMounted, watch } from "vue";
+import {
+  convertStyleUnitPxToNumber,
+  repeatActionForSetFrames,
+} from "../../utilities/helpers";
+import { useWindowsStatesStore } from "../../stores/windowsStates";
+import { storeToRefs } from "pinia";
+import { Trigger } from "../../utilities/trigger";
 
 const props = defineProps<{
   main: string;
   sub: string;
 }>();
 
-const appCalculatorDisplayElement = ref<HTMLDivElement>();
+const windowsState = useWindowsStatesStore();
+const { topWindow } = storeToRefs(windowsState);
+const displayRefreshTrigger = new Trigger();
+const topWindowSnap = computed(() => topWindow.value?.snapped);
 
+const appCalculatorDisplayElement = ref<HTMLDivElement>();
 const displayElementHeightStyle = useTrackComputedStyle(
   appCalculatorDisplayElement,
   "height"
 ).propertyRef;
-
 const displayElementHeight = computed(() => {
   if (!displayElementHeightStyle.value) return 0;
   const height = convertStyleUnitPxToNumber(
     displayElementHeightStyle.value as string
   );
   return height ? height / 200 : 0;
+});
+
+onMounted(() => {
+  watch(topWindowSnap, () => {
+    repeatActionForSetFrames(() => displayRefreshTrigger.notify(), 5);
+  });
 });
 </script>
 
@@ -34,7 +49,11 @@ const displayElementHeight = computed(() => {
           'AppCalculatorDisplay__line--first',
         ]"
       >
-        <ResponsiveText :text="sub" :align="'right'" />
+        <ResponsiveText
+          :text="sub"
+          :align="'right'"
+          :refresh-trigger="displayRefreshTrigger"
+        />
       </div>
       <div
         :class="[
@@ -42,7 +61,11 @@ const displayElementHeight = computed(() => {
           'AppCalculatorDisplay__line--second',
         ]"
       >
-        <ResponsiveText :text="main" :align="'right'" />
+        <ResponsiveText
+          :text="main"
+          :align="'right'"
+          :refresh-trigger="displayRefreshTrigger"
+        />
       </div>
     </div>
   </div>
