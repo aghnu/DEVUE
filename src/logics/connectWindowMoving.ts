@@ -70,7 +70,7 @@ export function connectWindowMoving(
         } else {
           if (snapped !== "center") {
             gsap.to(windowElement.value, {
-              duration: 0.3,
+              duration: 0.25,
               overwrite: "auto",
               height: styleSize[1],
               width: styleSize[0],

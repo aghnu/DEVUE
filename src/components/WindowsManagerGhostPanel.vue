@@ -109,7 +109,7 @@ onMounted(() => {
 
     will-change: height, width, left, top, z-index;
 
-    transition: all 0.4s;
+    transition: all 0.35s;
 
     &__inner {
       height: 100%;
