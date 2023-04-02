@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRaw, ref, computed } from "vue";
+import { toRaw, ref, computed, onMounted, watch } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
@@ -7,11 +7,13 @@ import { useWindowsStatesStore } from "../stores/windowsStates";
 import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
 import { useMovingWindowConfig } from "../composables/useMovingWindowConfig";
 import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
+import gsap from "gsap";
 
 import {
   MovingWindowLocalState,
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
+import { connectWindowMoving } from "../logics/connectWindowMoving";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -22,16 +24,17 @@ const props = defineProps<{
   state: MovingWindowLocalState;
 }>();
 
+// var
+const movingWindowElement = ref<HTMLDivElement>();
+
+// connect
+connectWindowMoving(ref(props.state), movingWindowElement);
+
 // compute styling string
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
-const {
-  styleWindowPositionLeft,
-  styleWindowPositionTop,
-  styleWindowSizeWidth,
-  styleWindowSizeHeight,
-  styleWindowZIndex,
-  isWindowFocused,
-} = useMovingWindowConfig(ref(props.state));
+const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
+  ref(props.state)
+);
 const styleApplicationColorBackground = computed(
   () =>
     props.state.appInstance.applicationStyle.colorBackground ??
@@ -108,7 +111,7 @@ function resetActionEvent() {
 </script>
 
 <template>
-  <div class="MovingWindow">
+  <div class="MovingWindow" ref="movingWindowElement">
     <div
       class="MovingWindow__window_display"
       :class="{ 'MovingWindow__window_display--focused': isWindowFocused }"
@@ -181,11 +184,6 @@ function resetActionEvent() {
   --title-height: 2rem;
 
   position: absolute;
-
-  height: v-bind(styleWindowSizeHeight);
-  width: v-bind(styleWindowSizeWidth);
-  left: v-bind(styleWindowPositionLeft);
-  top: v-bind(styleWindowPositionTop);
 
   z-index: v-bind(styleWindowZIndex);
 
