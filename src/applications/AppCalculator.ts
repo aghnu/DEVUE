@@ -16,7 +16,7 @@ export class AppCalculator extends ApplicationInternal {
     super();
     this.name = "calculator";
     this.applicationStyle = {
-      colorBackground: "#202020",
+      colorBackground: "#aaaaaa",
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
     };
 
@@ -26,8 +26,8 @@ export class AppCalculator extends ApplicationInternal {
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
-      sizeInitPerc: [0.6, 0.6],
-      sizeInitRatio: 2 / 3,
+      sizeInitPerc: [0.7, 0.7],
+      sizeInitRatio: 1 / 1.618,
     });
   }
 

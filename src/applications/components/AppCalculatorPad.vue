@@ -23,21 +23,21 @@ const padColorStyle = computed(() => {
     case "function":
       return pointerHover.value
         ? pointerDown.value
-          ? "#5f636899"
-          : "#5f6368bb"
-        : "#5f6368aa";
+          ? "#36344e99"
+          : "#36344ecc"
+        : "#36344eaa";
     case "value":
       return pointerHover.value
         ? pointerDown.value
-          ? "#3c404399"
-          : "#3c4043bb"
-        : "#3c4043aa";
+          ? "#dadce099"
+          : "#dadce0ee"
+        : "#dadce0aa";
     case "primary":
       return pointerHover.value
         ? pointerDown.value
-          ? "#9ab4f899"
-          : "#9ab4f8bb"
-        : "#9ab4f8aa";
+          ? "#dadce099"
+          : "#dadce0ee"
+        : "#dadce0aa";
   }
 });
 
@@ -46,9 +46,9 @@ const padTextColorStyle = computed(() => {
     case "function":
       return "var(--color-icon-inner)";
     case "value":
-      return "var(--color-icon-inner)";
+      return "var(--color-calculator-text-display)";
     case "primary":
-      return "var(--color-icon-inner-dark)";
+      return "var(--color-calculator-text-display)";
   }
 });
 </script>
@@ -88,7 +88,7 @@ const padTextColorStyle = computed(() => {
     color: v-bind(padTextColorStyle);
     background-color: v-bind(padColorStyle);
 
-    border-radius: 0.35rem;
+    border-radius: 0.2rem;
 
     transition: all 0.05s;
 
@@ -99,7 +99,7 @@ const padTextColorStyle = computed(() => {
     }
 
     &__text {
-      font-size: 1.2rem;
+      font-size: 1.05rem;
     }
   }
 }

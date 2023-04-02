@@ -81,6 +81,9 @@ onMounted(() => {
     position: absolute;
     top: 20%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 
     padding-left: 0.8rem;
     padding-right: 0.8rem;
@@ -92,15 +95,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    color: var(--color-icon-inner);
+    color: var(--color-calculator-text-display);
 
     &--first {
-      font-size: calc(v-bind(displayElementHeight) * 1.5rem);
+      font-size: calc(v-bind(displayElementHeight) * 1.25rem);
     }
 
     &--second {
-      font-size: calc(v-bind(displayElementHeight) * 4rem);
+      font-size: calc(v-bind(displayElementHeight) * 3.65rem);
     }
   }
 
