@@ -26,7 +26,7 @@ export class AppCalculator extends ApplicationInternal {
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
-      sizeInitPerc: [0.95, 0.75],
+      sizeInitPerc: [0.6, 0.6],
       sizeInitRatio: 2 / 3,
     });
   }

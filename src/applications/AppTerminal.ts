@@ -21,7 +21,9 @@ export class AppTerminal extends ApplicationInternal {
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
-    return initMovingWindowState(this);
+    return initMovingWindowState(this, {
+      sizeInitRatio: 4 / 5,
+    });
   }
 
   initTerminal(element: HTMLIFrameElement) {
