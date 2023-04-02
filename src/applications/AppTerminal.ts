@@ -22,7 +22,7 @@ export class AppTerminal extends ApplicationInternal {
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
-      sizeInitRatio: 4 / 5,
+      sizeInitRatio: 9 / 10,
     });
   }
 
