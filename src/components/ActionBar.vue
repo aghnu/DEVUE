@@ -2,16 +2,16 @@
 import AppButton from "./AppButton.vue";
 import { ref } from "vue";
 import { AppTerminal } from "../applications/AppTerminal";
-import { AppGithub } from "../applications/AppGithub";
-import { AppLinkedin } from "../applications/AppLinkedin";
 import { AppCalculator } from "../applications/AppCalculator";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import ApplicationMenu from "./ApplicationMenu.vue";
 import ScreenBlocker from "./ScreenBlocker.vue";
+import { useDynamicColor } from "../composables/useDynamicColor";
 
 const buttonSize = ref(2.9);
 const windowsState = useWindowsStatesStore();
 const menuOpen = ref(false);
+const actionBarElement = ref<HTMLDivElement>();
 
 function handleMenuToggle() {
   menuOpen.value = !menuOpen.value;
@@ -20,6 +20,9 @@ function handleMenuToggle() {
 function handleMenuClose() {
   menuOpen.value = false;
 }
+
+const { elementDropShadowStyle, elementBorderColorStyle } =
+  useDynamicColor(actionBarElement);
 </script>
 
 <template>
@@ -31,7 +34,7 @@ function handleMenuClose() {
         class="ActionBar__menu"
       ></ApplicationMenu>
     </transition>
-    <div class="ActionBar__inner">
+    <div class="ActionBar__inner" ref="actionBarElement">
       <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
         <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
       ></Teleport>
@@ -114,11 +117,11 @@ function handleMenuClose() {
     border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
     border: solid;
-    border-width: 1px;
-    border-color: var(--color-border-actionbar);
+    border-width: 2px;
+    border-color: v-bind(elementBorderColorStyle);
     background-color: var(--color-block-transparent-actionbar);
 
-    box-shadow: var(--shadow-block-float);
+    box-shadow: v-bind(elementDropShadowStyle);
   }
 
   &__menu {

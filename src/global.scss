@@ -18,6 +18,9 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-border-actionbar: rgba(125, 125, 125, 0.075);
   --color-border-window: rgba(200, 200, 200, 0.1);
 
+  --color-border-light: rgba(255, 255, 255, 0.075);
+  --color-border-dark: rgba(100, 100, 100, 0.075);
+
   // icon color
   --color-icon-primary: #c0c0c0;
   --color-icon-secondary: #3a3a3a;
@@ -26,10 +29,6 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-icon-dividor: rgba(80, 80, 80, 0.3);
   --color-icon-inner: #cbcbcb;
   --color-icon-inner-dark: #1a1a1a;
-
-  // shadow
-  --shadow-block-float: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.15);
-  --shadow-block-down: 0rem 0rem 0.25rem rgba(0, 0, 0, 0.075);
 
   // APP
   --color-app-default-background: #020202;
@@ -78,7 +77,7 @@ $font-family-main: "Roboto Mono", sans-serif;
 }
 
 @mixin width-narrow() {
-  @media only screen and (max-width: 350px) {
+  @media only screen and (max-width: 360px) {
     @content;
   }
 }

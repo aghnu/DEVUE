@@ -38,3 +38,27 @@ export function convertStyleColorToRGBA(styleColor: string) {
 
   return null;
 }
+
+export function convertStyleColorToIntensity(styleColor: string) {
+  const getIntensity = (r: number, g: number, b: number) => {
+    return (r + g + b) / 3 / 255;
+  };
+
+  const rgbGroup = styleColor.match(/^rgb\((\d+),\s(\d+),\s(\d+)\)$/);
+  if (rgbGroup)
+    return getIntensity(
+      Number(rgbGroup[1]),
+      Number(rgbGroup[2]),
+      Number(rgbGroup[3])
+    );
+
+  const rgbaGroup = styleColor.match(/^rgba\((\d+),\s(\d+),\s(\d+),\s(\d+)\)$/);
+  if (rgbaGroup)
+    return getIntensity(
+      Number(rgbaGroup[1]),
+      Number(rgbaGroup[2]),
+      Number(rgbaGroup[3])
+    );
+
+  return null;
+}

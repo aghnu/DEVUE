@@ -4,10 +4,17 @@ import { AppTerminal } from "../applications/AppTerminal";
 import { AppCalculator } from "../applications/AppCalculator";
 import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
+import { useDynamicColor } from "../composables/useDynamicColor";
+import { ref } from "vue";
 
 const emits = defineEmits<{
   (e: "close"): void;
 }>();
+
+const applicationMenuElement = ref<HTMLDivElement>();
+const { elementDropShadowStyle, elementBorderColorStyle } = useDynamicColor(
+  applicationMenuElement
+);
 
 function handleClose() {
   emits("close");
@@ -15,7 +22,7 @@ function handleClose() {
 </script>
 
 <template>
-  <div class="ApplicationMenu">
+  <div class="ApplicationMenu" ref="applicationMenuElement">
     <div
       :class="[
         'ApplicationMenu__container',
@@ -79,6 +86,11 @@ function handleClose() {
   background-color: #ffffff;
   border-radius: 0.85rem;
   // padding: 0.25rem;
+
+  box-shadow: v-bind(elementDropShadowStyle);
+  border: solid;
+  border-width: 2px;
+  border-color: v-bind(elementBorderColorStyle);
 
   display: flex;
   flex-direction: column;

@@ -63,13 +63,13 @@ const props = defineProps<{
 .MenuAppButton {
   @include mixin-clean-button-style;
 
-  width: 9rem;
+  width: 9.5rem;
   height: 100%;
   border-radius: 1rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.85rem;
 
-  padding: 0.65rem 1rem 0.95rem 1rem;
+  padding: 0.65rem 1.5rem 1rem 1rem;
 
   font-size: 1rem;
   text-align: left;

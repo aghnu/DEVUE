@@ -13,7 +13,7 @@ import {
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
 import { connectWindowMoving } from "../logics/connectWindowMoving";
-import { useDynamicDropShadow } from "../composables/useDynamicDropShadow";
+import { useDynamicColor } from "../composables/useDynamicColor";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -32,8 +32,9 @@ const windowDisplayElement = ref<HTMLDivElement>();
 connectWindowMoving(ref(props.state), movingWindowElement);
 
 // compute styling string
-const dynamicDropShadowStyle =
-  useDynamicDropShadow(windowDisplayElement).elementDropShadowStyle;
+const { elementDropShadowStyle, elementBorderColorStyle } =
+  useDynamicColor(windowDisplayElement);
+
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
   ref(props.state)
@@ -126,6 +127,7 @@ function resetActionEvent() {
           :windowid="state.id"
           :focused="isWindowFocused"
           :text-color="styleApplicationColorTitleText"
+          :title-color="elementBorderColorStyle"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
@@ -201,17 +203,13 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.5rem;
-    box-shadow: v-bind(dynamicDropShadowStyle);
+    box-shadow: v-bind(elementDropShadowStyle);
     background-color: v-bind(styleApplicationColorBackground);
     border: solid;
     border-width: 2px;
-    border-color: var(--color-border-window);
+    border-color: v-bind(elementBorderColorStyle);
 
     transition: box-shadow 0.15s;
-
-    // &--focused {
-    //   box-shadow: var(--shadow-block-float);
-    // }
 
     &__title_bar {
       height: var(--title-height);

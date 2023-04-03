@@ -11,6 +11,7 @@ const props = defineProps<{
   focused: boolean;
   windowid: MovingWindowID;
   textColor: string;
+  titleColor: string;
 }>();
 
 const emits = defineEmits<{
@@ -141,7 +142,8 @@ const handlerTouchStart = (e: TouchEvent) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.07);
+    // background-color: rgba(255, 255, 255, 0.07);
+    background-color: v-bind(titleColor);
 
     &__control_section {
       @include mixin-disable-pointer;
