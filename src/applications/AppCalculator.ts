@@ -16,7 +16,7 @@ export class AppCalculator extends ApplicationInternal {
     super();
     this.name = "calculator";
     this.applicationStyle = {
-      colorBackground: "#aaaaaa",
+      colorBackground: "#202020",
       colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
     };
 

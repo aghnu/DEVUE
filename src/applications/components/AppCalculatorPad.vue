@@ -23,28 +23,28 @@ const padColorStyle = computed(() => {
     case "function":
       return pointerHover.value
         ? pointerDown.value
-          ? "#36344e99"
-          : "#36344ecc"
-        : "#36344eaa";
+          ? "#60606099"
+          : "#606060ee"
+        : "#606060aa";
     case "value":
       return pointerHover.value
         ? pointerDown.value
-          ? "#dadce099"
-          : "#dadce0ee"
-        : "#dadce0aa";
+          ? "#3c3c3c99"
+          : "#3c3c3cee"
+        : "#3c3c3caa";
     case "primary":
       return pointerHover.value
         ? pointerDown.value
-          ? "#dadce099"
-          : "#dadce0ee"
-        : "#dadce0aa";
+          ? "#939fa799"
+          : "#939fa7ee"
+        : "#939fa7aa";
   }
 });
 
 const padTextColorStyle = computed(() => {
   switch (props.type) {
     case "function":
-      return "var(--color-icon-inner)";
+      return "var(--color-calculator-text-display)";
     case "value":
       return "var(--color-calculator-text-display)";
     case "primary":
