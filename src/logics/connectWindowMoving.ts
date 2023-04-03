@@ -98,7 +98,7 @@ export function connectWindowMoving(
             });
           } else {
             gsap.to(windowElement.value, {
-              duration: 0,
+              duration: 0.25,
               overwrite: "auto",
               height: styleSize[1],
               width: styleSize[0],
