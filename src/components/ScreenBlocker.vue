@@ -9,7 +9,7 @@ function handleClick() {
 </script>
 
 <template>
-  <div class="ScreenBlocker" @click="handleClick"></div>
+  <div class="ScreenBlocker" @click="handleClick" @touchend="handleClick"></div>
 </template>
 
 <style scoped lang="scss">

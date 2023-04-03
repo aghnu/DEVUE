@@ -19,25 +19,15 @@ const {
 } = useButtonAction(props.handler);
 
 const padColorStyle = computed(() => {
+  const alpha = pointerDown.value ? "88" : pointerHover.value ? "ee" : "aa";
+
   switch (props.type) {
     case "function":
-      return pointerHover.value
-        ? pointerDown.value
-          ? "#60606099"
-          : "#606060ee"
-        : "#606060aa";
+      return "#606060" + alpha;
     case "value":
-      return pointerHover.value
-        ? pointerDown.value
-          ? "#3c3c3c99"
-          : "#3c3c3cee"
-        : "#3c3c3caa";
+      return "#3c3c3c" + alpha;
     case "primary":
-      return pointerHover.value
-        ? pointerDown.value
-          ? "#939fa799"
-          : "#939fa7ee"
-        : "#939fa7aa";
+      return "#939fa7" + alpha;
   }
 });
 
@@ -99,7 +89,8 @@ const padTextColorStyle = computed(() => {
     }
 
     &__text {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
+      font-weight: 500;
     }
   }
 }

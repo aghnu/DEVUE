@@ -33,7 +33,7 @@ const props = defineProps<{
     class="MenuAppButton"
     :class="[
       { 'MenuAppButton--hover': pointerHover && !pointerDown },
-      { 'MenuAppButton--down': pointerHover },
+      { 'MenuAppButton--down': pointerDown },
     ]"
     @mousedown="handlerPointerDown"
     @touchstart="handlerPointerDown"
