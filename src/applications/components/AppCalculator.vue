@@ -45,7 +45,7 @@ const textSub = computed(
   height: 100%;
   width: 100%;
 
-  padding: 0.25rem;
+  padding: 0.75rem;
 
   &__display {
     height: 35%;
@@ -62,7 +62,7 @@ const textSub = computed(
     justify-items: center;
     align-items: center;
 
-    gap: 0.25rem;
+    gap: 0.75rem;
   }
 }
 </style>

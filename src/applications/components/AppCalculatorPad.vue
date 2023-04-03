@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
+import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import { CalculatorPadType } from "../../types/TypeCalculator";
+import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
 
 const props = defineProps<{
   text: string;
@@ -23,28 +25,51 @@ const padColorStyle = computed(() => {
 
   switch (props.type) {
     case "function":
-      return "#606060" + alpha;
-    case "value":
-      return "#3c3c3c" + alpha;
-    case "primary":
       return "#939fa7" + alpha;
+    case "value":
+      return "#ffffff" + alpha;
+    case "primary":
+      return "#ff5c5c" + alpha;
   }
 });
 
 const padTextColorStyle = computed(() => {
   switch (props.type) {
     case "function":
-      return "var(--color-calculator-text-display)";
+      return "var(--color-calculator-text-light)";
     case "value":
       return "var(--color-calculator-text-display)";
     case "primary":
-      return "var(--color-calculator-text-display)";
+      return "var(--color-calculator-text-light)";
   }
 });
+const appCalculatorPadElement = ref<HTMLDivElement>();
+
+const widthStyleComputed = useTrackComputedStyle(
+  appCalculatorPadElement,
+  "width"
+).propertyRef;
+const heightStyleComputed = useTrackComputedStyle(
+  appCalculatorPadElement,
+  "height"
+).propertyRef;
+const widthStyle = computed(() =>
+  widthStyleComputed.value
+    ? convertStyleUnitPxToNumber(widthStyleComputed.value as string) ?? 0
+    : 0
+);
+const heightStyle = computed(() =>
+  heightStyleComputed.value
+    ? convertStyleUnitPxToNumber(heightStyleComputed.value as string) ?? 0
+    : 0
+);
+const fontSizeStyle = computed(
+  () => Math.min(widthStyle.value, heightStyle.value) * 0.02
+);
 </script>
 
 <template>
-  <div class="AppCalculatorPad">
+  <div class="AppCalculatorPad" ref="appCalculatorPadElement">
     <button
       class="AppCalculatorPad__button"
       :class="[
@@ -78,9 +103,10 @@ const padTextColorStyle = computed(() => {
     color: v-bind(padTextColorStyle);
     background-color: v-bind(padColorStyle);
 
-    border-radius: 0.2rem;
+    font-size: calc(v-bind(fontSizeStyle) * 1rem);
+    border-radius: 1.75rem;
 
-    transition: all 0.05s;
+    transition: background-color 0.15s;
 
     &--down {
     }
@@ -89,8 +115,7 @@ const padTextColorStyle = computed(() => {
     }
 
     &__text {
-      font-size: 1.2rem;
-      font-weight: 500;
+      font-size: 1.2em;
     }
   }
 }

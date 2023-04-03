@@ -78,8 +78,9 @@ onMounted(() => {
   height: 100%;
 
   &__inner {
-    position: absolute;
+    position: relative;
     top: 20%;
+    left: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -99,17 +100,13 @@ onMounted(() => {
 
     &--first {
       font-size: calc(v-bind(displayElementHeight) * 1.25rem);
+      font-weight: 300;
     }
 
     &--second {
       font-size: calc(v-bind(displayElementHeight) * 3.65rem);
+      font-weight: 300;
     }
-  }
-
-  &__text {
-    text-align: right;
-    line-height: 1em;
-    font-weight: 500;
   }
 }
 </style>
