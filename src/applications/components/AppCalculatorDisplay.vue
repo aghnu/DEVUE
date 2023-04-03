@@ -92,6 +92,7 @@ onMounted(() => {
 
   &__line {
     width: 100%;
+    height: 1em;
 
     display: flex;
     flex-direction: column;

@@ -20,8 +20,8 @@ export class AppCalculator extends ApplicationInternal {
       colorTitleText: getGlobalCSSVarValue("--color-calculator-text-display"),
     };
 
-    this.textMain = "376";
-    this.textSub = "1 + 23 + (42 / 2)";
+    this.textMain = "0";
+    this.textSub = "";
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
@@ -49,7 +49,8 @@ export class AppCalculator extends ApplicationInternal {
           text: t,
           type: getKeyType(t),
           handler: () => {
-            this.textMain += "0000";
+            this.textSub += "" + t;
+            this.textMain += t;
           },
         }) satisfies CalculatorKey
     );
