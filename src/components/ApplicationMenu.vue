@@ -99,6 +99,10 @@ function handleClose() {
     justify-items: center;
     justify-content: center;
 
+    @include width-narrow() {
+      grid-template-columns: 100%;
+    }
+
     &--primary {
       background-color: rgba(150, 150, 150, 0.25);
     }

@@ -58,7 +58,7 @@ const props = defineProps<{
 .MenuAppButton {
   @include mixin-clean-button-style;
 
-  width: 100%;
+  width: 9rem;
   height: 100%;
   border-radius: 1rem;
   display: flex;
