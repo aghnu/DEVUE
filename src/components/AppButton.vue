@@ -7,18 +7,11 @@ import { storeToRefs } from "pinia";
 import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
 import { useButtonAction } from "../composables/useButtonAction";
 
-const props = withDefaults(
-  defineProps<{
-    name: AppName;
-    type: "primary" | "secondary" | "action" | "warn";
-    size: number;
-    placement: "action" | "menu";
-  }>(),
-  {
-    placement: "action",
-  }
-);
-
+const props = defineProps<{
+  name: AppName;
+  type: "primary" | "secondary" | "action" | "warn";
+  size: number;
+}>();
 const emits = defineEmits<{
   (e: "click"): void;
 }>();
@@ -86,7 +79,7 @@ const appInstancesCount = computed(() => {
     >
       <div class="AppButton__inner__icon" v-html="iconHTML"></div>
       <div
-        v-if="appInstancesCount && placement === 'action'"
+        v-if="appInstancesCount"
         :class="['AppButton__counter']"
         role="presentation"
       >
@@ -94,7 +87,6 @@ const appInstancesCount = computed(() => {
       </div>
     </button>
     <div
-      v-if="placement === 'action'"
       :class="[
         'AppButton__desc',
         {
