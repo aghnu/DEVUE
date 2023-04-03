@@ -95,7 +95,7 @@ function handleMenuClose() {
   @include mixin-center-children;
 
   position: relative;
-  width: 100%;
+  width: 0%;
   height: 100%;
 
   &__inner {
