@@ -86,14 +86,14 @@ function handleClose() {
   overflow: hidden;
 
   &__container {
-    padding: 0.6rem 1.1rem;
+    padding: 0.85rem 1rem;
     // border-radius: 0.5rem;
     width: 100%;
     height: fit-content;
 
     display: grid;
     grid-template-columns: 50% 50%;
-    row-gap: 1.25rem;
+    row-gap: 0.85rem;
     column-gap: 0.75rem;
     align-items: center;
     justify-items: center;

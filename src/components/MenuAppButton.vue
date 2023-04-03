@@ -49,7 +49,12 @@ const props = defineProps<{
       <p class="MenuAppButton__text__name">
         {{ APP_DISPLAY_NAME[name] }}
       </p>
-      <p class="MenuAppButton__text__desc">{{ APP_DISPLAY_DESC[name] }}</p>
+      <p
+        v-if="APP_DISPLAY_DESC[name].length > 0"
+        class="MenuAppButton__text__desc"
+      >
+        {{ APP_DISPLAY_DESC[name] }}
+      </p>
     </div>
   </button>
 </template>
@@ -64,7 +69,7 @@ const props = defineProps<{
   display: flex;
   gap: 0.5rem;
 
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 1rem 0.95rem 1rem;
 
   font-size: 1rem;
   text-align: left;
@@ -87,7 +92,7 @@ const props = defineProps<{
   &__text {
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
+    gap: 0.25rem;
     &__name {
       display: flex;
       align-items: center;

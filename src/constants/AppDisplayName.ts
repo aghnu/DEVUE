@@ -14,7 +14,7 @@ export const APP_DISPLAY_NAME: Record<AppName, string> = {
 export const APP_DISPLAY_DESC: Record<AppName, string> = {
   terminal: "A system console to control DEVUE",
   calculator: "A calculator for basic arithmetic operations",
-  github: "Open my GitHub homepage",
+  github: "Visit my GitHub homepage",
   linkedin: "Go to my LinkedIn",
 
   welcome: "",
