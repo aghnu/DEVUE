@@ -76,7 +76,7 @@ function handleClose() {
 
   // #c5c5c5 #464646 - light mode
   // #212121 #d4d4d4 - black mode
-  background-color: #c5c5c5;
+  background-color: #ffffff;
   border-radius: 0.85rem;
   // padding: 0.25rem;
 

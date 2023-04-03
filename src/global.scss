@@ -9,8 +9,8 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-background-dark: #050505;
   --color-text-bright:#c7c7c7;
   --color-text-dark: #161616;
-  --color-block-transparent: rgba(50, 50, 50, 0.85);
-  --color-block-transparent-actionbar: rgba(65, 65, 65, 0.275);
+  --color-block-transparent: rgba(40, 40, 40, 0.75);
+  --color-block-transparent-actionbar: rgba(40, 40, 40, 0.75);
 
   // component color
   --color-taskbar-text-bright: #6d6d6d;
@@ -20,7 +20,7 @@ $font-family-main: "Roboto Mono", sans-serif;
 
   // icon color
   --color-icon-primary: #c0c0c0;
-  --color-icon-secondary: #303030;
+  --color-icon-secondary: #3a3a3a;
   --color-icon-action: #303030;
   --color-icon-warn: #ff5c5c;
   --color-icon-dividor: rgba(80, 80, 80, 0.3);
@@ -37,7 +37,7 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-calculator-text-light: #ffffffb8;
 }
 
-@mixin mixin-glassblur($blur-value: 0.5rem) {
+@mixin mixin-glassblur($blur-value: 1rem) {
   backdrop-filter: blur($blur-value);
   -webkit-backdrop-filter: blur($blur-value);
 }

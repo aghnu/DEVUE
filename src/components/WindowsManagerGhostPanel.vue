@@ -97,6 +97,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .WindowsManagerGhostPanel {
   &__window {
+    @include mixin-glassblur();
     position: absolute;
     padding: 0.5rem;
 
