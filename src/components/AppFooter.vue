@@ -1,6 +1,6 @@
 <template>
   <footer class="AppFooter">
-    <!-- <p class="AppFooter__text">© 2022 AGHNU.ME</p> -->
+    <p class="AppFooter__text">© 2023 GENGYUAN HUANG</p>
   </footer>
 </template>
 
@@ -8,17 +8,15 @@
 .AppFooter {
   @include mixin-center-children;
 
-  height: 1.75rem;
+  height: 1.25rem;
   width: 100%;
 
   &__text {
-    color: var(--color-text-footer);
-    font-weight: 300;
-    font-size: 0.6rem;
-    letter-spacing: 0.65rem;
-    white-space: nowrap;
-    margin-bottom: 0.75rem;
+    letter-spacing: 0.85em;
+    font-size: 0.65rem;
     pointer-events: none;
+    white-space: nowrap;
+    color: transparent;
   }
 }
 </style>
