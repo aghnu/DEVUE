@@ -85,6 +85,7 @@ onUnmounted(() => {
       <MovingWindowApplications />
     </div>
     <div class="Desktop__action_bar">
+      <div id="teleport-actionbar-menu"></div>
       <ActionBar />
     </div>
     <div class="Desktop__footer">

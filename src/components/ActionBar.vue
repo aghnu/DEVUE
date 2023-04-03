@@ -6,45 +6,88 @@ import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
 import { AppCalculator } from "../applications/AppCalculator";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import ApplicationMenu from "./ApplicationMenu.vue";
+import ScreenBlocker from "./ScreenBlocker.vue";
 
 const buttonSize = ref(2.9);
 const windowsState = useWindowsStatesStore();
+const menuOpen = ref(false);
+
+function handleMenuToggle() {
+  menuOpen.value = !menuOpen.value;
+}
+
+function handleMenuClose() {
+  menuOpen.value = false;
+}
 </script>
 
 <template>
   <div class="ActionBar">
-    <AppButton name="app_menu" type="action" :size="buttonSize"></AppButton>
+    <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
+      <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
+    ></Teleport>
+
+    <transition name="ActionBarTransition__menu">
+      <ApplicationMenu
+        v-if="menuOpen"
+        @close="handleMenuClose()"
+        class="ActionBar__menu"
+      ></ApplicationMenu>
+    </transition>
+    <AppButton
+      name="app_menu"
+      type="action"
+      :size="buttonSize"
+      @click="handleMenuToggle"
+    ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
       name="terminal"
       type="primary"
       :size="buttonSize"
-      @click="AppTerminal.build().open()"
+      @click="
+        AppTerminal.build().open();
+        handleMenuClose();
+      "
     ></AppButton>
     <AppButton
       name="calculator"
       type="primary"
       :size="buttonSize"
-      @click="AppCalculator.build().open()"
+      @click="
+        AppCalculator.build().open();
+        handleMenuClose();
+      "
     ></AppButton>
     <div class="ActionBar__dividor"></div>
     <AppButton
-      name="github"
-      type="secondary"
+      name="reset"
+      type="warn"
       :size="buttonSize"
-      @click="AppGithub.build().open()"
+      @click="
+        windowsState.resetMovingWindow();
+        handleMenuClose();
+      "
     ></AppButton>
-    <AppButton
-      name="linkedin"
-      type="secondary"
-      :size="buttonSize"
-      @click="AppLinkedin.build().open()"
-    ></AppButton>
-    <AppButton name="reset" type="secondary" :size="buttonSize" @click="windowsState.resetMovingWindow()"></AppButton>
   </div>
 </template>
 
 <style scoped lang="scss">
+.ActionBarTransition {
+  &__menu {
+    &-enter-active,
+    &-leave-active {
+      transition: all 0.3s, opacity 0.15s;
+    }
+
+    &-enter-from,
+    &-leave-to {
+      transform: scale(0.75) translate(0, 10rem);
+      opacity: 0;
+    }
+  }
+}
 .ActionBar {
   @include mixin-center-children;
   @include mixin-disable-pointer;
@@ -66,6 +109,11 @@ const windowsState = useWindowsStatesStore();
   box-shadow: var(--shadow-block-float);
 
   @include mixin-glassblur;
+
+  &__menu {
+    position: absolute;
+    bottom: 125%;
+  }
 
   &__dividor {
     height: calc(v-bind(buttonSize) * 0.45rem);

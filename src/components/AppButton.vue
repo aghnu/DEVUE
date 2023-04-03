@@ -1,17 +1,23 @@
 <script setup lang="ts">
 import { getAppIcon } from "../utilities/factorySVG";
 import { AppName } from "../types/TypeApp";
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { computed } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
 import { useButtonAction } from "../composables/useButtonAction";
 
-const props = defineProps<{
-  name: AppName;
-  type: "primary" | "secondary" | "action";
-  size: number;
-}>();
+const props = withDefaults(
+  defineProps<{
+    name: AppName;
+    type: "primary" | "secondary" | "action" | "warn";
+    size: number;
+    placement: "action" | "menu";
+  }>(),
+  {
+    placement: "action",
+  }
+);
 
 const emits = defineEmits<{
   (e: "click"): void;
@@ -38,10 +44,12 @@ const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
 const iconHTML = computed(() => {
   switch (props.type) {
     case "primary":
+    case "warn":
       return getAppIcon(props.name, {
         size: "100%",
         color: "var(--color-icon-inner-dark)",
       });
+
     case "secondary":
     case "action":
       return getAppIcon(props.name, {
@@ -49,6 +57,10 @@ const iconHTML = computed(() => {
         color: "var(--color-icon-inner)",
       });
   }
+});
+
+const buttonColor = computed(() => {
+  return `var(--color-icon-${props.type})`;
 });
 
 const appInstancesCount = computed(() => {
@@ -74,7 +86,7 @@ const appInstancesCount = computed(() => {
     >
       <div class="AppButton__inner__icon" v-html="iconHTML"></div>
       <div
-        v-if="appInstancesCount"
+        v-if="appInstancesCount && placement === 'action'"
         :class="['AppButton__counter']"
         role="presentation"
       >
@@ -82,6 +94,7 @@ const appInstancesCount = computed(() => {
       </div>
     </button>
     <div
+      v-if="placement === 'action'"
       :class="[
         'AppButton__desc',
         {
@@ -120,7 +133,7 @@ const appInstancesCount = computed(() => {
     height: fit-content;
     width: fit-content;
 
-    background-color: rgba(25, 25, 25, 0.95);
+    background-color: rgb(70, 70, 70);
     color: rgba(195, 195, 195, 0.75);
 
     border-radius: calc(v-bind(buttonSize) * 100);
@@ -143,7 +156,7 @@ const appInstancesCount = computed(() => {
 
     position: relative;
 
-    background-color: var(--color-icon-primary);
+    background-color: v-bind(buttonColor);
     border-radius: calc(v-bind(buttonSize) * 0.42);
 
     height: v-bind(buttonSize);
