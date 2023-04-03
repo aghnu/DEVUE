@@ -6,7 +6,7 @@ import {
 import { useTrackComputedStyle } from "./useTrackComputedStyle";
 
 export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
-  const shadowPrefix = "0 0 1rem";
+  const shadowPrefix = "0 0 8px";
 
   const elementBackgroundColor = useTrackComputedStyle(
     element,
@@ -21,7 +21,7 @@ export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
     if (!rgba) return "none";
 
     return (
-      shadowPrefix + " " + `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, 0.25)`
+      shadowPrefix + " " + `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, 0.35)`
     );
   });
 
@@ -31,7 +31,7 @@ export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
       elementBackgroundColor.value as string
     );
     if (!intensity) return "transparent";
-    console.log(intensity);
+
     if (intensity > 0.5) {
       return "var(--color-border-dark)";
     } else {

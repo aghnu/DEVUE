@@ -117,7 +117,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
     border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
     border: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-color: v-bind(elementBorderColorStyle);
     background-color: var(--color-block-transparent-actionbar);
 

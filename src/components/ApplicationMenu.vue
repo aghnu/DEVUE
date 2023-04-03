@@ -78,18 +78,20 @@ function handleClose() {
 
 <style scoped lang="scss">
 .ApplicationMenu {
+  @include mixin-glassblur();
+
   width: min-content;
   height: fit-content;
 
   // #c5c5c5 #464646 - light mode
   // #212121 #d4d4d4 - black mode
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.85);
   border-radius: 0.85rem;
   // padding: 0.25rem;
 
   box-shadow: v-bind(elementDropShadowStyle);
   border: solid;
-  border-width: 2px;
+  border-width: 1px;
   border-color: v-bind(elementBorderColorStyle);
 
   display: flex;
