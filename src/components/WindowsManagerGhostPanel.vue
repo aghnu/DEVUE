@@ -5,9 +5,15 @@ import { usePointerLocation } from "../composables/usePointerLocation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { useTopWindowStartedMoving } from "../composables/useTopWindowStartedMoving";
 import { storeToRefs } from "pinia";
+import { useDesktopStatesStore } from "../stores/desktopStates";
+import { PointerLocation } from "../types/TypeDesktop";
+import { WINDOW_CONFIG } from "../constants/WindowManager";
 
 // vairables
 const windowsState = useWindowsStatesStore();
+const desktopState = useDesktopStatesStore();
+
+const { sizeWindowsManager } = storeToRefs(desktopState);
 const { topWindow } = storeToRefs(windowsState);
 const { pointerLocation } = usePointerLocation();
 const { isTopWindowStartedMoving } = useTopWindowStartedMoving();
@@ -22,6 +28,10 @@ const ghostPanelShow = computed(() => {
 const stylePanelZIndex = computed(() => {
   return String(topWindow.value !== null ? topWindow.value.order : 0);
 });
+const isSnapNarrow = computed(
+  () =>
+    sizeWindowsManager.value[0] <= WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW[0] * 2
+);
 
 const stylePanelFromWidth = ref("unset");
 const stylePanelFromHeight = ref("unset");
@@ -55,8 +65,13 @@ onMounted(() => {
 
   watch(
     pointerLocation,
-    () => {
-      switch (pointerLocation.value) {
+    (snapped) => {
+      // connect snapped based on desktop width
+      // if snapped and width too small, make it top
+      const snappedCorrected: PointerLocation =
+        snapped === "center" ? "center" : isSnapNarrow.value ? "top" : snapped;
+
+      switch (snappedCorrected) {
         case "left":
           stylePanelToWidth.value = "50%";
           stylePanelToHeight.value = "100%";

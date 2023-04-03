@@ -1,10 +1,12 @@
 import { storeToRefs } from "pinia";
 import { Ref, computed, onMounted, watch } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
+import { useDesktopStatesStore } from "../stores/desktopStates";
 import { Tuple } from "../types/TypeBasic";
 import { PointerLocation } from "../types/TypeDesktop";
 import { MovingWindowLocalState } from "../types/TypeWindows";
-import gsap from "gsap";
+import gsap, { snap } from "gsap";
+import { WINDOW_CONFIG } from "../constants/WindowManager";
 
 function getCurrentPositionStyle(
   position: Tuple<number>,
@@ -42,8 +44,14 @@ export function connectWindowMoving(
   state: Ref<MovingWindowLocalState>,
   windowElement: Ref<HTMLDivElement | undefined>
 ) {
-  const windowsState = useWindowsStatesStore();
-  const { topWindow } = storeToRefs(windowsState);
+  const desktopStates = useDesktopStatesStore();
+
+  const { sizeWindowsManager } = storeToRefs(desktopStates);
+  const isSnapNarrow = computed(
+    () =>
+      sizeWindowsManager.value[0] <=
+      WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW[0] * 2
+  );
 
   const statePosition = computed(() => state.value.position);
   const stateSize = computed(() => state.value.size);
@@ -55,8 +63,19 @@ export function connectWindowMoving(
       ([position, size, snapped], [_, __, snappedOld]) => {
         if (!windowElement.value) return;
 
-        const styleSize = getCurrentSizeStyle(size, snapped);
-        const stylePosition = getCurrentPositionStyle(position, snapped);
+        // connect snapped based on desktop width
+        // if snapped and width too small, make it top
+        const snappedCorrected: PointerLocation =
+          snapped === "center"
+            ? "center"
+            : isSnapNarrow.value
+            ? "top"
+            : snapped;
+        const styleSize = getCurrentSizeStyle(size, snappedCorrected);
+        const stylePosition = getCurrentPositionStyle(
+          position,
+          snappedCorrected
+        );
 
         if (snapped === snappedOld || snappedOld === undefined) {
           gsap.to(windowElement.value, {
