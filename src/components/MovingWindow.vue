@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRaw, ref, computed, onMounted, watch } from "vue";
+import { toRaw, ref, computed } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
@@ -7,13 +7,13 @@ import { useWindowsStatesStore } from "../stores/windowsStates";
 import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
 import { useMovingWindowConfig } from "../composables/useMovingWindowConfig";
 import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
-import gsap from "gsap";
 
 import {
   MovingWindowLocalState,
   MovingWindowResizeDirection,
 } from "../types/TypeWindows";
 import { connectWindowMoving } from "../logics/connectWindowMoving";
+import { useDynamicDropShadow } from "../composables/useDynamicDropShadow";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -26,15 +26,19 @@ const props = defineProps<{
 
 // var
 const movingWindowElement = ref<HTMLDivElement>();
+const windowDisplayElement = ref<HTMLDivElement>();
 
 // connect
 connectWindowMoving(ref(props.state), movingWindowElement);
 
 // compute styling string
+const dynamicDropShadowStyle =
+  useDynamicDropShadow(windowDisplayElement).elementDropShadowStyle;
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
   ref(props.state)
 );
+
 const styleApplicationColorBackground = computed(
   () =>
     props.state.appInstance.applicationStyle.colorBackground ??
@@ -115,6 +119,7 @@ function resetActionEvent() {
     <div
       class="MovingWindow__window_display"
       :class="{ 'MovingWindow__window_display--focused': isWindowFocused }"
+      ref="windowDisplayElement"
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
@@ -196,7 +201,7 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.5rem;
-    box-shadow: var(--shadow-block-down);
+    box-shadow: v-bind(dynamicDropShadowStyle);
     background-color: v-bind(styleApplicationColorBackground);
     border: solid;
     border-width: 2px;
@@ -204,9 +209,9 @@ function resetActionEvent() {
 
     transition: box-shadow 0.15s;
 
-    &--focused {
-      box-shadow: var(--shadow-block-float);
-    }
+    // &--focused {
+    //   box-shadow: var(--shadow-block-float);
+    // }
 
     &__title_bar {
       height: var(--title-height);
