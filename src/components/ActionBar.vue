@@ -24,10 +24,6 @@ function handleMenuClose() {
 
 <template>
   <div class="ActionBar">
-    <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
-      <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
-    ></Teleport>
-
     <transition name="ActionBarTransition__menu">
       <ApplicationMenu
         v-if="menuOpen"
@@ -35,41 +31,47 @@ function handleMenuClose() {
         class="ActionBar__menu"
       ></ApplicationMenu>
     </transition>
-    <AppButton
-      name="app_menu"
-      type="action"
-      :size="buttonSize"
-      @click="handleMenuToggle"
-    ></AppButton>
-    <div class="ActionBar__dividor"></div>
-    <AppButton
-      name="terminal"
-      type="primary"
-      :size="buttonSize"
-      @click="
-        AppTerminal.build().open();
-        handleMenuClose();
-      "
-    ></AppButton>
-    <AppButton
-      name="calculator"
-      type="primary"
-      :size="buttonSize"
-      @click="
-        AppCalculator.build().open();
-        handleMenuClose();
-      "
-    ></AppButton>
-    <div class="ActionBar__dividor"></div>
-    <AppButton
-      name="reset"
-      type="warn"
-      :size="buttonSize"
-      @click="
-        windowsState.resetMovingWindow();
-        handleMenuClose();
-      "
-    ></AppButton>
+    <div class="ActionBar__inner">
+      <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
+        <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
+      ></Teleport>
+
+      <AppButton
+        name="app_menu"
+        type="action"
+        :size="buttonSize"
+        @click="handleMenuToggle"
+      ></AppButton>
+      <div class="ActionBar__dividor"></div>
+      <AppButton
+        name="terminal"
+        type="primary"
+        :size="buttonSize"
+        @click="
+          AppTerminal.build().open();
+          handleMenuClose();
+        "
+      ></AppButton>
+      <AppButton
+        name="calculator"
+        type="primary"
+        :size="buttonSize"
+        @click="
+          AppCalculator.build().open();
+          handleMenuClose();
+        "
+      ></AppButton>
+      <div class="ActionBar__dividor"></div>
+      <AppButton
+        name="reset"
+        type="warn"
+        :size="buttonSize"
+        @click="
+          windowsState.resetMovingWindow();
+          handleMenuClose();
+        "
+      ></AppButton>
+    </div>
   </div>
 </template>
 
@@ -78,41 +80,50 @@ function handleMenuClose() {
   &__menu {
     &-enter-active,
     &-leave-active {
-      transition: all 0.3s, opacity 0.15s;
+      transition: all 0.3s, opacity 0.2s;
     }
 
     &-enter-from,
     &-leave-to {
-      transform: scale(0.75) translate(0, 10rem);
+      transform: scale(0.5) translate(0, 100%);
       opacity: 0;
     }
   }
 }
+
 .ActionBar {
   @include mixin-center-children;
-  @include mixin-disable-pointer;
 
-  display: flex;
-  gap: calc(v-bind(buttonSize) * 0.35rem);
+  position: relative;
+  width: 100%;
+  height: 100%;
 
-  width: fit-content;
-  height: fit-content;
+  &__inner {
+    @include mixin-center-children;
+    @include mixin-disable-pointer;
+    @include mixin-glassblur;
 
-  padding: calc(v-bind(buttonSize) * 0.15rem) calc(v-bind(buttonSize) * 0.3rem);
-  border-radius: calc(v-bind(buttonSize) * 0.5rem);
+    display: flex;
+    gap: calc(v-bind(buttonSize) * 0.35rem);
 
-  border: solid;
-  border-width: 1px;
-  border-color: var(--color-border-actionbar);
-  background-color: var(--color-block-transparent-actionbar);
+    width: fit-content;
+    height: fit-content;
 
-  box-shadow: var(--shadow-block-float);
+    padding: calc(v-bind(buttonSize) * 0.15rem)
+      calc(v-bind(buttonSize) * 0.3rem);
+    border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
-  @include mixin-glassblur;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--color-border-actionbar);
+    background-color: var(--color-block-transparent-actionbar);
+
+    box-shadow: var(--shadow-block-float);
+  }
 
   &__menu {
     position: absolute;
-    bottom: 125%;
+    bottom: 200%;
   }
 
   &__dividor {
