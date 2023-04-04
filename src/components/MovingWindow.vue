@@ -122,14 +122,13 @@ function resetActionEvent() {
 </script>
 
 <template>
-  <div
-    class="MovingWindow"
-    :class="[{ 'MovingWindow--glass': isBackgroundTransparent }]"
-    ref="movingWindowElement"
-  >
+  <div class="MovingWindow" ref="movingWindowElement">
     <div
       class="MovingWindow__window_display"
-      :class="{ 'MovingWindow__window_display--focused': isWindowFocused }"
+      :class="[
+        { 'MovingWindow__window_display--focused': isWindowFocused },
+        { 'MovingWindow__window_display--glass': isBackgroundTransparent },
+      ]"
       ref="windowDisplayElement"
     >
       <div class="MovingWindow__window_display__title_bar">
@@ -201,14 +200,8 @@ function resetActionEvent() {
   --title-height: 1.75rem;
 
   position: absolute;
-
   z-index: v-bind(styleWindowZIndex);
-
   will-change: height, width, left, top, z-index;
-
-  &--glass {
-    @include mixin-glassblur();
-  }
 
   &__window_display {
     height: 100%;
@@ -224,6 +217,10 @@ function resetActionEvent() {
     border-color: v-bind(elementBorderColorStyle);
 
     transition: box-shadow 0.15s;
+
+    &--glass {
+      @include mixin-glassblur();
+    }
 
     &__title_bar {
       height: var(--title-height);

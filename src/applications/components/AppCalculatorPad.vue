@@ -7,7 +7,7 @@ import { useDynamicColor } from "../../composables/useDynamicColor";
 const props = defineProps<{
   text: string;
   type: CalculatorPadType;
-  handler: () => void;
+  handler: (text: string) => void;
   sizeUnit: number;
 }>();
 
@@ -20,7 +20,7 @@ const {
   handlerPointerUp,
   handlerHover,
   handlerLeave,
-} = useButtonAction(props.handler);
+} = useButtonAction(() => props.handler(props.text));
 
 const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
 
