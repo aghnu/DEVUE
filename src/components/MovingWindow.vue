@@ -50,6 +50,11 @@ const styleApplicationColorTitleText = computed(
     props.state.appInstance.applicationStyle.colorTitleText ??
     "var(--color-taskbar-text-bright)"
 );
+const styleIsTitleBarColor = computed(() =>
+  props.state.appInstance.applicationStyle.hideTitleBarFading
+    ? "transparent"
+    : elementBorderColorStyle.value
+);
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -127,7 +132,7 @@ function resetActionEvent() {
           :windowid="state.id"
           :focused="isWindowFocused"
           :text-color="styleApplicationColorTitleText"
-          :title-color="elementBorderColorStyle"
+          :title-color="styleIsTitleBarColor"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"

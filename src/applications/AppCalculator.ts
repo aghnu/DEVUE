@@ -4,6 +4,7 @@ import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
 import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
+import { defaultApplicationStyleFactory } from "../utilities/application";
 
 export class AppCalculator extends ApplicationInternal {
   readonly name: AppName;
@@ -15,10 +16,13 @@ export class AppCalculator extends ApplicationInternal {
   constructor() {
     super();
     this.name = "calculator";
-    this.applicationStyle = {
-      colorBackground: "#eaf1fb",
-      colorTitleText: getGlobalCSSVarValue("--color-calculator-text-display"),
-    };
+    this.applicationStyle = defaultApplicationStyleFactory();
+
+    this.applicationStyle.colorBackground = "#eaf1fb";
+    this.applicationStyle.colorTitleText = getGlobalCSSVarValue(
+      "--color-calculator-text-display"
+    );
+    this.applicationStyle.hideTitleBarFading = true;
 
     this.textMain = "0";
     this.textSub = "";

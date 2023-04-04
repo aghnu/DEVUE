@@ -3,6 +3,7 @@ import { ApplicationInternal } from "./ApplicationInternal";
 import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
+import { defaultApplicationStyleFactory } from "../utilities/application";
 
 export class AppTerminal extends ApplicationInternal {
   readonly name: AppName;
@@ -14,10 +15,8 @@ export class AppTerminal extends ApplicationInternal {
     super();
     this.name = "terminal";
     this.backgroundColor = "#100f19";
-    this.applicationStyle = {
-      colorBackground: this.backgroundColor,
-      colorTitleText: getGlobalCSSVarValue("--color-taskbar-text-bright"),
-    };
+    this.applicationStyle = defaultApplicationStyleFactory();
+    this.applicationStyle.colorBackground = this.backgroundColor;
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {

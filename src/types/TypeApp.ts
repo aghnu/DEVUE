@@ -15,6 +15,7 @@ export type ApplicationInstance = ApplicationInternal;
 export interface ApplicationStyle {
   colorBackground: string | null;
   colorTitleText: string | null;
+  hideTitleBarFading: boolean;
 }
 
 export interface ApplicationExternalInterface {
