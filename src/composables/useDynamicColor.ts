@@ -5,7 +5,7 @@ import {
 } from "../utilities/helpers";
 import { useTrackComputedStyle } from "./useTrackComputedStyle";
 
-export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
+export function useDynamicColor(element: Ref<HTMLElement | undefined>) {
   const shadowPrefix = "0 0 8px";
 
   const elementBackgroundColor = useTrackComputedStyle(
@@ -23,6 +23,14 @@ export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
     return (
       shadowPrefix + " " + `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, 0.35)`
     );
+  });
+
+  const elementColorIntensity = computed(() => {
+    if (!elementBackgroundColor.value) return 0;
+    const intensity = convertStyleColorToIntensity(
+      elementBackgroundColor.value as string
+    );
+    return intensity ?? 0;
   });
 
   const elementBorderColorStyle = computed(() => {
@@ -43,5 +51,6 @@ export function useDynamicColor(element: Ref<HTMLDivElement | undefined>) {
     elementBackgroundColor,
     elementDropShadowStyle,
     elementBorderColorStyle,
+    elementColorIntensity,
   };
 }

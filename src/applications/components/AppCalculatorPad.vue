@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
 import { CalculatorPadType } from "../../types/TypeCalculator";
+import { useDynamicColor } from "../../composables/useDynamicColor";
 
 const props = defineProps<{
   text: string;
@@ -9,6 +10,8 @@ const props = defineProps<{
   handler: () => void;
   sizeUnit: number;
 }>();
+
+const calculatorPadButtonElement = ref<HTMLButtonElement>();
 
 const {
   pointerDown,
@@ -18,6 +21,8 @@ const {
   handlerHover,
   handlerLeave,
 } = useButtonAction(props.handler);
+
+const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
 
 const padColorStyle = computed(() => {
   const alpha = pointerDown.value ? "88" : pointerHover.value ? "ee" : "aa";
@@ -42,6 +47,11 @@ const padTextColorStyle = computed(() => {
       return "var(--color-calculator-text-light)";
   }
 });
+
+const boxShadowStyle = computed(() => {
+  const alpha = (1 - elementColorIntensity.value) * 0.05 + 0.025;
+  return `0 5px 5px rgba(20, 20, 20, ${alpha})`;
+});
 </script>
 
 <template>
@@ -52,6 +62,7 @@ const padTextColorStyle = computed(() => {
         { 'AppCalculatorPad__button--down': pointerDown },
         { 'AppCalculatorPad__button--hover': !pointerDown && pointerHover },
       ]"
+      ref="calculatorPadButtonElement"
       @mousedown="handlerPointerDown"
       @touchstart="handlerPointerDown"
       @mouseup="handlerPointerUp"
@@ -80,11 +91,15 @@ const padTextColorStyle = computed(() => {
     background-color: v-bind(padColorStyle);
 
     font-size: calc(v-bind(sizeUnit) * 1px * 5);
-    border-radius: min(1em, 1.25rem);
+    border-radius: min(1em, 1.15rem);
 
-    transition: background-color 0.15s;
+    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
+
+    box-shadow: v-bind(boxShadowStyle);
 
     &--down {
+      box-shadow: none;
+      transform: scale(0.95);
     }
 
     &--hover {
