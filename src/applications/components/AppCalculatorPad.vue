@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
-import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import { CalculatorPadType } from "../../types/TypeCalculator";
-import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
 
 const props = defineProps<{
   text: string;
   type: CalculatorPadType;
   handler: () => void;
+  sizeUnit: number;
 }>();
 
 const {
@@ -43,33 +42,10 @@ const padTextColorStyle = computed(() => {
       return "var(--color-calculator-text-light)";
   }
 });
-const appCalculatorPadElement = ref<HTMLDivElement>();
-
-const widthStyleComputed = useTrackComputedStyle(
-  appCalculatorPadElement,
-  "width"
-).propertyRef;
-const heightStyleComputed = useTrackComputedStyle(
-  appCalculatorPadElement,
-  "height"
-).propertyRef;
-const widthStyle = computed(() =>
-  widthStyleComputed.value
-    ? convertStyleUnitPxToNumber(widthStyleComputed.value as string) ?? 0
-    : 0
-);
-const heightStyle = computed(() =>
-  heightStyleComputed.value
-    ? convertStyleUnitPxToNumber(heightStyleComputed.value as string) ?? 0
-    : 0
-);
-const fontSizeStyle = computed(
-  () => Math.min(widthStyle.value, heightStyle.value) * 0.02
-);
 </script>
 
 <template>
-  <div class="AppCalculatorPad" ref="appCalculatorPadElement">
+  <div class="AppCalculatorPad">
     <button
       class="AppCalculatorPad__button"
       :class="[
@@ -103,8 +79,8 @@ const fontSizeStyle = computed(
     color: v-bind(padTextColorStyle);
     background-color: v-bind(padColorStyle);
 
-    font-size: calc(v-bind(fontSizeStyle) * 1rem);
-    border-radius: 1.75rem;
+    font-size: calc(v-bind(sizeUnit) * 1px * 5);
+    border-radius: min(1em, 1.25rem);
 
     transition: background-color 0.15s;
 
