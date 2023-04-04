@@ -5,7 +5,6 @@ import { MovingWindowLocalState } from "../../types/TypeWindows";
 import AppCalculatorPad from "./AppCalculatorPad.vue";
 import { AppCalculator } from "../AppCalculator";
 import AppCalculatorDisplay from "./AppCalculatorDisplay.vue";
-import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
 
 const props = defineProps<{
   state: MovingWindowLocalState;
@@ -20,14 +19,11 @@ const textMain = computed(
 const textSub = computed(
   () => (props.state.appInstance as AppCalculator).textSub
 );
-
-const movingWindowElement = ref<HTMLDivElement>();
-const { elemin, eleheight, elewidth } = useWindowSizeUnit(movingWindowElement);
 </script>
 
 <template>
   <MovingWindow :state="state">
-    <div class="AppCalculator" ref="movingWindowElement">
+    <div class="AppCalculator">
       <div class="AppCalculator__display">
         <AppCalculatorDisplay :main="textMain" :sub="textSub" />
       </div>
@@ -38,7 +34,6 @@ const { elemin, eleheight, elewidth } = useWindowSizeUnit(movingWindowElement);
           :text="key.text"
           :type="key.type"
           :handler="key.handler"
-          :size-unit="elemin"
         />
       </div>
     </div>
@@ -50,14 +45,7 @@ const { elemin, eleheight, elewidth } = useWindowSizeUnit(movingWindowElement);
   height: 100%;
   width: 100%;
 
-  padding: max(
-      calc(v-bind(eleheight) * 1px * 0.75),
-      min(0.75rem, calc(v-bind(eleheight) * 1px * 2.5))
-    )
-    max(
-      calc(v-bind(eleheight) * 1px * 0.75),
-      min(0.75rem, calc(v-bind(elewidth) * 1px * 4))
-    );
+  padding: 0.45rem;
 
   &__display {
     height: 35%;
@@ -74,14 +62,8 @@ const { elemin, eleheight, elewidth } = useWindowSizeUnit(movingWindowElement);
     justify-items: center;
     align-items: center;
 
-    row-gap: max(
-      calc(v-bind(eleheight) * 1px * 0.75),
-      min(0.75rem, calc(v-bind(eleheight) * 1px * 2.5))
-    );
-    column-gap: max(
-      calc(v-bind(eleheight) * 1px * 0.75),
-      min(0.75rem, calc(v-bind(elewidth) * 1px * 4))
-    );
+    row-gap: 0.3rem;
+    column-gap: 0.3rem;
   }
 }
 </style>

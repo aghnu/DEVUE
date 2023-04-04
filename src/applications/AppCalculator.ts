@@ -22,9 +22,8 @@ export class AppCalculator extends ApplicationInternal {
     this.applicationStyle = defaultApplicationStyleFactory();
 
     this.applicationStyle.colorBackground = "#eaf1fbe5";
-    this.applicationStyle.colorTitleText = getGlobalCSSVarValue(
-      "--color-calculator-text-display"
-    );
+    this.applicationStyle.colorTitleText =
+      "var(--color-calculator-text-display)";
     this.applicationStyle.hideTitleBarFading = true;
     this.applicationStyle.isBgTransparent = true;
 

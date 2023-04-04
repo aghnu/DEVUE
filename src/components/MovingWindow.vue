@@ -197,6 +197,7 @@ function resetActionEvent() {
 
 <style scoped lang="scss">
 .MovingWindow {
+  // filter: invert(1);
   --title-height: 1.75rem;
 
   position: absolute;

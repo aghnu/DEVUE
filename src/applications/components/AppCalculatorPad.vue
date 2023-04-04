@@ -3,12 +3,12 @@ import { computed, ref } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
 import { CalculatorPadType } from "../../types/TypeCalculator";
 import { useDynamicColor } from "../../composables/useDynamicColor";
+import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
 
 const props = defineProps<{
   text: string;
   type: CalculatorPadType;
   handler: (text: string) => void;
-  sizeUnit: number;
 }>();
 
 const calculatorPadButtonElement = ref<HTMLButtonElement>();
@@ -23,6 +23,7 @@ const {
 } = useButtonAction(() => props.handler(props.text));
 
 const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
+const sizeUnit = useWindowSizeUnit(calculatorPadButtonElement).elemin;
 
 const padColorStyle = computed(() => {
   const alpha = pointerDown.value ? "66" : pointerHover.value ? "cc" : "88";
@@ -90,10 +91,10 @@ const boxShadowStyle = computed(() => {
     color: v-bind(padTextColorStyle);
     background-color: v-bind(padColorStyle);
 
-    font-size: calc(v-bind(sizeUnit) * 1px * 5);
-    border-radius: min(1em, 1.15rem);
+    font-size: calc(v-bind(sizeUnit) * 1px * 35);
+    border-radius: 0.35em;
 
-    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    transition: background-color 0.05s, transform 0.15s, box-shadow 0.1s;
 
     box-shadow: v-bind(boxShadowStyle);
 
