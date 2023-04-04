@@ -48,6 +48,11 @@ export class AppCalculator extends ApplicationInternal {
     let lastKey: null | string = null;
     let lastOperation;
 
+    const getLastCharacter = (text: string): string | null => {
+      if (!text.length) return null;
+      return text[text.length - 1];
+    };
+
     // handlers
     const handlerValue = (text: string) => {
       if (this.textMain === CALCULATOR_DEFAULT_DISPLAY) {
@@ -70,6 +75,7 @@ export class AppCalculator extends ApplicationInternal {
           break;
         default:
           this.textSub += this.textMain + text;
+          this.textMain = CALCULATOR_DEFAULT_DISPLAY;
       }
     };
     const handlerPrim = (text: string) => {};

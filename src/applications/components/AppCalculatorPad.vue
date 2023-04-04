@@ -30,11 +30,11 @@ const padColorStyle = computed(() => {
 
   switch (props.type) {
     case "function":
-      return "#939fa7" + alpha;
+      return "#737f87" + alpha;
     case "value":
       return "#ffffff" + alpha;
     case "primary":
-      return "#ff5c5c" + alpha;
+      return "#df3c3c" + alpha;
   }
 });
 
