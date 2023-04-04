@@ -16,6 +16,7 @@ export interface ApplicationStyle {
   colorBackground: string | null;
   colorTitleText: string | null;
   hideTitleBarFading: boolean;
+  isBgTransparent: boolean;
 }
 
 export interface ApplicationExternalInterface {

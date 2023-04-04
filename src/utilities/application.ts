@@ -6,5 +6,6 @@ export function defaultApplicationStyleFactory(): ApplicationStyle {
     colorBackground: null,
     colorTitleText: null,
     hideTitleBarFading: false,
+    isBgTransparent: false,
   };
 }

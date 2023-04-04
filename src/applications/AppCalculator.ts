@@ -18,11 +18,12 @@ export class AppCalculator extends ApplicationInternal {
     this.name = "calculator";
     this.applicationStyle = defaultApplicationStyleFactory();
 
-    this.applicationStyle.colorBackground = "#eaf1fb";
+    this.applicationStyle.colorBackground = "#eaf1fbe5";
     this.applicationStyle.colorTitleText = getGlobalCSSVarValue(
       "--color-calculator-text-display"
     );
     this.applicationStyle.hideTitleBarFading = true;
+    this.applicationStyle.isBgTransparent = true;
 
     this.textMain = "0";
     this.textSub = "";

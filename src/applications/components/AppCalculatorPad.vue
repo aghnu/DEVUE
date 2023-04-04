@@ -25,7 +25,7 @@ const {
 const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
 
 const padColorStyle = computed(() => {
-  const alpha = pointerDown.value ? "88" : pointerHover.value ? "ee" : "aa";
+  const alpha = pointerDown.value ? "66" : pointerHover.value ? "cc" : "88";
 
   switch (props.type) {
     case "function":

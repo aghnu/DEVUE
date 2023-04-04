@@ -27,6 +27,9 @@ const props = defineProps<{
 // var
 const movingWindowElement = ref<HTMLDivElement>();
 const windowDisplayElement = ref<HTMLDivElement>();
+const isBackgroundTransparent = computed(
+  () => props.state.appInstance.applicationStyle.isBgTransparent
+);
 
 // connect
 connectWindowMoving(ref(props.state), movingWindowElement);
@@ -34,12 +37,10 @@ connectWindowMoving(ref(props.state), movingWindowElement);
 // compute styling string
 const { elementDropShadowStyle, elementBorderColorStyle } =
   useDynamicColor(windowDisplayElement);
-
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
   ref(props.state)
 );
-
 const styleApplicationColorBackground = computed(
   () =>
     props.state.appInstance.applicationStyle.colorBackground ??
@@ -121,7 +122,11 @@ function resetActionEvent() {
 </script>
 
 <template>
-  <div class="MovingWindow" ref="movingWindowElement">
+  <div
+    class="MovingWindow"
+    :class="[{ 'MovingWindow--glass': isBackgroundTransparent }]"
+    ref="movingWindowElement"
+  >
     <div
       class="MovingWindow__window_display"
       :class="{ 'MovingWindow__window_display--focused': isWindowFocused }"
@@ -200,6 +205,10 @@ function resetActionEvent() {
   z-index: v-bind(styleWindowZIndex);
 
   will-change: height, width, left, top, z-index;
+
+  &--glass {
+    @include mixin-glassblur();
+  }
 
   &__window_display {
     height: 100%;
