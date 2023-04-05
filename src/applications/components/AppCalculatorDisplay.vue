@@ -80,13 +80,13 @@ onMounted(() => {
   height: 100%;
 
   &__inner {
-    position: relative;
-    top: 10%;
-    left: 0;
-    width: 100%;
-    height: 90%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
     gap: 0.25rem;
   }
 
@@ -116,16 +116,16 @@ onMounted(() => {
 
     &--second {
       // 4,74
-      font-size: calc(v-bind(eleheight) * 42.5px);
+      font-size: calc(v-bind(eleheight) * 35px);
       font-weight: 300;
     }
 
     &--prompt {
       opacity: 0.25;
-      position: absolute;
-      bottom: 10%;
-      right: 0;
-      font-size: calc(v-bind(eleheight) * 9px);
+      // position: absolute;
+      // bottom: 10%;
+      // right: 0;
+      font-size: calc(v-bind(eleheight) * 10px);
       font-weight: 400;
     }
   }

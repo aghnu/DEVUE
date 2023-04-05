@@ -45,7 +45,6 @@ const backgroundColor = computed(
           v-for="(key, index) in keys"
           :key="index"
           :text="key.text"
-          :type="key.type"
           :handler="key.handler"
         />
       </div>
@@ -60,14 +59,14 @@ const backgroundColor = computed(
 
   &__display {
     padding: 0.45rem 0.45rem 0 0.45rem;
-    height: 27.5%;
-    min-height: 5rem;
+    height: 30%;
+    min-height: 6rem;
   }
 
   &__pad {
     padding: 0 0.45rem 0.45rem 0.45rem;
-    height: 72.5%;
-    max-height: calc(100% - 5rem);
+    height: 70%;
+    max-height: calc(100% - 6rem);
     width: 100%;
 
     background-color: rgba(100, 100, 100, 0.05);

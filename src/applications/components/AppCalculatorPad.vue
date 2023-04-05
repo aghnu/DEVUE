@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
-import { CalculatorPadType } from "../../types/TypeCalculator";
-import { useDynamicColor } from "../../composables/useDynamicColor";
 import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
 
 const props = defineProps<{
   text: string;
-  type: CalculatorPadType;
   handler: (text: string) => void;
 }>();
 
@@ -22,40 +19,7 @@ const {
   handlerLeave,
 } = useButtonAction(() => props.handler(props.text));
 
-const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
 const sizeUnit = useWindowSizeUnit(calculatorPadButtonElement).elemin;
-
-const padColorStyle = computed(() => {
-  const alpha = pointerDown.value ? "77" : pointerHover.value ? "99" : "88";
-
-  switch (props.type) {
-    case "function":
-      return "#737f87" + alpha;
-    case "value":
-      return "#ffffff" + alpha;
-    case "primary":
-      return "#ff5c5c" + alpha;
-    case "special":
-      return "transparent";
-  }
-});
-
-const padTextColorStyle = computed(() => {
-  switch (props.type) {
-    case "value":
-    case "special":
-      return "var(--color-calculator-text-display)";
-    case "primary":
-    case "function":
-      return "var(--color-calculator-text-light)";
-  }
-});
-
-const boxShadowStyle = computed(() => {
-  if (props.type === "special") return "none";
-  const alpha = (1 - elementColorIntensity.value) * 0.05 + 0.025;
-  return `0 5px 5px rgba(20, 20, 20, ${alpha})`;
-});
 </script>
 
 <template>
@@ -64,12 +28,10 @@ const boxShadowStyle = computed(() => {
       class="AppCalculatorPad__button"
       :class="[
         {
-          'AppCalculatorPad__button--down':
-            pointerDown && props.type !== 'special',
+          'AppCalculatorPad__button--down': pointerDown,
         },
         {
-          'AppCalculatorPad__button--hover':
-            !pointerDown && pointerHover && props.type !== 'special',
+          'AppCalculatorPad__button--hover': !pointerDown && pointerHover,
         },
       ]"
       ref="calculatorPadButtonElement"
@@ -97,23 +59,18 @@ const boxShadowStyle = computed(() => {
     height: 100%;
     width: 100%;
 
-    color: v-bind(padTextColorStyle);
-    background-color: v-bind(padColorStyle);
+    color: var(--color-calculator-text-display);
 
     font-size: calc(v-bind(sizeUnit) * 1px * 33);
-    border-radius: 0.35em;
 
     transition: background-color 0.05s, transform 0.15s, box-shadow 0.1s;
 
-    box-shadow: v-bind(boxShadowStyle);
-
     &--down {
-      box-shadow: none;
-      transform: scale(0.95);
+      opacity: 0.5;
     }
 
-    &--hover {
-    }
+    // &--hover {
+    // }
 
     &__text {
       font-size: 1.2em;

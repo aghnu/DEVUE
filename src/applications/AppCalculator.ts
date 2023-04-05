@@ -111,10 +111,6 @@ export class AppCalculator extends ApplicationInternal {
       "√ ^ π e ( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +".split(" ");
 
     // key categories
-    const keySetIsFunc = strToSet("CE C / * - + ( )");
-    const keySetIsPrim = strToSet("=");
-    const keySetIsSpecial = strToSet("√ ^ π e");
-
     const keyGroupValu = strToSet("1 2 3 4 5 6 7 8 9 0 . √ ^ π e");
     const keyGroupDelete = strToSet("CE C");
     const keyGroupOperations = strToSet("( ) * - + /");
@@ -160,12 +156,6 @@ export class AppCalculator extends ApplicationInternal {
       (t) =>
         Object({
           text: t,
-          type: (() => {
-            if (keySetIsFunc.has(t)) return "function";
-            if (keySetIsPrim.has(t)) return "primary";
-            if (keySetIsSpecial.has(t)) return "special";
-            return "value";
-          })(),
           handler: keyHandler,
         }) satisfies CalculatorKey
     );
