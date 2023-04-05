@@ -26,7 +26,7 @@ const { elementColorIntensity } = useDynamicColor(calculatorPadButtonElement);
 const sizeUnit = useWindowSizeUnit(calculatorPadButtonElement).elemin;
 
 const padColorStyle = computed(() => {
-  const alpha = pointerDown.value ? "66" : pointerHover.value ? "cc" : "88";
+  const alpha = pointerDown.value ? "77" : pointerHover.value ? "99" : "88";
 
   switch (props.type) {
     case "function":
@@ -34,7 +34,7 @@ const padColorStyle = computed(() => {
     case "value":
       return "#ffffff" + alpha;
     case "primary":
-      return "#df3c3c" + alpha;
+      return "#ff5c5c" + alpha;
     case "special":
       return "transparent";
   }

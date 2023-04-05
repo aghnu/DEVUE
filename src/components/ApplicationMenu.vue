@@ -85,7 +85,7 @@ function handleClose() {
 
   // #c5c5c5 #464646 - light mode
   // #212121 #d4d4d4 - black mode
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--color-block-transparent-actionbar);
   border-radius: 0.85rem;
   // padding: 0.25rem;
 
@@ -100,7 +100,7 @@ function handleClose() {
   overflow: hidden;
 
   &__container {
-    padding: 0.85rem 1rem;
+    padding: 0.75rem 0.9rem;
     // border-radius: 0.5rem;
     width: 100%;
     height: fit-content;
@@ -108,7 +108,7 @@ function handleClose() {
     display: grid;
     grid-template-columns: 50% 50%;
     row-gap: 0.85rem;
-    column-gap: 0.75rem;
+    column-gap: 0.25rem;
     align-items: center;
     justify-items: center;
     justify-content: center;

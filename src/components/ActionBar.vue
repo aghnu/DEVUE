@@ -83,7 +83,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
   &__menu {
     &-enter-active,
     &-leave-active {
-      transition: all 0.3s, opacity 0.2s;
+      transition: all 0.2s, opacity 0.2s;
     }
 
     &-enter-from,

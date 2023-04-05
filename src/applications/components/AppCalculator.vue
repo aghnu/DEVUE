@@ -19,6 +19,10 @@ const textMain = computed(
 const textSub = computed(
   () => (props.state.appInstance as AppCalculator).textSub
 );
+const textPrompt = computed(
+  () => (props.state.appInstance as AppCalculator).textPrompt
+);
+const isHold = computed(() => (props.state.appInstance as AppCalculator).hold);
 
 const backgroundColor = computed(
   () => props.state.appInstance.applicationStyle.colorBackground
@@ -29,7 +33,12 @@ const backgroundColor = computed(
   <MovingWindow :state="state">
     <div class="AppCalculator">
       <div class="AppCalculator__display">
-        <AppCalculatorDisplay :main="textMain" :sub="textSub" />
+        <AppCalculatorDisplay
+          :main="textMain"
+          :sub="textSub"
+          :prompt="textPrompt"
+          :hold="isHold"
+        />
       </div>
       <div class="AppCalculator__pad">
         <AppCalculatorPad

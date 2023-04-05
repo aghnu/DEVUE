@@ -43,7 +43,11 @@ const props = defineProps<{
     @mouseleave="handlerLeave"
   >
     <div class="MenuAppButton__icon">
-      <AppIcon color="#464646" :name="props.name" :scale="0.75"></AppIcon>
+      <AppIcon
+        color="var(--color-text-actionbar)"
+        :name="props.name"
+        :scale="0.75"
+      ></AppIcon>
     </div>
     <div class="MenuAppButton__text">
       <p class="MenuAppButton__text__name">
@@ -63,9 +67,9 @@ const props = defineProps<{
 .MenuAppButton {
   @include mixin-clean-button-style;
 
-  width: 9.5rem;
+  width: 100%;
   height: 100%;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   display: flex;
   gap: 0.85rem;
 
@@ -74,14 +78,14 @@ const props = defineProps<{
   font-size: 1rem;
   text-align: left;
   transition: all 0.3s;
-  color: #464646;
+  color: var(--color-text-actionbar);
 
   &--down {
-    background-color: rgb(100, 100, 100, 0.2);
+    background-color: rgb(175, 175, 175, 0.2);
   }
 
   &--hover {
-    background-color: rgb(100, 100, 100, 0.1);
+    background-color: rgba(175, 175, 175, 0.1);
   }
 
   &__icon {
@@ -97,11 +101,11 @@ const props = defineProps<{
       display: flex;
       align-items: center;
       height: 1.5rem;
-      font-size: 0.85em;
+      font-size: 0.9rem;
     }
 
     &__desc {
-      font-size: 0.5em;
+      font-size: 0.5rem;
     }
   }
 }

@@ -11,6 +11,7 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-text-dark: #161616;
   --color-block-transparent: rgba(40, 40, 40, 0.75);
   --color-block-transparent-actionbar: rgba(40, 40, 40, 0.75);
+  --color-text-actionbar: rgba(255, 255, 255, 0.65);
 
   // component color
   --color-taskbar-text-bright: #6d6d6d;
@@ -32,7 +33,7 @@ $font-family-main: "Roboto Mono", sans-serif;
 
   // APP
   --color-app-default-background: #020202;
-  --color-calculator-text-display: #3a3a3a7c;
+  --color-calculator-text-display: #ffffff7c;
   --color-calculator-text-light: #ffffffb8;
 }
 

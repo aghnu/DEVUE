@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import ResponsiveText from "../../uikit/components/ResponsiveText.vue";
-import { ref, computed, onMounted, watch } from "vue";
-import {
-  convertStyleUnitPxToNumber,
-  repeatActionForSetFrames,
-} from "../../utilities/helpers";
+import { ref, computed, onMounted, watch, onUnmounted } from "vue";
+import { repeatActionForSetFrames } from "../../utilities/helpers";
 import { useWindowsStatesStore } from "../../stores/windowsStates";
 import { storeToRefs } from "pinia";
 import { Trigger } from "../../utilities/trigger";
+import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
 
 const props = defineProps<{
   main: string;
   sub: string;
+  prompt: string;
+  hold: boolean;
 }>();
 
 const windowsState = useWindowsStatesStore();
@@ -21,17 +20,7 @@ const displayRefreshTrigger = new Trigger();
 const topWindowSnap = computed(() => topWindow.value?.snapped);
 
 const appCalculatorDisplayElement = ref<HTMLDivElement>();
-const displayElementHeightStyle = useTrackComputedStyle(
-  appCalculatorDisplayElement,
-  "height"
-).propertyRef;
-const displayElementHeight = computed(() => {
-  if (!displayElementHeightStyle.value) return 0;
-  const height = convertStyleUnitPxToNumber(
-    displayElementHeightStyle.value as string
-  );
-  return height ? height / 200 : 0;
-});
+const { eleheight } = useWindowSizeUnit(appCalculatorDisplayElement);
 
 onMounted(() => {
   watch(topWindowSnap, () => {
@@ -59,10 +48,23 @@ onMounted(() => {
         :class="[
           'AppCalculatorDisplay__line',
           'AppCalculatorDisplay__line--second',
+          { 'AppCalculatorDisplay__line--hold': props.hold },
         ]"
       >
         <ResponsiveText
           :text="main"
+          :align="'right'"
+          :refresh-trigger="displayRefreshTrigger"
+        />
+      </div>
+      <div
+        :class="[
+          'AppCalculatorDisplay__line',
+          'AppCalculatorDisplay__line--prompt',
+        ]"
+      >
+        <ResponsiveText
+          :text="prompt"
           :align="'right'"
           :refresh-trigger="displayRefreshTrigger"
         />
@@ -79,15 +81,13 @@ onMounted(() => {
 
   &__inner {
     position: relative;
-    top: 15%;
+    top: 10%;
     left: 0;
     width: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
   }
 
   &__line {
@@ -98,15 +98,35 @@ onMounted(() => {
     flex-direction: column;
     justify-content: center;
     color: var(--color-calculator-text-display);
+    line-height: 1em;
+
+    transition: color 0.3s;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+
+    &--hold {
+      opacity: 0.25;
+    }
 
     &--first {
-      font-size: calc(v-bind(displayElementHeight) * 1.5rem);
+      // 1.5
+      font-size: calc(v-bind(eleheight) * 15px);
       font-weight: 300;
     }
 
     &--second {
-      font-size: calc(v-bind(displayElementHeight) * 4.75rem);
+      // 4,74
+      font-size: calc(v-bind(eleheight) * 42.5px);
       font-weight: 300;
+    }
+
+    &--prompt {
+      opacity: 0.25;
+      position: absolute;
+      bottom: 10%;
+      right: 0;
+      font-size: calc(v-bind(eleheight) * 9px);
+      font-weight: 400;
     }
   }
 }

@@ -5,7 +5,7 @@ import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
-import { strToSet } from "../utilities/helpers";
+import { strReplaceAll, strToSet } from "../utilities/helpers";
 
 // constants used by calculators
 const CALCULATOR_DEFAULT_DISPLAY = "0";
@@ -14,15 +14,19 @@ export class AppCalculator extends ApplicationInternal {
   readonly name: AppName = "calculator";
   applicationStyle: ApplicationStyle = defaultApplicationStyleFactory();
 
-  textMain: string = CALCULATOR_DEFAULT_DISPLAY;
   textSub: string = "";
+  textMain: string = CALCULATOR_DEFAULT_DISPLAY;
+  textPrompt: string = "";
+  textInput: string = "";
+
   mathModule: typeof import("mathjs") | null = null;
+  hold: boolean = false;
 
   constructor() {
     super();
 
     // set style
-    this.applicationStyle.colorBackground = "#eaf1fbe5";
+    this.applicationStyle.colorBackground = "#151515ef";
     this.applicationStyle.colorTitleText =
       "var(--color-calculator-text-display)";
     this.applicationStyle.hideTitleBarFading = true;
@@ -42,24 +46,63 @@ export class AppCalculator extends ApplicationInternal {
     });
   }
 
+  private getInputTextExpression() {
+    // translate subtext into expression
+    let exp = this.textInput;
+
+    // sqrt
+    exp = strReplaceAll(exp, "√", "sqrt(");
+
+    // pi
+    exp = strReplaceAll(exp, "π", "pi");
+
+    return exp;
+  }
+
+  private getSubTextDisplay() {
+    // translate subtext into expression
+    let exp = this.textInput;
+
+    // sqrt
+    exp = strReplaceAll(exp, "√", "√(");
+
+    return exp;
+  }
+
+  private evaluateExp(exp: string): string | null {
+    // return default is mathModule missing or textInput empty
+    if (!this.mathModule || exp === "") return CALCULATOR_DEFAULT_DISPLAY;
+
+    // return null if cannot evaluate, otherwise return result
+    try {
+      const result = this.mathModule.evaluate(exp);
+      if (result === undefined || isNaN(result)) return null;
+      return String(result);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  private evaluateExpContinue(exp: string): string {
+    const result = this.evaluateExp(exp);
+    return result ?? this.evaluateExpContinue(exp.slice(0, exp.length - 1));
+  }
+
   private updateTextMain() {
-    const evaludateExpression = (exp: string): string => {
-      // base cases
-      if (!this.mathModule || exp === "") return CALCULATOR_DEFAULT_DISPLAY;
+    const result = this.evaluateExp(this.getInputTextExpression());
+    const resultProgress = this.evaluateExpContinue(
+      this.getInputTextExpression()
+    );
 
-      // calculate, if no result, recursion
-      try {
-        const result = this.mathModule.evaluate(exp);
-        if (result === undefined)
-          return evaludateExpression(exp.slice(0, exp.length - 1));
-        return String(result);
-      } catch (_) {
-        console.log(exp);
-        return evaludateExpression(exp.slice(0, exp.length - 1));
-      }
-    };
-
-    this.textMain = evaludateExpression(this.textSub);
+    if (result) {
+      this.hold = false;
+      this.textMain = resultProgress;
+      this.textSub = this.getSubTextDisplay();
+    } else {
+      this.hold = true;
+      this.textMain = resultProgress;
+      this.textSub = this.getSubTextDisplay();
+    }
   }
 
   getInitKeys(): CalculatorKey[] {
@@ -70,51 +113,59 @@ export class AppCalculator extends ApplicationInternal {
     // key categories
     const keySetIsFunc = strToSet("CE C / * - + ( )");
     const keySetIsPrim = strToSet("=");
-    const keySetIsSpecial = strToSet("π e √ ^");
+    const keySetIsSpecial = strToSet("√ ^ π e");
 
-    const keyGroupValu = strToSet("1 2 3 4 5 6 7 8 9 0 . √ ^ % e");
+    const keyGroupValu = strToSet("1 2 3 4 5 6 7 8 9 0 . √ ^ π e");
     const keyGroupDelete = strToSet("CE C");
-    const keyGroupOperations = strToSet("( ) * - = +");
-
-    // funcs
-    const getKeyType = (key: string): CalculatorPadType => {
-      if (keySetIsFunc.has(key)) return "function";
-      if (keySetIsPrim.has(key)) return "primary";
-      if (keySetIsSpecial.has(key)) return "special";
-      return "value";
-    };
+    const keyGroupOperations = strToSet("( ) * - + /");
+    const keyGroupPrim = strToSet("=");
 
     const keyHandleDelete = (key: string) => {
       if (key === "CE") {
-        if (this.textSub.length > 0) {
-          this.textSub = this.textSub.slice(0, this.textSub.length - 1);
+        if (this.textInput.length > 0) {
+          this.textInput = this.textInput.slice(0, this.textInput.length - 1);
         }
       } else if (key === "C") {
-        this.textSub = "";
+        this.textInput = "";
+      }
+      this.textPrompt = "";
+      this.updateTextMain();
+    };
+    const keyHandleConfirm = (key: string) => {
+      if (this.hold) {
+        this.textPrompt = "Syntax Error";
+      } else {
+        this.textPrompt = "";
+        this.textInput = this.textMain;
+        this.updateTextMain();
       }
     };
-
     const keyHandleInput = (key: string) => {
-      this.textSub += key;
+      this.textPrompt = "";
+      this.textInput += key;
+      this.updateTextMain();
     };
 
     const keyHandler = (key: string) => {
       if (!this.mathModule) return;
 
       // process input level down
+      if (keyGroupPrim.has(key)) keyHandleConfirm(key);
       if (keyGroupDelete.has(key)) keyHandleDelete(key);
       if (keyGroupValu.has(key)) keyHandleInput(key);
       if (keyGroupOperations.has(key)) keyHandleInput(key);
-
-      // calculate main display result
-      this.updateTextMain();
     };
 
     return keyArrayText.map(
       (t) =>
         Object({
           text: t,
-          type: getKeyType(t),
+          type: (() => {
+            if (keySetIsFunc.has(t)) return "function";
+            if (keySetIsPrim.has(t)) return "primary";
+            if (keySetIsSpecial.has(t)) return "special";
+            return "value";
+          })(),
           handler: keyHandler,
         }) satisfies CalculatorKey
     );

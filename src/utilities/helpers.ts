@@ -70,3 +70,11 @@ export function convertStyleColorToIntensity(styleColor: string) {
 export function strToSet(str: string, delimiter: string = " "): Set<string> {
   return new Set(str.split(delimiter));
 }
+
+export function strReplaceAll(
+  target: string,
+  pattern: string,
+  replacement: string
+): string {
+  return target.split(pattern).join(replacement);
+}
