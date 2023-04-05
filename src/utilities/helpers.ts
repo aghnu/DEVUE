@@ -66,3 +66,7 @@ export function convertStyleColorToIntensity(styleColor: string) {
 
   return null;
 }
+
+export function strToSet(str: string, delimiter: string = " "): Set<string> {
+  return new Set(str.split(delimiter));
+}

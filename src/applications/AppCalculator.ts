@@ -5,93 +5,109 @@ import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
+import { strToSet } from "../utilities/helpers";
 
 // constants used by calculators
 const CALCULATOR_DEFAULT_DISPLAY = "0";
 
 export class AppCalculator extends ApplicationInternal {
-  readonly name: AppName;
+  readonly name: AppName = "calculator";
+  applicationStyle: ApplicationStyle = defaultApplicationStyleFactory();
 
-  applicationStyle: ApplicationStyle;
-  textMain: string;
-  textSub: string;
+  textMain: string = CALCULATOR_DEFAULT_DISPLAY;
+  textSub: string = "";
+  mathModule: typeof import("mathjs") | null = null;
 
   constructor() {
     super();
-    this.name = "calculator";
-    this.applicationStyle = defaultApplicationStyleFactory();
 
+    // set style
     this.applicationStyle.colorBackground = "#eaf1fbe5";
     this.applicationStyle.colorTitleText =
       "var(--color-calculator-text-display)";
     this.applicationStyle.hideTitleBarFading = true;
     this.applicationStyle.isBgTransparent = true;
+  }
 
-    this.textMain = CALCULATOR_DEFAULT_DISPLAY;
-    this.textSub = "";
+  public async open() {
+    // add loading modules
+    this.mathModule = await import("mathjs");
+    return await super.open();
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
-      sizeInitPerc: [0.7, 0.8],
-      sizeInitRatio: 1 / 1.618,
+      sizeInitPerc: [0.7, 0.9],
+      sizeInitRatio: 1 / 1.95,
     });
   }
 
+  private updateTextMain() {
+    const evaludateExpression = (exp: string): string => {
+      // base cases
+      if (!this.mathModule || exp === "") return CALCULATOR_DEFAULT_DISPLAY;
+
+      // calculate, if no result, recursion
+      try {
+        const result = this.mathModule.evaluate(exp);
+        if (result === undefined)
+          return evaludateExpression(exp.slice(0, exp.length - 1));
+        return String(result);
+      } catch (_) {
+        console.log(exp);
+        return evaludateExpression(exp.slice(0, exp.length - 1));
+      }
+    };
+
+    this.textMain = evaludateExpression(this.textSub);
+  }
+
   getInitKeys(): CalculatorKey[] {
-    const keyArrayText = "( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +".split(" ");
-    const keyArrayOperations = "";
-    const keySetIsFunc = new Set("( ) CE C / * - +".split(" "));
-    const keySetIsPrim = new Set("=".split(" "));
+    // all the keys
+    const keyArrayText =
+      "√ ^ π e ( ) CE C 7 8 9 / 4 5 6 * 1 2 3 - 0 . = +".split(" ");
 
-    // memory
-    let lastKey: null | string = null;
-    let lastOperation;
+    // key categories
+    const keySetIsFunc = strToSet("CE C / * - + ( )");
+    const keySetIsPrim = strToSet("=");
+    const keySetIsSpecial = strToSet("π e √ ^");
 
-    const getLastCharacter = (text: string): string | null => {
-      if (!text.length) return null;
-      return text[text.length - 1];
-    };
+    const keyGroupValu = strToSet("1 2 3 4 5 6 7 8 9 0 . √ ^ % e");
+    const keyGroupDelete = strToSet("CE C");
+    const keyGroupOperations = strToSet("( ) * - = +");
 
-    // handlers
-    const handlerValue = (text: string) => {
-      if (this.textMain === CALCULATOR_DEFAULT_DISPLAY) {
-        this.textMain = text;
-      } else {
-        this.textMain += text;
-      }
-    };
-    const handlerFunc = (text: string) => {
-      switch (text) {
-        case "CE":
-          if (this.textMain.length <= 1) {
-            this.textMain = CALCULATOR_DEFAULT_DISPLAY;
-            return;
-          }
-          this.textMain = this.textMain.slice(0, this.textMain.length - 1);
-          break;
-        case "C":
-          this.textMain = CALCULATOR_DEFAULT_DISPLAY;
-          break;
-        default:
-          this.textSub += this.textMain + text;
-          this.textMain = CALCULATOR_DEFAULT_DISPLAY;
-      }
-    };
-    const handlerPrim = (text: string) => {};
-
+    // funcs
     const getKeyType = (key: string): CalculatorPadType => {
       if (keySetIsFunc.has(key)) return "function";
       if (keySetIsPrim.has(key)) return "primary";
-
+      if (keySetIsSpecial.has(key)) return "special";
       return "value";
     };
 
-    const getHandler = (key: string) => {
-      if (keySetIsFunc.has(key)) return handlerFunc;
-      if (keySetIsPrim.has(key)) return handlerPrim;
+    const keyHandleDelete = (key: string) => {
+      if (key === "CE") {
+        if (this.textSub.length > 0) {
+          this.textSub = this.textSub.slice(0, this.textSub.length - 1);
+        }
+      } else if (key === "C") {
+        this.textSub = "";
+      }
+    };
 
-      return handlerValue;
+    const keyHandleInput = (key: string) => {
+      this.textSub += key;
+    };
+
+    const keyHandler = (key: string) => {
+      if (!this.mathModule) return;
+
+      // process input level down
+      if (keyGroupDelete.has(key)) keyHandleDelete(key);
+      if (keyGroupValu.has(key)) keyHandleInput(key);
+      if (keyGroupOperations.has(key)) keyHandleInput(key);
+
+      // calculate main display result
+      this.updateTextMain();
     };
 
     return keyArrayText.map(
@@ -99,7 +115,7 @@ export class AppCalculator extends ApplicationInternal {
         Object({
           text: t,
           type: getKeyType(t),
-          handler: getHandler(t),
+          handler: keyHandler,
         }) satisfies CalculatorKey
     );
   }

@@ -8,6 +8,7 @@
   "dependencies": {
     "@types/uuid": "^8.3.4",
     "gsap": "^3.11.5",
+    "mathjs": "^11.8.0",
     "pinia": "^2.0.24",
     "uuid": "^9.0.0",
     "vue": "^3.2.41"

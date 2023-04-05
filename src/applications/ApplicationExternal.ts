@@ -13,7 +13,7 @@ export abstract class ApplicationExternal
     this.type = "external";
   }
 
-  public open(): this {
+  public async open() {
     window.open(this.link);
     return this;
   }

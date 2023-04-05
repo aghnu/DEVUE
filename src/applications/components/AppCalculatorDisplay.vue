@@ -79,7 +79,7 @@ onMounted(() => {
 
   &__inner {
     position: relative;
-    top: 20%;
+    top: 15%;
     left: 0;
     width: 100%;
     display: flex;
@@ -100,12 +100,12 @@ onMounted(() => {
     color: var(--color-calculator-text-display);
 
     &--first {
-      font-size: calc(v-bind(displayElementHeight) * 1.25rem);
+      font-size: calc(v-bind(displayElementHeight) * 1.5rem);
       font-weight: 300;
     }
 
     &--second {
-      font-size: calc(v-bind(displayElementHeight) * 3.65rem);
+      font-size: calc(v-bind(displayElementHeight) * 4.75rem);
       font-weight: 300;
     }
   }

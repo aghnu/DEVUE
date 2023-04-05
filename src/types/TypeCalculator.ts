@@ -1,4 +1,4 @@
-export type CalculatorPadType = "value" | "function" | "primary";
+export type CalculatorPadType = "value" | "function" | "primary" | "special";
 
 export interface CalculatorKey {
   text: string;

@@ -24,7 +24,8 @@ export abstract class ApplicationInternal
 
   abstract getInitMovingWindowState(): MovingWindowLocalState;
 
-  public open(): this {
+  public async open() {
+    // init windows
     const windowsState = useWindowsStatesStore();
     const movingWindowState = this.getInitMovingWindowState();
     this.movingWindowID = movingWindowState.id;

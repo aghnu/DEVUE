@@ -19,6 +19,10 @@ const textMain = computed(
 const textSub = computed(
   () => (props.state.appInstance as AppCalculator).textSub
 );
+
+const backgroundColor = computed(
+  () => props.state.appInstance.applicationStyle.colorBackground
+);
 </script>
 
 <template>
@@ -45,17 +49,19 @@ const textSub = computed(
   height: 100%;
   width: 100%;
 
-  padding: 0.45rem;
-
   &__display {
-    height: 35%;
-    min-height: 7rem;
+    padding: 0.45rem 0.45rem 0 0.45rem;
+    height: 27.5%;
+    min-height: 5rem;
   }
 
   &__pad {
-    height: 65%;
-    max-height: calc(100% - 7rem);
+    padding: 0 0.45rem 0.45rem 0.45rem;
+    height: 72.5%;
+    max-height: calc(100% - 5rem);
     width: 100%;
+
+    background-color: rgba(100, 100, 100, 0.05);
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
