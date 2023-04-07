@@ -85,13 +85,13 @@ function handleClose() {
 
   // #c5c5c5 #464646 - light mode
   // #212121 #d4d4d4 - black mode
-  background-color: var(--color-block-transparent-actionbar);
+  background-color: var(--color-block-transparent-menu);
   border-radius: 0.85rem;
   // padding: 0.25rem;
 
   box-shadow: v-bind(elementDropShadowStyle);
   border: solid;
-  border-width: 1px;
+  border-width: 2px;
   border-color: v-bind(elementBorderColorStyle);
 
   display: flex;
@@ -118,7 +118,7 @@ function handleClose() {
     }
 
     &--primary {
-      background-color: rgba(150, 150, 150, 0.25);
+      background-color: rgba(150, 150, 150, 0.1);
     }
 
     &--secondary {

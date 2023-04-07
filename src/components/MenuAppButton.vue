@@ -4,7 +4,6 @@ import {
   APP_DISPLAY_DESC,
   APP_DISPLAY_NAME,
 } from "../constants/AppDisplayName";
-import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
 import { useButtonAction } from "../composables/useButtonAction";
 
@@ -44,7 +43,7 @@ const props = defineProps<{
   >
     <div class="MenuAppButton__icon">
       <AppIcon
-        color="var(--color-text-actionbar)"
+        color="var(--color-text-menu)"
         :name="props.name"
         :scale="0.75"
       ></AppIcon>
@@ -78,10 +77,10 @@ const props = defineProps<{
   font-size: 1rem;
   text-align: left;
   transition: all 0.3s;
-  color: var(--color-text-actionbar);
+  color: var(--color-text-menu);
 
   &--down {
-    background-color: rgb(175, 175, 175, 0.2);
+    background-color: rgba(175, 175, 175, 0.2);
   }
 
   &--hover {

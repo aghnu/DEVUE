@@ -126,7 +126,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
 
   &__menu {
     position: absolute;
-    bottom: 200%;
+    bottom: 175%;
   }
 
   &__dividor {
