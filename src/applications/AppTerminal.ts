@@ -35,7 +35,7 @@ export class AppTerminal extends ApplicationInternal {
         colorDesc: "#7fc5d0",
         colorAppBackground: "transparent",
 
-        fontSize: "14px",
+        fontSize: "13px",
       },
       "*"
     );

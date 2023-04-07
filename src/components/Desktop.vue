@@ -3,6 +3,7 @@ import ActionBar from "./ActionBar.vue";
 import AppFooter from "./AppFooter.vue";
 import MovingWindowApplications from "./MovingWindowApplications.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
+import StatusBar from "./StatusBar.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
@@ -80,6 +81,9 @@ onUnmounted(() => {
 
 <template>
   <div class="Desktop">
+    <div class="Desktop__status_bar">
+      <StatusBar></StatusBar>
+    </div>
     <div class="Desktop__windows" ref="windowsManagerElement">
       <WindowsManagerGhostPanel />
       <MovingWindowApplications />
@@ -107,6 +111,14 @@ onUnmounted(() => {
   width: 100%;
 
   background-color: var(--color-background-dark);
+  // background-color: #060522;
+  // background-image: url(https://images.unsplash.com/photo-1508739773434-c26b3d09e071?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80);
+
+  &__status_bar {
+    height: fit-content;
+    width: 100%;
+    z-index: 2;
+  }
 
   &__windows {
     position: relative;
