@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { useButtonAction } from "../../composables/useButtonAction";
 import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
+import { strToSet } from "../../utilities/helpers";
 
 const props = defineProps<{
   text: string;
@@ -19,7 +20,14 @@ const {
   handlerLeave,
 } = useButtonAction(() => props.handler(props.text));
 
+const SMALLER_PAD = strToSet("CE C sin cos tan log");
 const sizeUnit = useWindowSizeUnit(calculatorPadButtonElement).elemin;
+const textSizeStyle = computed(() => {
+  if (SMALLER_PAD.has(props.text)) {
+    return "1em";
+  }
+  return "1.2em";
+});
 </script>
 
 <template>
@@ -73,7 +81,7 @@ const sizeUnit = useWindowSizeUnit(calculatorPadButtonElement).elemin;
     // }
 
     &__text {
-      font-size: 1.2em;
+      font-size: v-bind(textSizeStyle);
     }
   }
 }

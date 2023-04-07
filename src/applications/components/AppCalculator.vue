@@ -23,10 +23,6 @@ const isError = computed(
   () => (props.state.appInstance as AppCalculator).error
 );
 const isHold = computed(() => (props.state.appInstance as AppCalculator).hold);
-
-const backgroundColor = computed(
-  () => props.state.appInstance.applicationStyle.colorBackground
-);
 </script>
 
 <template>
@@ -59,14 +55,14 @@ const backgroundColor = computed(
 
   &__display {
     padding: 0.45rem 0.45rem 0 0.45rem;
-    height: 35%;
-    min-height: 6rem;
+    height: 32.5%;
+    min-height: 5em;
   }
 
   &__pad {
     padding: 0 0.45rem 0.45rem 0.45rem;
-    height: 65%;
-    max-height: calc(100% - 6rem);
+    height: 67.5%;
+    max-height: calc(100% - 5rem);
     width: 100%;
 
     background-color: rgba(100, 100, 100, 0.05);
