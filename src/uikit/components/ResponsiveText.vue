@@ -1,38 +1,34 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useResponsiveFontSizeFactor } from "../../composables/useResponsiveFontSizeFactor";
+import { computed, onMounted, ref, watch } from "vue";
 import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
 import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
-import { Trigger } from "../../utilities/trigger";
 
 const props = withDefaults(
   defineProps<{
     text: string;
     align: "left" | "right" | "center";
-    refreshTrigger: Trigger | null;
   }>(),
   {
-    refreshTrigger: null,
+    align: "right",
   }
 );
 
 const textElement = ref<HTMLParagraphElement>();
 const textContainerElement = ref<HTMLDivElement>();
+const text = computed(() => props.text);
 
-const styleJustifyContent = computed(() => {
-  switch (props.align) {
-    case "left":
-      return "flex-start";
-    case "right":
-      return "flex-end";
-    case "center":
-      return "center";
-  }
-});
-const widthTextStyle = useTrackComputedStyle(textElement, "width").propertyRef;
+const widthTextStyle = useTrackComputedStyle(
+  textElement,
+  "width",
+  ":after"
+).propertyRef;
 const widthContainerStyle = useTrackComputedStyle(
   textContainerElement,
   "width"
+).propertyRef;
+const parentFontSizeStyle = useTrackComputedStyle(
+  textContainerElement,
+  "fontSize"
 ).propertyRef;
 
 const widthText = computed(() => {
@@ -45,17 +41,34 @@ const widthContainer = computed(() => {
   return convertStyleUnitPxToNumber(widthContainerStyle.value as string) ?? 0;
 });
 
-const { fontSizeFactor, refreshSizeFactor } = useResponsiveFontSizeFactor(
-  widthText,
-  widthContainer
+const parentFontSizeStyleCorrected = computed(
+  () => parentFontSizeStyle.value ?? "0px"
 );
+const fontSizeStyle = ref("0px");
+onMounted(() => {
+  // update fontSizeStyle of the text based on container size and pseudo element size
+  watch([widthContainer, widthText], ([widthContainerNew, widthTextNew]) => {
+    if (!textElement.value) return;
+    const pseudoFontSize = convertStyleUnitPxToNumber(
+      window.getComputedStyle(textElement.value, ":after")["fontSize"]
+    );
+    if (pseudoFontSize === null) return;
 
-// connect trigger
-if (props.refreshTrigger) {
-  props.refreshTrigger.listen(() => {
-    refreshSizeFactor();
+    fontSizeStyle.value =
+      Math.min(widthContainerNew / widthTextNew, 1) * pseudoFontSize + "px";
   });
-}
+
+  // update pseudo element content text
+  watch(
+    text,
+    () => {
+      if (textElement.value) {
+        textElement.value.dataset.text = props.text;
+      }
+    },
+    { immediate: true }
+  );
+});
 </script>
 
 <template>
@@ -66,13 +79,25 @@ if (props.refreshTrigger) {
 
 <style scoped lang="scss">
 .ResponsiveText {
+  position: relative;
   width: 100%;
+  height: fit-content;
   display: flex;
-  justify-content: v-bind(styleJustifyContent);
   &__text {
-    width: fit-content;
-    font-size: calc(v-bind(fontSizeFactor) * 1em);
+    position: relative;
+    height: fit-content;
+    width: 100%;
+    font-size: v-bind(fontSizeStyle);
     white-space: nowrap;
+    text-align: v-bind(align);
+
+    &::after {
+      position: absolute;
+      visibility: hidden;
+      right: 100%;
+      font-size: v-bind(parentFontSizeStyleCorrected);
+      content: attr(data-text);
+    }
   }
 }
 </style>

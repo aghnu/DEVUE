@@ -16,11 +16,11 @@ export class AppCalculator extends ApplicationInternal {
 
   textSub: string = "";
   textMain: string = CALCULATOR_DEFAULT_DISPLAY;
-  textPrompt: string = "";
   textInput: string = "";
 
   mathModule: typeof import("mathjs") | null = null;
   hold: boolean = false;
+  error: boolean = false;
 
   constructor() {
     super();
@@ -124,20 +124,20 @@ export class AppCalculator extends ApplicationInternal {
       } else if (key === "C") {
         this.textInput = "";
       }
-      this.textPrompt = "";
+      this.error = false;
       this.updateTextMain();
     };
     const keyHandleConfirm = (key: string) => {
       if (this.hold) {
-        this.textPrompt = "Syntax Error";
+        this.error = true;
       } else {
-        this.textPrompt = "";
+        this.error = false;
         this.textInput = this.textMain;
         this.updateTextMain();
       }
     };
     const keyHandleInput = (key: string) => {
-      this.textPrompt = "";
+      this.error = false;
       this.textInput += key;
       this.updateTextMain();
     };

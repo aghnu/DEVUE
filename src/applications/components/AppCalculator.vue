@@ -19,8 +19,8 @@ const textMain = computed(
 const textSub = computed(
   () => (props.state.appInstance as AppCalculator).textSub
 );
-const textPrompt = computed(
-  () => (props.state.appInstance as AppCalculator).textPrompt
+const isError = computed(
+  () => (props.state.appInstance as AppCalculator).error
 );
 const isHold = computed(() => (props.state.appInstance as AppCalculator).hold);
 
@@ -36,8 +36,8 @@ const backgroundColor = computed(
         <AppCalculatorDisplay
           :main="textMain"
           :sub="textSub"
-          :prompt="textPrompt"
           :hold="isHold"
+          :error="isError"
         />
       </div>
       <div class="AppCalculator__pad">
@@ -59,13 +59,13 @@ const backgroundColor = computed(
 
   &__display {
     padding: 0.45rem 0.45rem 0 0.45rem;
-    height: 30%;
+    height: 35%;
     min-height: 6rem;
   }
 
   &__pad {
     padding: 0 0.45rem 0.45rem 0.45rem;
-    height: 70%;
+    height: 65%;
     max-height: calc(100% - 6rem);
     width: 100%;
 
@@ -76,8 +76,10 @@ const backgroundColor = computed(
     justify-items: center;
     align-items: center;
 
-    row-gap: 0.3rem;
-    column-gap: 0.3rem;
+    // row-gap: 0.3rem;
+    // column-gap: 0.3rem;
+    row-gap: 2%;
+    column-gap: 2%;
   }
 }
 </style>

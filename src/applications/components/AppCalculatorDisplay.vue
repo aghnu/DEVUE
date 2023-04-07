@@ -1,32 +1,17 @@
 <script setup lang="ts">
 import ResponsiveText from "../../uikit/components/ResponsiveText.vue";
-import { ref, computed, onMounted, watch, onUnmounted } from "vue";
-import { repeatActionForSetFrames } from "../../utilities/helpers";
-import { useWindowsStatesStore } from "../../stores/windowsStates";
-import { storeToRefs } from "pinia";
-import { Trigger } from "../../utilities/trigger";
+import { ref } from "vue";
 import { useWindowSizeUnit } from "../../composables/useWindowSizeUnit";
 
 const props = defineProps<{
   main: string;
   sub: string;
-  prompt: string;
+  error: boolean;
   hold: boolean;
 }>();
 
-const windowsState = useWindowsStatesStore();
-const { topWindow } = storeToRefs(windowsState);
-const displayRefreshTrigger = new Trigger();
-const topWindowSnap = computed(() => topWindow.value?.snapped);
-
 const appCalculatorDisplayElement = ref<HTMLDivElement>();
 const { eleheight } = useWindowSizeUnit(appCalculatorDisplayElement);
-
-onMounted(() => {
-  watch(topWindowSnap, () => {
-    repeatActionForSetFrames(() => displayRefreshTrigger.notify(), 5);
-  });
-});
 </script>
 
 <template>
@@ -38,36 +23,17 @@ onMounted(() => {
           'AppCalculatorDisplay__line--first',
         ]"
       >
-        <ResponsiveText
-          :text="sub"
-          :align="'right'"
-          :refresh-trigger="displayRefreshTrigger"
-        />
+        <ResponsiveText :text="sub" :align="'right'" />
       </div>
       <div
         :class="[
           'AppCalculatorDisplay__line',
           'AppCalculatorDisplay__line--second',
           { 'AppCalculatorDisplay__line--hold': props.hold },
+          { 'AppCalculatorDisplay__line--error': props.error },
         ]"
       >
-        <ResponsiveText
-          :text="main"
-          :align="'right'"
-          :refresh-trigger="displayRefreshTrigger"
-        />
-      </div>
-      <div
-        :class="[
-          'AppCalculatorDisplay__line',
-          'AppCalculatorDisplay__line--prompt',
-        ]"
-      >
-        <ResponsiveText
-          :text="prompt"
-          :align="'right'"
-          :refresh-trigger="displayRefreshTrigger"
-        />
+        <ResponsiveText :text="main" :align="'right'" />
       </div>
     </div>
   </div>
@@ -86,19 +52,12 @@ onMounted(() => {
 
     width: 100%;
     height: 100%;
-
-    gap: 0.25rem;
   }
 
   &__line {
     width: 100%;
-    height: 1em;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     color: var(--color-calculator-text-display);
-    line-height: 1em;
 
     transition: color 0.3s;
     padding-left: 0.8rem;
@@ -110,23 +69,16 @@ onMounted(() => {
 
     &--first {
       // 1.5
+      height: 1.5em;
       font-size: calc(v-bind(eleheight) * 15px);
       font-weight: 300;
     }
 
     &--second {
-      // 4,74
-      font-size: calc(v-bind(eleheight) * 35px);
+      // 4.74
+      height: 1.5em;
+      font-size: calc(v-bind(eleheight) * 30px);
       font-weight: 300;
-    }
-
-    &--prompt {
-      opacity: 0.25;
-      // position: absolute;
-      // bottom: 10%;
-      // right: 0;
-      font-size: calc(v-bind(eleheight) * 10px);
-      font-weight: 400;
     }
   }
 }

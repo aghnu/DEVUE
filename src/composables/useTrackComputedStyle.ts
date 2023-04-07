@@ -3,13 +3,16 @@ import GlobalAnimation from "../utilities/globalAnimation";
 
 export function useTrackComputedStyle(
   elRef: Ref<HTMLElement | undefined>,
-  property: keyof CSSStyleDeclaration
+  property: keyof CSSStyleDeclaration,
+  pseudoElement: string | null = null
 ) {
   const propertyRef = ref<CSSStyleDeclaration[typeof property]>();
 
   const updateProperty = () => {
     if (!elRef.value) return;
-    propertyRef.value = window.getComputedStyle(elRef.value)[property];
+    propertyRef.value = window.getComputedStyle(elRef.value, pseudoElement)[
+      property
+    ];
   };
 
   onMounted(() => {
