@@ -104,7 +104,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
   &__inner {
     @include mixin-center-children;
     @include mixin-disable-pointer;
-    @include mixin-glassblur;
+    @include mixin-glassblur();
 
     display: flex;
     gap: calc(v-bind(buttonSize) * 0.35rem);

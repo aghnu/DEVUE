@@ -17,6 +17,7 @@ import { AppTerminal } from "../applications/AppTerminal";
 // variables
 const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
+const wallpaperDisplay = ref(false);
 
 // handlers
 const handlerMouseMove = (e: MouseEvent) => {
@@ -53,6 +54,10 @@ const handlerInitDefaultApplications = () => {
   new AppTerminal().open();
 };
 
+const handlerImageLoad = () => {
+  wallpaperDisplay.value = true;
+};
+
 // connect logics
 connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
 connectWindowsActionEvent();
@@ -81,6 +86,14 @@ onUnmounted(() => {
 
 <template>
   <div class="Desktop">
+    <img
+      class="Desktop__wallpaper"
+      :class="[{ 'Desktop__wallpaper--loaded': wallpaperDisplay }]"
+      alt=""
+      role="presentation"
+      src="../assets/img/DEVUE.jpg"
+      @load="handlerImageLoad"
+    />
     <div class="Desktop__status_bar">
       <StatusBar></StatusBar>
     </div>
@@ -111,12 +124,26 @@ onUnmounted(() => {
   width: 100%;
 
   background-color: var(--color-background-dark);
-  // background-color: #060522;
-  background-image: url(../assets/img/DEVUE.png);
-  background-position: top;
-  background-size: cover;
+
+  &__wallpaper {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    object-fit: cover;
+    object-position: top;
+
+    transition: opacity 0.5s;
+
+    &--loaded {
+      opacity: 1;
+    }
+  }
 
   &__status_bar {
+    position: relative;
     height: fit-content;
     width: 100%;
     z-index: 2;
