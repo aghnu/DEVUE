@@ -38,7 +38,7 @@ export function useDynamicColor(element: Ref<HTMLElement | undefined>) {
     const intensity = convertStyleColorToIntensity(
       elementBackgroundColor.value as string
     );
-    if (!intensity) return "transparent";
+    if (intensity === null) return "transparent";
 
     if (intensity > 0.5) {
       return "var(--color-border-dark)";

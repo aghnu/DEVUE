@@ -6,6 +6,7 @@ import { AppGithub } from "../applications/AppGithub";
 import { AppLinkedin } from "../applications/AppLinkedin";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { ref } from "vue";
+import { AppWnfa } from "../applications/AppWnfa";
 
 const emits = defineEmits<{
   (e: "close"): void;
@@ -43,6 +44,15 @@ function handleClose() {
         @click="
           () => {
             AppCalculator.build().open();
+            handleClose();
+          }
+        "
+      ></MenuAppButton>
+      <MenuAppButton
+        name="wnfa"
+        @click="
+          () => {
+            AppWnfa.build().open();
             handleClose();
           }
         "

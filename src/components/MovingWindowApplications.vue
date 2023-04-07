@@ -3,6 +3,7 @@ import AppTerminal from "../applications/components/AppTerminal.vue";
 import AppCalculator from "../applications/components/AppCalculator.vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
+import AppWnfa from "../applications/components/AppWnfa.vue";
 
 const windowsState = useWindowsStatesStore();
 const { movingWindows } = storeToRefs(windowsState);
@@ -18,6 +19,10 @@ const { movingWindows } = storeToRefs(windowsState);
         />
         <AppCalculator
           v-else-if="mvState.appInstance.name === 'calculator'"
+          :state="mvState"
+        />
+        <AppWnfa
+          v-else-if="mvState.appInstance.name === 'wnfa'"
           :state="mvState"
         />
       </template>

@@ -16,6 +16,7 @@ export function getAppIcon(name: AppName, style: AppIconStyle): AppIconHTML {
     app_menu: getAppIconAppMenu,
     calculator: getAppIconCalculator,
     reset: getAppIconReset,
+    wnfa: getAppIconWnfa,
   };
 
   return lookup[name](style);
@@ -58,6 +59,23 @@ export function getAppIconReset(style: AppIconStyle): AppIconHTML {
     <svg height="${style.size}" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M25 6V10.2222C33.1468 10.2222 39.7778 16.8511 39.7778 25C39.7778 33.1489 33.1468 39.7778 25 39.7778C16.8532 39.7778 10.2222 33.1489 10.2222 25C10.2222 21.1008 11.7739 17.4295 14.4445 14.6935V19.7222H18.6667V8.11112H7.05555V12.3333H10.8365C7.75433 15.7787 6 20.269 6 25C6 35.4753 14.5225 44 25 44C35.4775 44 44 35.4753 44 25C44 14.5247 35.4775 6 25 6Z" fill="${style.color}"/>
     </svg>
+  `;
+}
+
+export function getAppIconWnfa(style: AppIconStyle): AppIconHTML {
+  return /*html*/ `
+  <svg height="${style.size}" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M39.9062 39.8612H10.1491V10.0771H39.9062V39.8612ZM12.9034 37.23H37.3381V12.513H12.9034V37.23Z" fill="${style.color}"/>
+  <path d="M39.9242 1H37.0437V6.83608H39.9242V1Z" fill="${style.color}"/>
+  <path d="M12.8914 1H10.0109V6.95923H12.8914V1Z" fill="${style.color}"/>
+  <path d="M39.8612 43.051H37.0437V48.824H39.8612V43.051Z" fill="${style.color}"/>
+  <path d="M12.8914 43.051H10.0109V49.0103H12.8914V43.051Z" fill="${style.color}"/>
+  <path d="M48.6828 37.0437H43.051V40.0294H48.6828V37.0437Z" fill="${style.color}"/>
+  <path d="M6.57176 37.0437H1V39.8011H6.57176V37.0437Z" fill="${style.color}"/>
+  <path d="M48.9982 10.011H43.051V12.8284H48.9982V10.011Z" fill="${style.color}"/>
+  <path d="M6.82106 10.011H1V12.8854H6.82106V10.011Z" fill="${style.color}"/>
+  </svg>
+  
   `;
 }
 

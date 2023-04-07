@@ -101,6 +101,7 @@ const props = defineProps<{
       align-items: center;
       height: 1.5rem;
       font-size: 0.9rem;
+      white-space: nowrap;
     }
 
     &__desc {

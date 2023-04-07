@@ -1,6 +1,5 @@
 import { ApplicationStyle, AppName } from "../types/TypeApp";
 import { ApplicationInternal } from "./ApplicationInternal";
-import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";

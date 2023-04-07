@@ -9,6 +9,7 @@ export const APP_DISPLAY_NAME: Record<AppName, string> = {
   app_menu: "Menu",
   calculator: "Calculator",
   reset: "Reset",
+  wnfa: "WNFA Poster",
 };
 
 export const APP_DISPLAY_DESC: Record<AppName, string> = {
@@ -16,6 +17,7 @@ export const APP_DISPLAY_DESC: Record<AppName, string> = {
   calculator: "A calculator for basic arithmetic operations",
   github: "Visit my GitHub homepage",
   linkedin: "Go to my LinkedIn",
+  wnfa: "WNFA Poster generator",
 
   welcome: "",
   doc_pdf: "",

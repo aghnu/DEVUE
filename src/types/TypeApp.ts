@@ -8,7 +8,8 @@ export type AppName =
   | "app_menu"
   | "doc_pdf"
   | "calculator"
-  | "reset";
+  | "reset"
+  | "wnfa";
 export type AppType = "external" | "internal" | "action";
 export type ApplicationInstance = ApplicationInternal;
 
