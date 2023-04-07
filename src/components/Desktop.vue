@@ -133,7 +133,7 @@ onUnmounted(() => {
     opacity: 0;
     pointer-events: none;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
 
     transition: opacity 0.5s;
 
