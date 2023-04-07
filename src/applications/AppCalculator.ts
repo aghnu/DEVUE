@@ -50,7 +50,7 @@ export class AppCalculator extends ApplicationInternal {
     super();
 
     // set style
-    this.applicationStyle.colorBackground = "#151515ef";
+    this.applicationStyle.colorBackground = "#151515dd";
     this.applicationStyle.colorTitleText =
       "var(--color-calculator-text-display)";
     this.applicationStyle.hideTitleBarFading = true;
