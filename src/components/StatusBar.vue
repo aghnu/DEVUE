@@ -16,8 +16,12 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
 
 <template>
   <div class="StatusBar" ref="statusBarElement">
-    <div class="StatusBar__appinfo">
-      <template v-if="topWindow !== null">
+    <Transition name="StatusBar__appinfo__transition" mode="out-in">
+      <div
+        v-if="topWindow !== null"
+        class="StatusBar__appinfo"
+        :key="topWindow.appInstance.name"
+      >
         <div class="StatusBar__appinfo__icon">
           <AppIcon
             :name="topWindow.appInstance.name"
@@ -27,12 +31,12 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
         <p class="StatusBar__appinfo__name">
           {{ APP_DISPLAY_NAME[topWindow.appInstance.name] }}
         </p>
-      </template>
-      <template v-else>
+      </div>
+      <div v-else key="DEVUE" class="StatusBar__appinfo">
         <div class="StatusBar__appinfo__icon"></div>
         <p class="StatusBar__appinfo__name">DEVUE</p>
-      </template>
-    </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -40,7 +44,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
 .StatusBar {
   @include mixin-glassblur();
 
-  height: 1.5rem;
+  height: 1.6rem;
   color: var(--color-text-statusbar);
   background-color: var(--color-block-transparent-statusbar);
 
@@ -57,6 +61,18 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
     padding: 0 0.75rem;
 
     gap: 0.75rem;
+
+    &__transition {
+      &-enter-active,
+      &-leave-active {
+        transition: opacity 0.2s;
+      }
+
+      &-enter-from,
+      &-leave-to {
+        opacity: 0 !important;
+      }
+    }
 
     &__icon {
       height: 60%;

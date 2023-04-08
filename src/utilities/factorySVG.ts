@@ -64,18 +64,17 @@ export function getAppIconReset(style: AppIconStyle): AppIconHTML {
 
 export function getAppIconWnfa(style: AppIconStyle): AppIconHTML {
   return /*html*/ `
-  <svg height="${style.size}" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M39.9062 39.8612H10.1491V10.0771H39.9062V39.8612ZM12.9034 37.23H37.3381V12.513H12.9034V37.23Z" fill="${style.color}"/>
-  <path d="M39.9242 1H37.0437V6.83608H39.9242V1Z" fill="${style.color}"/>
-  <path d="M12.8914 1H10.0109V6.95923H12.8914V1Z" fill="${style.color}"/>
-  <path d="M39.8612 43.051H37.0437V48.824H39.8612V43.051Z" fill="${style.color}"/>
-  <path d="M12.8914 43.051H10.0109V49.0103H12.8914V43.051Z" fill="${style.color}"/>
-  <path d="M48.6828 37.0437H43.051V40.0294H48.6828V37.0437Z" fill="${style.color}"/>
-  <path d="M6.57176 37.0437H1V39.8011H6.57176V37.0437Z" fill="${style.color}"/>
-  <path d="M48.9982 10.011H43.051V12.8284H48.9982V10.011Z" fill="${style.color}"/>
-  <path d="M6.82106 10.011H1V12.8854H6.82106V10.011Z" fill="${style.color}"/>
-  </svg>
-  
+  <svg height="${style.size}" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M37.9062 37.8612H12.1491V12.0771H37.9062V37.8612ZM15.9034 34.23H34.3381V15.513H15.9034V34.23Z" fill="${style.color}"/>
+  <path d="M37.9242 1H34.0437V8.83608H37.9242V1Z" fill="${style.color}"/>
+  <path d="M15.8914 1H12.0109V8.95923H15.8914V1Z" fill="${style.color}"/>
+  <path d="M37.8612 41.051H34.0437V48.824H37.8612V41.051Z" fill="${style.color}"/>
+  <path d="M15.8914 41.051H12.0109V49.0103H15.8914V41.051Z" fill="${style.color}"/>
+  <path d="M48.6828 34.0437H41.051V38.0294H48.6828V34.0437Z" fill="${style.color}"/>
+  <path d="M8.57176 34.0437H1V37.8011H8.57176V34.0437Z" fill="${style.color}"/>
+  <path d="M48.9982 12.011H41.051V15.8284H48.9982V12.011Z" fill="${style.color}"/>
+  <path d="M8.82106 12.011H1V15.8854H8.82106V12.011Z" fill="${style.color}"/>
+  </svg>  
   `;
 }
 
