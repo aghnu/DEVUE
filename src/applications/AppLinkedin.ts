@@ -1,4 +1,4 @@
-import { AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApplication";
 import { ApplicationExternal } from "./ApplicationExternal";
 
 export class AppLinkedin extends ApplicationExternal {
@@ -8,6 +8,6 @@ export class AppLinkedin extends ApplicationExternal {
   constructor() {
     super();
     this.name = "linkedin";
-    this.link = "https://www.linkedin.com/in/gengyuanh"
+    this.link = "https://www.linkedin.com/in/gengyuanh";
   }
 }

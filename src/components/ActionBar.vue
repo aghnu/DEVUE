@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
 import { ref } from "vue";
-import { AppTerminal } from "../applications/AppTerminal";
-import { AppCalculator } from "../applications/AppCalculator";
 import { useWindowsStatesStore } from "../stores/windowsStates";
-import ApplicationMenu from "./ApplicationMenu.vue";
+import AppMenu from "./AppMenu.vue";
 import ScreenBlocker from "./ScreenBlocker.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
+import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
+import { computed } from "@vue/reactivity";
+import { ApplicationMetaInternal } from "../types/TypeApplication";
 
 const buttonSize = ref(2.9);
 const windowsState = useWindowsStatesStore();
@@ -23,16 +24,25 @@ function handleMenuClose() {
 
 const { elementDropShadowStyle, elementBorderColorStyle } =
   useDynamicColor(actionBarElement);
+
+const appsMeta = computed(() => {
+  const appsMetaList: ApplicationMetaInternal[] = [];
+  applicationActionBar.forEach((appName) => {
+    const meta = APPLICATION_INDEX[appName];
+    if (meta.type === "internal") appsMetaList.push(meta);
+  });
+  return appsMetaList;
+});
 </script>
 
 <template>
   <div class="ActionBar">
     <transition name="ActionBarTransition__menu">
-      <ApplicationMenu
+      <AppMenu
         v-if="menuOpen"
         @close="handleMenuClose()"
         class="ActionBar__menu"
-      ></ApplicationMenu>
+      ></AppMenu>
     </transition>
     <div class="ActionBar__inner" ref="actionBarElement">
       <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
@@ -40,34 +50,30 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
       ></Teleport>
 
       <AppButton
-        name="app_menu"
-        type="action"
+        name="menu"
         :size="buttonSize"
         @click="handleMenuToggle"
       ></AppButton>
       <div class="ActionBar__dividor"></div>
+
+      <!-- Applications that is pinned to action bar -->
+
       <AppButton
-        name="terminal"
-        type="primary"
+        v-for="meta in appsMeta"
+        :key="meta.name"
+        :name="meta.name"
         :size="buttonSize"
         @click="
-          AppTerminal.build().open();
-          handleMenuClose();
+          () => {
+            meta.objectClass.build().open();
+            handleMenuClose();
+          }
         "
       ></AppButton>
-      <AppButton
-        name="calculator"
-        type="primary"
-        :size="buttonSize"
-        @click="
-          AppCalculator.build().open();
-          handleMenuClose();
-        "
-      ></AppButton>
+
       <div class="ActionBar__dividor"></div>
       <AppButton
         name="reset"
-        type="warn"
         :size="buttonSize"
         @click="
           windowsState.resetMovingWindow();

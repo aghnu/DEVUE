@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { AppName } from "../types/TypeApp";
-import { getAppIcon } from "../utilities/factorySVG";
+import { AppName } from "../types/TypeApplication";
+import { APPLICATION_INDEX } from "../applications/META";
 
 const props = withDefaults(
   defineProps<{
     name: AppName;
     color: string;
-    scale: number;
+    scale?: number;
   }>(),
   {
     scale: 1,
@@ -15,7 +15,7 @@ const props = withDefaults(
 );
 
 const iconHTML = computed(() => {
-  return getAppIcon(props.name, {
+  return APPLICATION_INDEX[props.name].getAppIcon({
     size: `${props.scale * 100}%`,
     color: props.color,
   });

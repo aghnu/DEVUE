@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { getAppIcon } from "../utilities/factorySVG";
-import { AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApplication";
 import { computed } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
-import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
 import { useButtonAction } from "../composables/useButtonAction";
+import { APPLICATION_INDEX } from "../applications/META";
+import { applicationActionBarStyle } from "../applications/META";
 
 const props = defineProps<{
   name: AppName;
-  type: "primary" | "secondary" | "action" | "warn";
   size: number;
 }>();
 const emits = defineEmits<{
@@ -34,26 +33,41 @@ const buttonSizeFactor = computed(() =>
   pointerDown.value ? 0.6 : pointerHover.value ? 1 : 0.8
 );
 const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
-const iconHTML = computed(() => {
-  switch (props.type) {
-    case "primary":
-    case "warn":
-      return getAppIcon(props.name, {
-        size: "100%",
-        color: "var(--color-icon-inner-dark)",
-      });
+const meta = computed(() => APPLICATION_INDEX[props.name]);
 
-    case "secondary":
-    case "action":
-      return getAppIcon(props.name, {
-        size: "100%",
-        color: "var(--color-icon-inner)",
-      });
+const iconHTML = computed(() => {
+  const specialStyle = applicationActionBarStyle[props.name];
+  if (specialStyle !== undefined) {
+    return APPLICATION_INDEX[props.name].getAppIcon({
+      size: "100%",
+      color: specialStyle.colorText,
+    });
   }
+
+  if (meta.value.type === "internal") {
+    return APPLICATION_INDEX[props.name].getAppIcon({
+      size: "100%",
+      color: "var(--color-icon-inner-dark)",
+    });
+  }
+
+  return APPLICATION_INDEX[props.name].getAppIcon({
+    size: "100%",
+    color: "var(--color-icon-inner)",
+  });
 });
 
 const buttonColor = computed(() => {
-  return `var(--color-icon-${props.type})`;
+  const specialStyle = applicationActionBarStyle[props.name];
+  if (specialStyle !== undefined) {
+    return specialStyle.colorBackground;
+  }
+
+  if (meta.value.type === "internal") {
+    return "var(--color-icon-primary)";
+  }
+
+  return "var(--color-icon-secondary)";
 });
 
 const appInstancesCount = computed(() => {
@@ -65,11 +79,7 @@ const appInstancesCount = computed(() => {
   <div class="AppButton">
     <button
       class="AppButton__inner"
-      :class="[
-        { 'AppButton__inner--down': pointerDown },
-        { 'AppButton__inner--secondary': type === 'secondary' },
-        { 'AppButton__inner--action': type === 'action' },
-      ]"
+      :class="[{ 'AppButton__inner--down': pointerDown }]"
       @mousedown="handlerPointerDown"
       @touchstart="handlerPointerDown"
       @mouseup="handlerPointerUp"
@@ -95,7 +105,7 @@ const appInstancesCount = computed(() => {
       ]"
       role="presentation"
     >
-      <p>{{ APP_DISPLAY_NAME[name] }}</p>
+      <p>{{ APPLICATION_INDEX[name].nameDisplay }}</p>
     </div>
   </div>
 </template>
@@ -155,11 +165,6 @@ const appInstancesCount = computed(() => {
     width: v-bind(buttonSize);
 
     transition: all 0.3s;
-
-    &--secondary,
-    &--action {
-      background-color: var(--color-icon-secondary);
-    }
 
     &__icon {
       @include mixin-center-children;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApplication";
 import {
   ApplicationWindowsStatesID,
   WindowsStatesStore,
@@ -42,13 +42,13 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
     },
     getApplicationsInstanceCount() {
       return (name: AppName): Number => {
-        const movingWindowIDArray = this.applicationWindowsStates.get(name) ?? [];
+        const movingWindowIDArray =
+          this.applicationWindowsStates.get(name) ?? [];
         return movingWindowIDArray.length;
-      }
-    }
+      };
+    },
   },
   actions: {
-
     updateMovingWindowAction(actionEvent: MovingWindowActionEvent) {
       this.actionEvent = actionEvent;
     },

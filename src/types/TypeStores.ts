@@ -1,5 +1,5 @@
 import { Tuple } from "../types/TypeBasic";
-import { AppName } from "./TypeApp";
+import { AppName } from "./TypeApplication";
 import { PointerOperation } from "./TypeDesktop";
 import {
   MovingWindowLocalState,

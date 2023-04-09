@@ -1,4 +1,7 @@
-import { ApplicationExternalInterface, AppType } from "../types/TypeApp";
+import {
+  ApplicationExternalInterface,
+  AppType,
+} from "../types/TypeApplication";
 import { Application } from "./Application";
 
 export abstract class ApplicationExternal

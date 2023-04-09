@@ -7,15 +7,43 @@ import { AppLinkedin } from "../applications/AppLinkedin";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { ref } from "vue";
 import { AppWnfa } from "../applications/AppWnfa";
+import { computed } from "@vue/reactivity";
+import {
+  APPLICATION_INDEX,
+  APPLICATION_INDEX_NAME_EXTERNAL,
+  APPLICATION_INDEX_NAME_INTERNAL,
+} from "../applications/META";
+import {
+  ApplicationMetaExternal,
+  ApplicationMetaInternal,
+} from "../types/TypeApplication";
 
 const emits = defineEmits<{
   (e: "close"): void;
 }>();
 
-const applicationMenuElement = ref<HTMLDivElement>();
-const { elementDropShadowStyle, elementBorderColorStyle } = useDynamicColor(
-  applicationMenuElement
-);
+const AppMenuElement = ref<HTMLDivElement>();
+const { elementDropShadowStyle, elementBorderColorStyle } =
+  useDynamicColor(AppMenuElement);
+
+const AppInternalMetaArray = computed(() => {
+  const appsMetaList: ApplicationMetaInternal[] = [];
+
+  APPLICATION_INDEX_NAME_INTERNAL.forEach((appName) => {
+    const meta = APPLICATION_INDEX[appName];
+    if (meta.type === "internal") appsMetaList.push(meta);
+  });
+  return appsMetaList;
+});
+
+const AppExternalMetaArray = computed(() => {
+  const appsMetaList: ApplicationMetaExternal[] = [];
+  APPLICATION_INDEX_NAME_EXTERNAL.forEach((appName) => {
+    const meta = APPLICATION_INDEX[appName];
+    if (meta.type === "external") appsMetaList.push(meta);
+  });
+  return appsMetaList;
+});
 
 function handleClose() {
   emits("close");
@@ -23,61 +51,28 @@ function handleClose() {
 </script>
 
 <template>
-  <div class="ApplicationMenu" ref="applicationMenuElement">
-    <div
-      :class="[
-        'ApplicationMenu__container',
-        'ApplicationMenu__container--primary',
-      ]"
-    >
+  <div class="AppMenu" ref="AppMenuElement">
+    <div :class="['AppMenu__container', 'AppMenu__container--primary']">
       <MenuAppButton
-        name="terminal"
+        v-for="meta in AppInternalMetaArray"
+        :key="meta.name"
+        :name="meta.name"
         @click="
           () => {
-            AppTerminal.build().open();
-            handleClose();
-          }
-        "
-      ></MenuAppButton>
-      <MenuAppButton
-        name="calculator"
-        @click="
-          () => {
-            AppCalculator.build().open();
-            handleClose();
-          }
-        "
-      ></MenuAppButton>
-      <MenuAppButton
-        name="wnfa"
-        @click="
-          () => {
-            AppWnfa.build().open();
+            meta.objectClass.build().open();
             handleClose();
           }
         "
       ></MenuAppButton>
     </div>
-    <div
-      :class="[
-        'ApplicationMenu__container',
-        'ApplicationMenu__container--secondary',
-      ]"
-    >
+    <div :class="['AppMenu__container', 'AppMenu__container--secondary']">
       <MenuAppButton
-        name="github"
+        v-for="meta in AppExternalMetaArray"
+        :key="meta.name"
+        :name="meta.name"
         @click="
           () => {
-            AppGithub.build().open();
-            handleClose();
-          }
-        "
-      ></MenuAppButton>
-      <MenuAppButton
-        name="linkedin"
-        @click="
-          () => {
-            AppLinkedin.build().open();
+            meta.objectClass.build().open();
             handleClose();
           }
         "
@@ -87,7 +82,7 @@ function handleClose() {
 </template>
 
 <style scoped lang="scss">
-.ApplicationMenu {
+.AppMenu {
   @include mixin-glassblur();
 
   width: min-content;

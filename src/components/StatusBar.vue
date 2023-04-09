@@ -2,16 +2,15 @@
 import { storeToRefs } from "pinia";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import AppIcon from "./AppIcon.vue";
-import { APP_DISPLAY_NAME } from "../constants/AppDisplayName";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { ref } from "vue";
+import { APPLICATION_INDEX } from "../applications/META";
 
 const windowsStore = useWindowsStatesStore();
 const { topWindow } = storeToRefs(windowsStore);
 const statusBarElement = ref<HTMLDivElement>();
 
-const { elementDropShadowStyle, elementBorderColorStyle } =
-  useDynamicColor(statusBarElement);
+const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
 </script>
 
 <template>
@@ -29,7 +28,7 @@ const { elementDropShadowStyle, elementBorderColorStyle } =
           ></AppIcon>
         </div>
         <p class="StatusBar__appinfo__name">
-          {{ APP_DISPLAY_NAME[topWindow.appInstance.name] }}
+          {{ APPLICATION_INDEX[topWindow.appInstance.name].nameDisplay }}
         </p>
       </div>
       <div v-else key="DEVUE" class="StatusBar__appinfo">

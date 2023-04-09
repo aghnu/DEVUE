@@ -4,8 +4,7 @@ import { useDesktopStatesStore } from "../stores/desktopStates";
 import { WindowConfig, WINDOW_CONFIG } from "../constants/WindowManager";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { v4 as uuid } from "uuid";
-import { ApplicationInstance } from "../types/TypeApp";
-import { clone } from "../utilities/helpers";
+import { ApplicationInternal } from "../applications/ApplicationInternal";
 
 export interface InitMovingWindowStateOptions {
   sizeMin: Tuple<number>;
@@ -64,7 +63,7 @@ export function calculateWindowSizeWithConstrain(
   return [newSizeX, newSizeY] as Tuple<number>;
 }
 export function initMovingWindowState(
-  application: ApplicationInstance,
+  application: ApplicationInternal,
   options: Partial<InitMovingWindowStateOptions> = {}
 ): MovingWindowLocalState {
   // TODO: sizeMax is not finished, need to change window resize logic
@@ -75,7 +74,7 @@ export function initMovingWindowState(
     position: [0, 0],
     size: [0, 0],
     sizeMin: options.sizeMin ?? null,
-    sizeMax: options.SizeMax ?? null, 
+    sizeMax: options.SizeMax ?? null,
     snapped: "center",
     appInstance: application,
   };
@@ -84,12 +83,13 @@ export function initMovingWindowState(
   const WINDOW_CONFIG_LOCAL: WindowConfig = {
     MIN_WINDOW_VISIABLE_BOARDER: WINDOW_CONFIG.MIN_WINDOW_VISIABLE_BOARDER,
     DEFAULT_SIZE_MIN_WINDOW: WINDOW_CONFIG.DEFAULT_SIZE_MIN_WINDOW,
-    WIN_INIT_SIZE_PERC: options.sizeInitPerc ?? WINDOW_CONFIG.WIN_INIT_SIZE_PERC,
-    WIN_INIT_SIZE_RATIO: options.sizeInitRatio ?? WINDOW_CONFIG.WIN_INIT_SIZE_RATIO,
-    WIN_INIT_STACK_POSITION_OFFSET: WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET
-  }
-
-
+    WIN_INIT_SIZE_PERC:
+      options.sizeInitPerc ?? WINDOW_CONFIG.WIN_INIT_SIZE_PERC,
+    WIN_INIT_SIZE_RATIO:
+      options.sizeInitRatio ?? WINDOW_CONFIG.WIN_INIT_SIZE_RATIO,
+    WIN_INIT_STACK_POSITION_OFFSET:
+      WINDOW_CONFIG.WIN_INIT_STACK_POSITION_OFFSET,
+  };
 
   const desktopStates = useDesktopStatesStore();
   const windowsStates = useWindowsStatesStore();
@@ -137,12 +137,14 @@ export function initMovingWindowState(
     );
   };
 
-  if ((topWindow !== null) && (topWindow.appInstance.name === application.name)) {
+  if (topWindow !== null && topWindow.appInstance.name === application.name) {
     // calculate size and pos from top window
     const initPosX =
-      topWindow.position[0] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
+      topWindow.position[0] +
+      WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
     const initPosY =
-      topWindow.position[1] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[1];
+      topWindow.position[1] +
+      WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[1];
     const initSizeX = topWindow.size[0];
     const initSizeY = topWindow.size[1];
 
@@ -159,7 +161,8 @@ export function initMovingWindowState(
     if (helperCheckMovingWindowInsideDesktop() === false) {
       // calculate size and pos from top window
       const initPosX =
-        topWindow.position[0] + WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
+        topWindow.position[0] +
+        WINDOW_CONFIG_LOCAL.WIN_INIT_STACK_POSITION_OFFSET[0];
       const initPosY = topWindow.position[1];
 
       // set size and pos

@@ -1,4 +1,4 @@
-import { ApplicationStyle } from "../types/TypeApp";
+import { ApplicationStyle } from "../types/TypeApplication";
 import { getGlobalCSSVarValue } from "./getGlobalCSSVarValue";
 
 export function defaultApplicationStyleFactory(): ApplicationStyle {

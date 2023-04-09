@@ -1,5 +1,5 @@
+import { ApplicationInternal } from "../applications/ApplicationInternal";
 import { Tuple } from "../types/TypeBasic";
-import { ApplicationInstance } from "./TypeApp";
 import { PointerLocation } from "./TypeDesktop";
 
 // type
@@ -59,7 +59,7 @@ export interface MovingWindowLocalState extends MovingWindowLocation {
   id: string;
   order: number;
   snapped: PointerLocation;
-  appInstance: ApplicationInstance;
+  appInstance: ApplicationInternal;
 }
 
 export type MovingWindowID = string;

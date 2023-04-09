@@ -3,7 +3,7 @@ import {
   ApplicationInternalnterface,
   ApplicationStyle,
   AppType,
-} from "../types/TypeApp";
+} from "../types/TypeApplication";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { Application } from "./Application";
 

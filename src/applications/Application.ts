@@ -1,4 +1,4 @@
-import { AppName, AppType } from "../types/TypeApp";
+import { AppName, AppType } from "../types/TypeApplication";
 
 export abstract class Application {
   abstract readonly name: AppName;

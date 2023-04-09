@@ -1,4 +1,4 @@
-import { ApplicationStyle, AppName } from "../types/TypeApp";
+import { ApplicationStyle, AppName } from "../types/TypeApplication";
 import { ApplicationInternal } from "./ApplicationInternal";
 import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
 import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";

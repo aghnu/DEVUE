@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { AppName } from "../types/TypeApp";
-import {
-  APP_DISPLAY_DESC,
-  APP_DISPLAY_NAME,
-} from "../constants/AppDisplayName";
+import { AppName } from "../types/TypeApplication";
 import AppIcon from "./AppIcon.vue";
 import { useButtonAction } from "../composables/useButtonAction";
+import { APPLICATION_INDEX } from "../applications/META";
+import { ref } from "vue";
+import { computed } from "@vue/reactivity";
 
 const {
   pointerDown,
@@ -25,6 +24,8 @@ const emits = defineEmits<{
 const props = defineProps<{
   name: AppName;
 }>();
+
+const meta = computed(() => APPLICATION_INDEX[props.name]);
 </script>
 
 <template>
@@ -50,13 +51,13 @@ const props = defineProps<{
     </div>
     <div class="MenuAppButton__text">
       <p class="MenuAppButton__text__name">
-        {{ APP_DISPLAY_NAME[name] }}
+        {{ meta.nameDisplay }}
       </p>
       <p
-        v-if="APP_DISPLAY_DESC[name].length > 0"
+        v-if="meta.type !== 'action' && meta.description.length > 0"
         class="MenuAppButton__text__desc"
       >
-        {{ APP_DISPLAY_DESC[name] }}
+        {{ meta.description }}
       </p>
     </div>
   </button>

@@ -1,4 +1,4 @@
-import { ApplicationStyle, AppName } from "../types/TypeApp";
+import { ApplicationStyle, AppName } from "../types/TypeApplication";
 import { ApplicationInternal } from "./ApplicationInternal";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";

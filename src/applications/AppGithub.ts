@@ -1,4 +1,4 @@
-import { AppName } from "../types/TypeApp";
+import { AppName } from "../types/TypeApplication";
 import { ApplicationExternal } from "./ApplicationExternal";
 
 export class AppGithub extends ApplicationExternal {
@@ -8,6 +8,6 @@ export class AppGithub extends ApplicationExternal {
   constructor() {
     super();
     this.name = "github";
-    this.link = "https://github.com/aghnu"
+    this.link = "https://github.com/aghnu";
   }
 }
