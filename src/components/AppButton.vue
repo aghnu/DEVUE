@@ -95,7 +95,7 @@ function handlePressDown() {
   pressDownTimeout = window.setTimeout(() => {
     pressDown.value = false;
     emits("click");
-  }, 300);
+  }, 450);
 }
 if (props.press !== null) {
   props.press.listen(() => {
