@@ -13,11 +13,13 @@ import {
 } from "../logics/doWindowAction";
 import { connectWindowSnapping } from "../logics/doWindowSnapping";
 import { AppTerminal } from "../applications/AppTerminal";
+import { Trigger } from "../utilities/trigger";
 
 // variables
 const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
 const wallpaperDisplay = ref(false);
+const actionBarAppPressTrigger = Trigger.build();
 
 // handlers
 const handlerMouseMove = (e: MouseEvent) => {
@@ -50,8 +52,9 @@ const handlerTouchStart = (e: TouchEvent) => {
   ]);
 };
 
+// TODO: refactor this notify trigger flow
 const handlerInitDefaultApplications = () => {
-  new AppTerminal().open();
+  actionBarAppPressTrigger.notify("terminal");
 };
 
 const handlerImageLoad = () => {
@@ -72,7 +75,9 @@ onMounted(() => {
   document.addEventListener("touchstart", handlerTouchStart, {
     passive: false,
   });
-  handlerInitDefaultApplications();
+  setTimeout(() => {
+    handlerInitDefaultApplications();
+  }, 700);
 });
 
 onUnmounted(() => {
@@ -103,7 +108,7 @@ onUnmounted(() => {
     </div>
     <div class="Desktop__action_bar">
       <div id="teleport-actionbar-menu"></div>
-      <ActionBar />
+      <ActionBar :press-button-trigger="actionBarAppPressTrigger" />
     </div>
     <div class="Desktop__footer">
       <AppFooter />

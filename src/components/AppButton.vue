@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { AppName } from "../types/TypeApplication";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 import { useButtonAction } from "../composables/useButtonAction";
 import { APPLICATION_INDEX } from "../applications/META";
 import { applicationActionBarStyle } from "../applications/META";
+import { Trigger } from "../utilities/trigger";
 
-const props = defineProps<{
-  name: AppName;
-  size: number;
-}>();
+const props = withDefaults(
+  defineProps<{
+    name: AppName;
+    size: number;
+    press?: Trigger | null;
+  }>(),
+  {
+    press: null,
+  }
+);
+
 const emits = defineEmits<{
   (e: "click"): void;
 }>();
@@ -27,10 +35,14 @@ const {
 } = useButtonAction(() => {
   emits("click");
 });
+const pressDown = ref(false);
+const animationPointerDown = computed(
+  () => pressDown.value || pointerDown.value
+);
 
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSizeFactor = computed(() =>
-  pointerDown.value ? 0.6 : pointerHover.value ? 1 : 0.8
+  animationPointerDown.value ? 0.6 : pointerHover.value ? 1 : 0.8
 );
 const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
 const meta = computed(() => APPLICATION_INDEX[props.name]);
@@ -73,13 +85,30 @@ const buttonColor = computed(() => {
 const appInstancesCount = computed(() => {
   return getApplicationsInstanceCount.value(props.name);
 });
+
+// handle manual press down trigger
+let pressDownTimeout: number | undefined = undefined;
+function handlePressDown() {
+  // manually triggered by system
+  window.clearTimeout(pressDownTimeout);
+  pressDown.value = true;
+  pressDownTimeout = window.setTimeout(() => {
+    pressDown.value = false;
+    emits("click");
+  }, 300);
+}
+if (props.press !== null) {
+  props.press.listen(() => {
+    handlePressDown();
+  });
+}
 </script>
 
 <template>
   <div class="AppButton">
     <button
       class="AppButton__inner"
-      :class="[{ 'AppButton__inner--down': pointerDown }]"
+      :class="[{ 'AppButton__inner--down': animationPointerDown }]"
       @mousedown="handlerPointerDown"
       @touchstart="handlerPointerDown"
       @mouseup="handlerPointerUp"
@@ -100,7 +129,7 @@ const appInstancesCount = computed(() => {
       :class="[
         'AppButton__desc',
         {
-          'AppButton__desc--show': pointerHover && !pointerDown,
+          'AppButton__desc--show': pointerHover && !animationPointerDown,
         },
       ]"
       role="presentation"

@@ -1,55 +1,55 @@
-export type Listner = () => void;
+export type Listner = (message?: string) => void;
 
 export default class GlobalAnimation {
-    static _instance: GlobalAnimation | undefined;
-    loopRun: boolean = false;
-    listeners: Listner[] = [];
+  static _instance: GlobalAnimation | undefined;
+  loopRun: boolean = false;
+  listeners: Listner[] = [];
 
-    constructor() {
-        if (GlobalAnimation._instance) {
-            return GlobalAnimation._instance;
-        }
-
-        GlobalAnimation._instance = this;
-        this.start();
+  constructor() {
+    if (GlobalAnimation._instance) {
+      return GlobalAnimation._instance;
     }
 
-    static getInstance() {
-        if (GlobalAnimation._instance) {
-            return GlobalAnimation._instance;
-        }
+    GlobalAnimation._instance = this;
+    this.start();
+  }
 
-        return new GlobalAnimation();
+  static getInstance() {
+    if (GlobalAnimation._instance) {
+      return GlobalAnimation._instance;
     }
 
-    private loop() {
-        if (!this.loopRun) return;
-        window.requestAnimationFrame(() => {
-            this.listeners.forEach((func) => func());
-            this.loop();
-        })
-    }
+    return new GlobalAnimation();
+  }
 
-    public start() {
-        if (this.loopRun) return;
-        this.loopRun = true;
-        this.loop();
-    }
+  private loop() {
+    if (!this.loopRun) return;
+    window.requestAnimationFrame(() => {
+      this.listeners.forEach((func) => func());
+      this.loop();
+    });
+  }
 
-    public stop() {
-        this.loopRun = false;
-    }
+  public start() {
+    if (this.loopRun) return;
+    this.loopRun = true;
+    this.loop();
+  }
 
-    public destroy() {
-        this.stop();
-        GlobalAnimation._instance = undefined;
-    }
+  public stop() {
+    this.loopRun = false;
+  }
 
-    public subscribe(listner: Listner) {
-        this.listeners.push(listner);
-    }
+  public destroy() {
+    this.stop();
+    GlobalAnimation._instance = undefined;
+  }
 
-    public unsubscribe(listner: Listner) {
-        this.listeners = this.listeners.filter((func) => func !== listner);
-    }
+  public subscribe(listner: Listner) {
+    this.listeners.push(listner);
+  }
+
+  public unsubscribe(listner: Listner) {
+    this.listeners = this.listeners.filter((func) => func !== listner);
+  }
 }

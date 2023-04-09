@@ -7,7 +7,12 @@ import ScreenBlocker from "./ScreenBlocker.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
 import { computed } from "@vue/reactivity";
-import { ApplicationMetaInternal } from "../types/TypeApplication";
+import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
+import { Trigger } from "../utilities/trigger";
+
+const props = defineProps<{
+  pressButtonTrigger: Trigger;
+}>();
 
 const buttonSize = ref(2.9);
 const windowsState = useWindowsStatesStore();
@@ -33,6 +38,29 @@ const appsMeta = computed(() => {
   });
   return appsMetaList;
 });
+
+// set up triggers
+const triggerMap = computed(() => {
+  // apps metas + menu + reset
+  const map: Map<AppName, Trigger> = new Map([
+    ["menu", Trigger.build()],
+    ["reset", Trigger.build()],
+  ]);
+
+  appsMeta.value.forEach((meta) => {
+    map.set(meta.name, Trigger.build());
+  });
+
+  return map;
+});
+
+props.pressButtonTrigger.listen((message) => {
+  if (!message) return;
+  const trigger = triggerMap.value.get(message as AppName);
+  if (trigger) {
+    trigger.notify();
+  }
+});
 </script>
 
 <template>
@@ -52,6 +80,7 @@ const appsMeta = computed(() => {
       <AppButton
         name="menu"
         :size="buttonSize"
+        :press="triggerMap.has('menu') ? triggerMap.get('menu') : null"
         @click="handleMenuToggle"
       ></AppButton>
       <div class="ActionBar__dividor"></div>
@@ -63,6 +92,7 @@ const appsMeta = computed(() => {
         :key="meta.name"
         :name="meta.name"
         :size="buttonSize"
+        :press="triggerMap.has(meta.name) ? triggerMap.get(meta.name) : null"
         @click="
           () => {
             meta.objectClass.build().open();
@@ -75,6 +105,7 @@ const appsMeta = computed(() => {
       <AppButton
         name="reset"
         :size="buttonSize"
+        :press="triggerMap.has('reset') ? triggerMap.get('reset') : null"
         @click="
           windowsState.resetMovingWindow();
           handleMenuClose();
