@@ -13,7 +13,7 @@ export class AppTerminal extends ApplicationInternal {
   constructor() {
     super();
     this.name = "terminal";
-    this.backgroundColor = "#100f19";
+    this.backgroundColor = "#181721";
     this.applicationStyle = defaultApplicationStyleFactory();
     this.applicationStyle.colorBackground = this.backgroundColor;
   }
@@ -33,7 +33,7 @@ export class AppTerminal extends ApplicationInternal {
         colorFocus: "#f9ca8f",
         colorBackground: this.backgroundColor,
         colorDesc: "#7fc5d0",
-        colorAppBackground: "transparent",
+        colorAppBackground: this.backgroundColor,
 
         fontSize: "13px",
       },
