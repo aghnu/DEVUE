@@ -14,9 +14,9 @@ const visibilityStyle = computed(() =>
 );
 
 function handleIframeload(e: Event) {
-  htmlLoaded.value = true;
   const element = e.target as HTMLIFrameElement;
   (props.state.appInstance as AppTerminal).initTerminal(element);
+  htmlLoaded.value = true;
 }
 </script>
 
