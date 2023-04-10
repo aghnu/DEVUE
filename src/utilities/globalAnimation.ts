@@ -2,7 +2,7 @@ export type Listner = (message?: string) => void;
 
 export default class GlobalAnimation {
   static _instance: GlobalAnimation | undefined;
-  loopRun: boolean = false;
+  loopRun = false;
   listeners: Listner[] = [];
 
   constructor() {

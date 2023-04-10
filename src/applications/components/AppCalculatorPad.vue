@@ -33,6 +33,7 @@ const textSizeStyle = computed(() => {
 <template>
   <div class="AppCalculatorPad">
     <button
+      ref="calculatorPadButtonElement"
       class="AppCalculatorPad__button"
       :class="[
         {
@@ -42,7 +43,6 @@ const textSizeStyle = computed(() => {
           'AppCalculatorPad__button--hover': !pointerDown && pointerHover,
         },
       ]"
-      ref="calculatorPadButtonElement"
       @mousedown="handlerPointerDown"
       @touchstart="handlerPointerDown"
       @mouseup="handlerPointerUp"

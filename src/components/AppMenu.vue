@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import MenuAppButton from "./MenuAppButton.vue";
-import { AppTerminal } from "../applications/AppTerminal";
-import { AppCalculator } from "../applications/AppCalculator";
-import { AppGithub } from "../applications/AppGithub";
-import { AppLinkedin } from "../applications/AppLinkedin";
 import { useDynamicColor } from "../composables/useDynamicColor";
-import { ref } from "vue";
-import { AppWnfa } from "../applications/AppWnfa";
-import { computed } from "@vue/reactivity";
+import { ref, computed } from "vue";
 import {
   APPLICATION_INDEX,
   APPLICATION_INDEX_NAME_EXTERNAL,
@@ -51,7 +45,7 @@ function handleClose() {
 </script>
 
 <template>
-  <div class="AppMenu" ref="AppMenuElement">
+  <div ref="AppMenuElement" class="AppMenu">
     <div :class="['AppMenu__container', 'AppMenu__container--primary']">
       <MenuAppButton
         v-for="meta in AppInternalMetaArray"
@@ -126,8 +120,8 @@ function handleClose() {
       background-color: rgba(150, 150, 150, 0.1);
     }
 
-    &--secondary {
-    }
+    // &--secondary {
+    // }
   }
 }
 </style>

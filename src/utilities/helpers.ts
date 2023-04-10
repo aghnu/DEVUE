@@ -17,10 +17,7 @@ export function convertStyleUnitPxToNumber(stylePx: string) {
  * Not a prefered way
  *
  */
-export function repeatActionForSetFrames(
-  action: () => void,
-  repeatNum: number = 1
-) {
+export function repeatActionForSetFrames(action: () => void, repeatNum = 1) {
   if (repeatNum <= 0) return;
   window.requestAnimationFrame(() => {
     action();
@@ -67,7 +64,7 @@ export function convertStyleColorToIntensity(styleColor: string) {
   return null;
 }
 
-export function strToSet(str: string, delimiter: string = " "): Set<string> {
+export function strToSet(str: string, delimiter = " "): Set<string> {
   return new Set(str.split(delimiter));
 }
 

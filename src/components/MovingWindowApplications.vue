@@ -12,7 +12,7 @@ const { movingWindows } = storeToRefs(windowsState);
 <template>
   <div class="MovingWindowApplications">
     <TransitionGroup name="MovingWindowApplication__transition">
-      <template v-for="[_, mvState] in movingWindows" :key="mvState.id">
+      <template v-for="[mid, mvState] in movingWindows" :key="mid">
         <AppTerminal
           v-if="mvState.appInstance.name === 'terminal'"
           :state="mvState"

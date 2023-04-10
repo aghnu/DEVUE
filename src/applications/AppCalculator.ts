@@ -1,7 +1,6 @@
 import { ApplicationStyle, AppName } from "../types/TypeApplication";
 import { ApplicationInternal } from "./ApplicationInternal";
-import { getGlobalCSSVarValue } from "../utilities/getGlobalCSSVarValue";
-import { CalculatorKey, CalculatorPadType } from "../types/TypeCalculator";
+import { CalculatorKey } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
@@ -38,13 +37,13 @@ export class AppCalculator extends ApplicationInternal {
   readonly name: AppName = "calculator";
   applicationStyle: ApplicationStyle = defaultApplicationStyleFactory();
 
-  textSub: string = "";
+  textSub = "";
   textMain: string = CALCULATOR_DEFAULT_DISPLAY;
-  textInternal: string = "";
+  textInternal = "";
 
   mathModule: typeof import("mathjs") | null = null;
-  hold: boolean = false;
-  error: boolean = false;
+  hold = false;
+  error = false;
 
   constructor() {
     super();
@@ -158,7 +157,7 @@ export class AppCalculator extends ApplicationInternal {
       this.error = false;
       this.updateTextMain();
     };
-    const keyHandleConfirm = (key: string) => {
+    const keyHandleConfirm = () => {
       if (this.hold) {
         this.error = true;
       } else {
@@ -177,7 +176,7 @@ export class AppCalculator extends ApplicationInternal {
       if (!this.mathModule) return;
 
       // process input level down
-      if (keyGroupPrim.has(key)) keyHandleConfirm(key);
+      if (keyGroupPrim.has(key)) keyHandleConfirm();
       if (keyGroupDelete.has(key)) keyHandleDelete(key);
       if (keyGroupValu.has(key)) keyHandleInput(key);
       if (keyGroupOperations.has(key)) keyHandleInput(key);

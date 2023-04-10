@@ -41,7 +41,7 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       return appToStatesID;
     },
     getApplicationsInstanceCount() {
-      return (name: AppName): Number => {
+      return (name: AppName): number => {
         const movingWindowIDArray =
           this.applicationWindowsStates.get(name) ?? [];
         return movingWindowIDArray.length;
@@ -88,19 +88,18 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       movingWindowID: MovingWindowID,
       partialWindowState: Partial<MovingWindowLocalState>
     ) {
-      if (this.movingWindows.has(movingWindowID)) {
-        Object.assign(
-          this.movingWindows.get(movingWindowID)!,
-          partialWindowState
-        );
+      const movingWindow = this.movingWindows.get(movingWindowID);
+      if (movingWindow) {
+        Object.assign(movingWindow, partialWindowState);
       }
     },
 
     getMovingWindowFromID(
       movingWindowID: MovingWindowID
     ): MovingWindowLocalState | null {
-      if (this.movingWindows.has(movingWindowID)) {
-        return this.movingWindows.get(movingWindowID)!;
+      const movingWindow = this.movingWindows.get(movingWindowID);
+      if (movingWindow) {
+        return movingWindow;
       } else {
         return null;
       }
@@ -114,7 +113,7 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
       this.movingWindows.forEach((movingWindowState, id) => {
         new Promise(() => {
           const partialState = updateFunc(movingWindowState);
-          Object.assign(this.movingWindows.get(id)!, partialState);
+          this.updateMovingWindowState(id, partialState);
         });
       });
     },

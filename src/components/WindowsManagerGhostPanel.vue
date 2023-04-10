@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "@vue/reactivity";
-import { onMounted, watch } from "vue";
+import { onMounted, watch, computed, ref } from "vue";
 import { usePointerLocation } from "../composables/usePointerLocation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { useTopWindowStartedMoving } from "../composables/useTopWindowStartedMoving";

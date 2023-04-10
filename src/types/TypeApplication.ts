@@ -9,9 +9,9 @@ import {
 /**
  * Application name
  */
-export type AppNameInternal = typeof APPLICATION_INDEX_NAME_INTERNAL[number];
-export type AppNameExternal = typeof APPLICATION_INDEX_NAME_EXTERNAL[number];
-export type AppNameAction = typeof APPLICATION_INDEX_NAME_ACTION[number];
+export type AppNameInternal = (typeof APPLICATION_INDEX_NAME_INTERNAL)[number];
+export type AppNameExternal = (typeof APPLICATION_INDEX_NAME_EXTERNAL)[number];
+export type AppNameAction = (typeof APPLICATION_INDEX_NAME_ACTION)[number];
 export type AppName = AppNameInternal | AppNameExternal | AppNameAction;
 
 /**
@@ -31,14 +31,14 @@ export interface ApplicationMetaInternal extends ApplicationMetaCommon {
   name: AppNameInternal;
   type: "internal";
   description: string;
-  objectClass: typeof APPLICATION_OBJECT_CLASS_INTERNAL[number];
+  objectClass: (typeof APPLICATION_OBJECT_CLASS_INTERNAL)[number];
 }
 
 export interface ApplicationMetaExternal extends ApplicationMetaCommon {
   name: AppNameExternal;
   type: "external";
   description: string;
-  objectClass: typeof APPLICATION_OBJECT_CLASS_EXTERNAL[number];
+  objectClass: (typeof APPLICATION_OBJECT_CLASS_EXTERNAL)[number];
 }
 
 export interface ApplicationMetaAction extends ApplicationMetaCommon {

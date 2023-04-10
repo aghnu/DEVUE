@@ -72,8 +72,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="ResponsiveText" ref="textContainerElement">
-    <p class="ResponsiveText__text" ref="textElement">{{ text }}</p>
+  <div ref="textContainerElement" class="ResponsiveText">
+    <p ref="textElement" class="ResponsiveText__text">{{ text }}</p>
   </div>
 </template>
 

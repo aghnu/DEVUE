@@ -14,12 +14,12 @@ const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
 </script>
 
 <template>
-  <div class="StatusBar" ref="statusBarElement">
+  <div ref="statusBarElement" class="StatusBar">
     <Transition name="StatusBar__appinfo__transition" mode="out-in">
       <div
         v-if="topWindow !== null"
-        class="StatusBar__appinfo"
         :key="topWindow.appInstance.name"
+        class="StatusBar__appinfo"
       >
         <div class="StatusBar__appinfo__icon">
           <AppIcon

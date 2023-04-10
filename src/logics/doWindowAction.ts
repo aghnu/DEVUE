@@ -30,12 +30,9 @@ export function updateMovingWindowPosition(
     windowsStates.updateMovingWindowState(movingWindowState.id, {
       position: newPosition,
     });
-    return position;
-  } else {
-    console.error(
-      "Error: movingWindow not tracked when updating window position"
-    );
+    return newPosition;
   }
+  return position;
 }
 
 export function updateMovingWindowSize(
@@ -50,12 +47,8 @@ export function updateMovingWindowSize(
       size: newSize,
     });
     return newSize;
-  } else {
-    console.error(
-      "Error: movingWindow not tracked when updating window position"
-    );
-    return null;
   }
+  return size;
 }
 
 export function connectWindowsActionEvent() {
@@ -119,7 +112,7 @@ export function connectWindowsActionEvent() {
             const positionNew = updateMovingWindowPosition(
               movingWindowState.id,
               [windowStateCurrentPosition[0], newPosY]
-            )!;
+            );
 
             const newSizeY =
               windowStateSnapshotSize[1] -
@@ -127,7 +120,7 @@ export function connectWindowsActionEvent() {
             const sizeNew = updateMovingWindowSize(movingWindowState.id, [
               windowStateCurrentSize[0],
               newSizeY,
-            ])!;
+            ]);
 
             if (sizeNew[1] !== newSizeY) {
               // this.windowState = windowStateCurrentPosition;
@@ -154,7 +147,7 @@ export function connectWindowsActionEvent() {
             const positionNew = updateMovingWindowPosition(
               movingWindowState.id,
               [newPosX, windowStateCurrentPosition[1]]
-            )!;
+            );
 
             const newSizeX =
               windowStateSnapshotSize[0] -
@@ -162,7 +155,7 @@ export function connectWindowsActionEvent() {
             const sizeNew = updateMovingWindowSize(movingWindowState.id, [
               newSizeX,
               windowStateCurrentSize[1],
-            ])!;
+            ]);
 
             if (sizeNew[0] !== newSizeX) {
               // this.windowState = windowStateCurrentPosition;

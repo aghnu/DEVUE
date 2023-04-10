@@ -79,9 +79,13 @@ const handlerCloseWindow = () => {
 
 const handlerMaxWindow = () => {
   if (props.state.snapped === "center") {
-    props.state.snapped = "top";
+    windowsStates.updateMovingWindowState(props.state.id, {
+      snapped: "top",
+    });
   } else if (props.state.snapped === "top") {
-    props.state.snapped = "center";
+    windowsStates.updateMovingWindowState(props.state.id, {
+      snapped: "center",
+    });
   }
 };
 
@@ -122,14 +126,14 @@ function resetActionEvent() {
 </script>
 
 <template>
-  <div class="MovingWindow" ref="movingWindowElement">
+  <div ref="movingWindowElement" class="MovingWindow">
     <div
+      ref="windowDisplayElement"
       class="MovingWindow__window_display"
       :class="[
         { 'MovingWindow__window_display--focused': isWindowFocused },
         { 'MovingWindow__window_display--glass': isBackgroundTransparent },
       ]"
-      ref="windowDisplayElement"
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
@@ -168,6 +172,7 @@ function resetActionEvent() {
 
     <div
       v-for="direction in MOVING_WINDOW_DIRECTIONS"
+      :key="direction"
       :class="[
         'MovingWindow__panel_resize',
         `MovingWindow__panel_resize--direction-${direction}`,

@@ -8,7 +8,7 @@ export function useTopWindowStartedMoving() {
   const desktopState = useDesktopStatesStore();
   const { topWindow, actionEvent } = storeToRefs(windowsState);
 
-  var isWindowMoved: boolean = false;
+  let isWindowMoved = false;
   const isTopWindowStartedMoving = computed(() => {
     if (
       actionEvent.value !== null &&

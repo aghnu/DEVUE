@@ -116,6 +116,7 @@ if (props.press !== null) {
       @mouseover="handlerHover"
       @mouseleave="handlerLeave"
     >
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="AppButton__inner__icon" v-html="iconHTML"></div>
       <div
         v-if="appInstancesCount"

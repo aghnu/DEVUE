@@ -15,7 +15,7 @@ const { eleheight } = useWindowSizeUnit(appCalculatorDisplayElement);
 </script>
 
 <template>
-  <div class="AppCalculatorDisplay" ref="appCalculatorDisplayElement">
+  <div ref="appCalculatorDisplayElement" class="AppCalculatorDisplay">
     <div class="AppCalculatorDisplay__inner">
       <div
         :class="[

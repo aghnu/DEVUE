@@ -1,11 +1,10 @@
 import { storeToRefs } from "pinia";
 import { Ref, computed, onMounted, watch } from "vue";
-import { useWindowsStatesStore } from "../stores/windowsStates";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { Tuple } from "../types/TypeBasic";
 import { PointerLocation } from "../types/TypeDesktop";
 import { MovingWindowLocalState } from "../types/TypeWindows";
-import gsap, { snap } from "gsap";
+import gsap from "gsap";
 import { WINDOW_CONFIG } from "../constants/WindowManager";
 
 function getCurrentPositionStyle(
@@ -60,6 +59,7 @@ export function connectWindowMoving(
   onMounted(() => {
     watch(
       [statePosition, stateSize, stateSnapped],
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ([position, size, snapped], [_, __, snappedOld]) => {
         if (!windowElement.value) return;
 

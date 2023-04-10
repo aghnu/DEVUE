@@ -98,6 +98,7 @@ const handlerTouchStart = (e: TouchEvent) => {
     <div class="MovingWindowTitleBar__action_area">
       <div class="MovingWindowTitleBar__action_area__title_section"></div>
       <div class="MovingWindowTitleBar__action_area__control_section">
+        <!-- eslint-disable vue/no-v-html -->
         <button
           :class="[
             'MovingWindowTitleBar__action_area__control_section__button',
@@ -110,6 +111,7 @@ const handlerTouchStart = (e: TouchEvent) => {
           @touchstart.prevent.stop="() => emits('action:close')"
           v-html="iconClose"
         />
+        <!-- eslint-enable vue/no-v-html -->
       </div>
     </div>
     <div class="MovingWindowTitleBar__dragbar">

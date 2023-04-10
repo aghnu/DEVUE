@@ -3,8 +3,7 @@ import { AppName } from "../types/TypeApplication";
 import AppIcon from "./AppIcon.vue";
 import { useButtonAction } from "../composables/useButtonAction";
 import { APPLICATION_INDEX } from "../applications/META";
-import { ref } from "vue";
-import { computed } from "@vue/reactivity";
+import { computed } from "vue";
 
 const {
   pointerDown,

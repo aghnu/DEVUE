@@ -12,7 +12,7 @@ const visibilityStyle = computed(() =>
   htmlLoaded.value ? "visible" : "hidden"
 );
 
-function handleIframeload(e: Event) {
+function handleIframeload() {
   htmlLoaded.value = true;
 }
 </script>

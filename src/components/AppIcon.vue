@@ -23,6 +23,7 @@ const iconHTML = computed(() => {
 </script>
 
 <template>
+  <!-- eslint-disable-next-line vue/no-v-html -->
   <div class="AppIcon" v-html="iconHTML"></div>
 </template>
 

@@ -101,7 +101,7 @@ onUnmounted(() => {
     <div class="Desktop__status_bar">
       <StatusBar></StatusBar>
     </div>
-    <div class="Desktop__windows" ref="windowsManagerElement">
+    <div ref="windowsManagerElement" class="Desktop__windows">
       <WindowsManagerGhostPanel />
       <MovingWindowApplications />
     </div>

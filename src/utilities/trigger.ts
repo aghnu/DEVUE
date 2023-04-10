@@ -1,10 +1,12 @@
 import { Listner } from "./globalAnimation";
 
 export class Trigger {
-  listner: Listner = () => {};
+  listner: Listner | null = null;
 
   public notify(message?: string) {
-    this.listner(message);
+    if (this.listner) {
+      this.listner(message);
+    }
   }
 
   public listen(listner: Listner) {

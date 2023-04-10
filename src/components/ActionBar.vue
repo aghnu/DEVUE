@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import AppMenu from "./AppMenu.vue";
 import ScreenBlocker from "./ScreenBlocker.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
-import { computed } from "@vue/reactivity";
 import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
 import { Trigger } from "../utilities/trigger";
 
@@ -68,11 +67,11 @@ props.pressButtonTrigger.listen((message) => {
     <transition name="ActionBarTransition__menu">
       <AppMenu
         v-if="menuOpen"
-        @close="handleMenuClose()"
         class="ActionBar__menu"
+        @close="handleMenuClose()"
       ></AppMenu>
     </transition>
-    <div class="ActionBar__inner" ref="actionBarElement">
+    <div ref="actionBarElement" class="ActionBar__inner">
       <Teleport v-if="menuOpen" to="#teleport-actionbar-menu">
         <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
       ></Teleport>
