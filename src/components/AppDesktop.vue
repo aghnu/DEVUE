@@ -12,7 +12,6 @@ import {
   connectWindowsActionEvent,
 } from "../logics/doWindowAction";
 import { connectWindowSnapping } from "../logics/doWindowSnapping";
-import { AppTerminal } from "../applications/AppTerminal";
 import { Trigger } from "../utilities/trigger";
 
 // variables
