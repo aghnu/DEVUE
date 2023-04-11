@@ -1,3 +1,4 @@
+import { Component } from "vue";
 import {
   APPLICATION_INDEX_NAME_ACTION,
   APPLICATION_INDEX_NAME_EXTERNAL,
@@ -32,6 +33,7 @@ export interface ApplicationMetaInternal extends ApplicationMetaCommon {
   type: "internal";
   description: string;
   objectClass: (typeof APPLICATION_OBJECT_CLASS_INTERNAL)[number];
+  vueComponent: Component;
 }
 
 export interface ApplicationMetaExternal extends ApplicationMetaCommon {

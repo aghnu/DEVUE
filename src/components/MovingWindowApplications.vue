@@ -1,9 +1,6 @@
 <script lang="ts" setup>
-import AppTerminal from "../applications/components/AppTerminal.vue";
-import AppCalculator from "../applications/components/AppCalculator.vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
-import AppWnfa from "../applications/components/AppWnfa.vue";
 
 const windowsState = useWindowsStatesStore();
 const { movingWindows } = storeToRefs(windowsState);
@@ -13,7 +10,8 @@ const { movingWindows } = storeToRefs(windowsState);
   <div class="MovingWindowApplications">
     <TransitionGroup name="MovingWindowApplication__transition">
       <template v-for="[mid, mvState] in movingWindows" :key="mid">
-        <AppTerminal
+        <component :is="mvState.vueComponent" :state="mvState"></component>
+        <!-- <AppTerminal
           v-if="mvState.appInstance.name === 'terminal'"
           :state="mvState"
         />
@@ -24,7 +22,7 @@ const { movingWindows } = storeToRefs(windowsState);
         <AppWnfa
           v-else-if="mvState.appInstance.name === 'wnfa'"
           :state="mvState"
-        />
+        /> -->
       </template>
     </TransitionGroup>
   </div>
