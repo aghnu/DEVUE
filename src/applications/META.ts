@@ -10,9 +10,6 @@ import {
   AppNameInternal,
   ApplicationMeta,
 } from "../types/TypeApplication";
-import { AppPixel } from "./AppPixel";
-
-import AppPixelVue from "./components/AppPixel.vue";
 import AppCalculatorVue from "./components/AppCalculator.vue";
 import AppTerminalVue from "./components/AppTerminal.vue";
 import AppWnfaVue from "./components/AppWnfa.vue";
@@ -36,7 +33,6 @@ export const APPLICATION_OBJECT_CLASS_INTERNAL = [
   AppTerminal,
   AppCalculator,
   AppWnfa,
-  AppPixel,
 ] as const;
 
 export const APPLICATION_OBJECT_CLASS_EXTERNAL = [
@@ -48,26 +44,12 @@ export const APPLICATION_INDEX_NAME_INTERNAL = [
   "terminal",
   "calculator",
   "wnfa",
-  "pixel",
 ] as const;
 export const APPLICATION_INDEX_NAME_EXTERNAL = ["github", "linkedin"] as const;
 export const APPLICATION_INDEX_NAME_ACTION = ["reset", "menu"] as const;
 
 // app meta index
 export const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
-  pixel: {
-    name: "pixel",
-    type: "internal",
-    nameDisplay: "Pixel",
-    description: "testing feature",
-    getAppIcon: (style) => /*html*/ `
-    <svg height="${style.size}" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7.80355 40L5.00396 37.248L17.4616 24.9981L5 12.752L7.7996 10L23.0607 24.9981L7.80355 40ZM46 38.622H26.2009V34.7295H46V38.622Z" fill="${style.color}"/>
-    </svg>
-    `,
-    vueComponent: AppPixelVue,
-    objectClass: AppPixel,
-  },
   terminal: {
     name: "terminal",
     type: "internal",

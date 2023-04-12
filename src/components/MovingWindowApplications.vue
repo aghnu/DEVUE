@@ -1,16 +1,32 @@
 <script lang="ts" setup>
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
+import { markRaw, shallowRef } from "vue";
+import { MovingWindowLocalState } from "../types/TypeWindows";
+import AppTerminal from "../applications/components/AppTerminal.vue";
+import {
+  AppName,
+  AppNameInternal,
+  ApplicationMetaInternal,
+} from "../types/TypeApplication";
+import { APPLICATION_INDEX } from "../applications/META";
 
 const windowsState = useWindowsStatesStore();
 const { movingWindows } = storeToRefs(windowsState);
+
+function getComponent(name: AppNameInternal) {
+  return (APPLICATION_INDEX[name] as ApplicationMetaInternal).vueComponent;
+}
 </script>
 
 <template>
   <div class="MovingWindowApplications">
     <TransitionGroup name="MovingWindowApplication__transition">
       <template v-for="[mid, mvState] in movingWindows" :key="mid">
-        <component :is="mvState.vueComponent" :state="mvState"></component>
+        <component
+          :is="getComponent(mvState.appInstance.name as AppNameInternal)"
+          :state="mvState"
+        ></component>
         <!-- <AppTerminal
           v-if="mvState.appInstance.name === 'terminal'"
           :state="mvState"

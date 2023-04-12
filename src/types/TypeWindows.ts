@@ -61,7 +61,6 @@ export interface MovingWindowLocalState extends MovingWindowLocation {
   order: number;
   snapped: PointerLocation;
   appInstance: ApplicationInternal;
-  vueComponent: Component;
 }
 
 export type MovingWindowID = string;

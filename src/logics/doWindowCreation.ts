@@ -71,12 +71,6 @@ export function initMovingWindowState(
   // TODO: sizeMax is not finished, need to change window resize logic
   // TODO: implment an option to turn off ghost window snapping
 
-  // since application is an instance of ApplicationInternal, it is assumed that applicationMeta we get from APPLICATION_INDEX
-  // is of type ApplicationMetaInternal
-  const applicationInternalMeta = APPLICATION_INDEX[
-    application.name
-  ] as ApplicationMetaInternal;
-
   const movingWindowStateDetached: MovingWindowLocalState = {
     id: uuid(),
     order: 0,
@@ -86,7 +80,6 @@ export function initMovingWindowState(
     sizeMax: options.SizeMax ?? null,
     snapped: "center",
     appInstance: application,
-    vueComponent: applicationInternalMeta.vueComponent,
   };
 
   // set local WINDOW_CONFIG used for init window
