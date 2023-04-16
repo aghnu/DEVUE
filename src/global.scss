@@ -10,12 +10,12 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-text-bright:#c7c7c7;
   --color-text-dark: #161616;
   --color-block-transparent: rgba(235, 235, 235, 0.5);
-  --color-block-transparent-actionbar: rgba(235, 235, 235, 0.9);
+  --color-block-transparent-actionbar: rgba(30, 30, 30, 0.9);
   --color-text-actionbar: rgba(255, 255, 255, 0.65);
-  --color-block-transparent-menu: rgba(255, 255, 255, 0.9);
+  --color-block-transparent-menu: rgba(255, 244, 235, 0.9);
   --color-text-menu: rgba(15, 15, 15, 0.75);
 
-  --color-block-transparent-statusbar: rgba(235, 235, 235, 0.5);
+  --color-block-transparent-statusbar: rgba(255, 255, 255, 0.1);
   --color-text-statusbar: rgba(15, 15, 15, 0.4);
 
   --shadow-intensity-high: 0 0 8px rgba(100, 100, 100, 0.15); 
@@ -31,13 +31,13 @@ $font-family-main: "Roboto Mono", sans-serif;
   --color-border-dark: rgba(100, 100, 100, 0.05);
 
   // icon color
-  --color-icon-primary: rgba(0, 22, 45, 0.7);
-  --color-icon-secondary: rgba(48, 48, 48, 0.7);
+  --color-icon-primary: rgba(236, 208, 187, 0.95);
+  --color-icon-secondary: rgba(75, 90, 104, 0.95);
   --color-icon-action: #454545;
-  --color-icon-warn: rgba(255, 92, 92, 0.7);
-  --color-icon-dividor: rgba(50, 50, 50, 0.075);
-  --color-icon-inner: rgba(255, 255, 255, 0.75);
-  --color-icon-inner-dark: rgba(15, 15, 15, 0.6);
+  --color-icon-warn: rgba(255, 92, 92, 0.95);
+  --color-icon-dividor: rgba(255, 255, 255, 0.06);
+  --color-icon-inner: rgba(255, 255, 255, 0.6);
+  --color-icon-inner-dark: rgba(15, 15, 15, 0.75);
   --color-icon-inner-warn: rgba(20, 20, 20, 0.5);
 
   // APP

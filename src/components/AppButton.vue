@@ -7,6 +7,7 @@ import { useButtonAction } from "../composables/useButtonAction";
 import { APPLICATION_INDEX } from "../applications/META";
 import { applicationActionBarStyle } from "../applications/META";
 import { Trigger } from "../utilities/trigger";
+import { useDynamicColor } from "../composables/useDynamicColor";
 
 const props = withDefaults(
   defineProps<{
@@ -25,6 +26,7 @@ const emits = defineEmits<{
 
 const windowsState = useWindowsStatesStore();
 const { getApplicationsInstanceCount } = storeToRefs(windowsState);
+
 const {
   pointerDown,
   pointerHover,
@@ -36,10 +38,11 @@ const {
   emits("click");
 });
 const pressDown = ref(false);
+const buttonElement = ref<HTMLElement>();
 const animationPointerDown = computed(
   () => pressDown.value || pointerDown.value
 );
-
+const { elementDropShadowIntensityStyle } = useDynamicColor(buttonElement);
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSizeFactor = computed(() =>
   animationPointerDown.value ? 0.6 : pointerHover.value ? 1 : 0.8
@@ -59,7 +62,7 @@ const iconHTML = computed(() => {
   if (meta.value.type === "internal") {
     return APPLICATION_INDEX[props.name].getAppIcon({
       size: "100%",
-      color: "var(--color-icon-inner)",
+      color: "var(--color-icon-inner-dark)",
     });
   }
 
@@ -107,6 +110,7 @@ if (props.press !== null) {
 <template>
   <div class="AppButton">
     <button
+      ref="buttonElement"
       class="AppButton__inner"
       :class="[{ 'AppButton__inner--down': animationPointerDown }]"
       @mousedown="handlerPointerDown"
@@ -152,6 +156,8 @@ if (props.press !== null) {
 
   &__desc {
     @include mixin-center-children;
+    @include mixin-glassblur;
+
     position: absolute;
 
     top: calc(-1 * v-bind(buttonSize) * 0.6);
@@ -194,6 +200,8 @@ if (props.press !== null) {
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
 
+    box-shadow: v-bind(elementDropShadowIntensityStyle);
+
     transition: all 0.3s;
 
     &__icon {
@@ -219,9 +227,9 @@ if (props.press !== null) {
     border-radius: 10rem;
 
     transition: all 0.3s;
-    background-color: rgba(215, 215, 215, 0.8);
+    background-color: var(--color-block-transparent-menu);
 
-    color: rgba(34, 34, 34, 0.5);
+    color: var(--color-text-menu);
     font-size: calc(v-bind(buttonSize) * 0.2);
     padding: 0.25em 0.5em;
 
