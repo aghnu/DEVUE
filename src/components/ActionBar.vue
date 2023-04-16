@@ -197,7 +197,7 @@ props.pressButtonTrigger.listen((message) => {
 
       display: flex;
       flex-direction: column;
-      gap: calc(v-bind(buttonSize) * 0.1rem);
+      gap: calc(v-bind(buttonSize) * 0.13rem);
 
       white-space: nowrap;
       &__time {
