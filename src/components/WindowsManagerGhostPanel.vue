@@ -111,6 +111,8 @@ onMounted(() => {
 <style scoped lang="scss">
 .WindowsManagerGhostPanel {
   &__window {
+    @include mixin-gpu-accelerate();
+
     position: absolute;
     padding: 0.5rem;
 
