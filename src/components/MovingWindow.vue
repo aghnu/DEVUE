@@ -55,6 +55,9 @@ const styleIsTitleBarColor = computed(() =>
     ? "transparent"
     : elementBorderColorStyle.value
 );
+const styleTransformScale = computed(() =>
+  isWindowMoving.value ? "scale(1.01)" : "scale(1)"
+);
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -207,7 +210,11 @@ function resetActionEvent() {
 
   position: absolute;
   z-index: v-bind(styleWindowZIndex);
-  will-change: height, width, left, top, z-index;
+  transform: v-bind(styleTransformScale);
+
+  will-change: height, width, left, top, z-index, transform;
+
+  transition: transform 0.25s;
 
   &__window_display {
     height: 100%;

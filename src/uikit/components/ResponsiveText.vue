@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
-import { useTrackComputedStyle } from "../../composables/useTrackComputedStyle";
+import {
+  useTrackComputedStyle,
+  useTrackComputedWidthHeightNumber,
+} from "../../composables/useTrackComputedStyle";
 import { convertStyleUnitPxToNumber } from "../../utilities/helpers";
 
 const props = withDefaults(
@@ -17,29 +20,18 @@ const textElement = ref<HTMLParagraphElement>();
 const textContainerElement = ref<HTMLDivElement>();
 const text = computed(() => props.text);
 
-const widthTextStyle = useTrackComputedStyle(
-  textElement,
-  "width",
-  ":after"
-).propertyRef;
-const widthContainerStyle = useTrackComputedStyle(
-  textContainerElement,
-  "width"
-).propertyRef;
 const parentFontSizeStyle = useTrackComputedStyle(
   textContainerElement,
   "fontSize"
 ).propertyRef;
 
-const widthText = computed(() => {
-  if (!widthTextStyle.value) return 0;
-  return convertStyleUnitPxToNumber(widthTextStyle.value as string) ?? 0;
-});
+const widthText = useTrackComputedWidthHeightNumber(
+  textElement,
+  ":after"
+).widthNumber;
 
-const widthContainer = computed(() => {
-  if (!widthContainerStyle.value) return 0;
-  return convertStyleUnitPxToNumber(widthContainerStyle.value as string) ?? 0;
-});
+const widthContainer =
+  useTrackComputedWidthHeightNumber(textContainerElement).widthNumber;
 
 const parentFontSizeStyleCorrected = computed(
   () => parentFontSizeStyle.value ?? "0px"
