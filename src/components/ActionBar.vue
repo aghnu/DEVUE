@@ -8,6 +8,7 @@ import { useDynamicColor } from "../composables/useDynamicColor";
 import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
 import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
 import { Trigger } from "../utilities/trigger";
+import { useDateTime } from "../composables/useDateTime";
 
 const props = defineProps<{
   pressButtonTrigger: Trigger;
@@ -28,6 +29,8 @@ function handleMenuClose() {
 
 const { elementBorderColorStyle, elementDropShadowIntensityStyle } =
   useDynamicColor(actionBarElement);
+
+const { timeString, dateString } = useDateTime();
 
 const appsMeta = computed(() => {
   const appsMetaList: ApplicationMetaInternal[] = [];
@@ -110,6 +113,12 @@ props.pressButtonTrigger.listen((message) => {
           handleMenuClose();
         "
       ></AppButton>
+      <div class="ActionBar__info">
+        <div class="ActionBar__info__date_time">
+          <p class="ActionBar__info__date_time__time">{{ timeString }}</p>
+          <p class="ActionBar__info__date_time__date">{{ dateString }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -167,11 +176,41 @@ props.pressButtonTrigger.listen((message) => {
 
   &__dividor {
     height: calc(v-bind(buttonSize) * 0.45rem);
-    // margin-left: 0.5rem;
-    // margin-right: 0.5rem;
+    margin-left: calc(v-bind(buttonSize) * -0.1rem);
+    margin-right: calc(v-bind(buttonSize) * -0.1rem);
     width: 2px;
     border-radius: calc(v-bind(buttonSize) * 100rem);
     background-color: var(--color-icon-dividor);
+  }
+
+  &__info {
+    @include mixin-center-children;
+    min-width: calc(v-bind(buttonSize) * 1.67rem);
+    width: fit-content;
+
+    &__date_time {
+      font-size: calc(v-bind(buttonSize) * 0.22rem);
+      color: var(--color-text-actionbar);
+      text-align: center;
+      letter-spacing: 0.1em;
+
+      display: flex;
+      flex-direction: column;
+      gap: calc(v-bind(buttonSize) * 0.1rem);
+
+      white-space: nowrap;
+      &__time {
+        line-height: 1em;
+        height: 1em;
+        font-size: 1.1em;
+      }
+
+      &__date {
+        line-height: 1em;
+        height: 1em;
+        font-size: 1em;
+      }
+    }
   }
 }
 </style>

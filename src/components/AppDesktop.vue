@@ -130,7 +130,7 @@ onUnmounted(() => {
 
   opacity: 1;
 
-  transition: all 2.5s ease-in;
+  transition: opacity 2.5s ease-in;
 
   &--loading {
     pointer-events: none;

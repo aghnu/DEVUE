@@ -15,10 +15,7 @@ import AppTerminalVue from "./components/AppTerminal.vue";
 import AppWnfaVue from "./components/AppWnfa.vue";
 
 // app placement globals and style
-export const applicationActionBar: AppNameInternal[] = [
-  "terminal",
-  "calculator",
-];
+export const applicationActionBar: AppNameInternal[] = ["terminal"];
 export const applicationActionBarStyle: Partial<
   Record<AppName, ActionBarAppIconStyle>
 > = {
