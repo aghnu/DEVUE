@@ -2,6 +2,7 @@
   @include colors;
   font-size: 15px;
   font-family: $font-family-main;
+  background-color: var(--color-background);
 }
 
 #app {

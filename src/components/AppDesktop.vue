@@ -4,6 +4,7 @@ import AppFooter from "./AppFooter.vue";
 import MovingWindowApplications from "./MovingWindowApplications.vue";
 import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 import StatusBar from "./StatusBar.vue";
+import WidgetsManager from "./WidgetsManager.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 
@@ -17,7 +18,7 @@ import { Trigger } from "../utilities/trigger";
 // variables
 const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
-const wallpaperDisplay = ref(false);
+const DesktopLoaded = ref(false);
 const actionBarAppPressTrigger = Trigger.build();
 
 // handlers
@@ -57,7 +58,7 @@ const handlerInitDefaultApplications = () => {
 };
 
 const handlerImageLoad = () => {
-  wallpaperDisplay.value = true;
+  DesktopLoaded.value = true;
 };
 
 // connect logics
@@ -89,10 +90,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="Desktop">
+  <div :class="['Desktop', { 'Desktop--loading': !DesktopLoaded }]">
     <img
       class="Desktop__wallpaper"
-      :class="[{ 'Desktop__wallpaper--loaded': wallpaperDisplay }]"
       alt=""
       role="presentation"
       src="../assets/img/devue_park.jpg"
@@ -102,6 +102,7 @@ onUnmounted(() => {
       <StatusBar></StatusBar>
     </div>
     <div ref="windowsManagerElement" class="Desktop__windows">
+      <WidgetsManager />
       <WindowsManagerGhostPanel />
       <MovingWindowApplications />
     </div>
@@ -127,23 +128,23 @@ onUnmounted(() => {
   height: 100%;
   width: 100%;
 
-  background-color: var(--color-background);
+  opacity: 1;
+
+  transition: all 2.5s ease-in;
+
+  &--loading {
+    pointer-events: none;
+    opacity: 0;
+  }
 
   &__wallpaper {
     position: absolute;
     height: 100%;
     width: 100%;
     z-index: 0;
-    opacity: 0;
     pointer-events: none;
     object-fit: cover;
     object-position: center;
-
-    transition: opacity 0.5s;
-
-    &--loaded {
-      opacity: 1;
-    }
   }
 
   &__status_bar {
