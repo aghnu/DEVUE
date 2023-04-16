@@ -43,7 +43,7 @@ const { elementDropShadowIntensityStyle } = useDynamicColor(statusBarElement);
 .StatusBar {
   @include mixin-glassblur();
 
-  height: 2rem;
+  height: 2.15rem;
   color: var(--color-text-statusbar);
   background-color: var(--color-block-transparent-statusbar);
 
@@ -84,7 +84,7 @@ const { elementDropShadowIntensityStyle } = useDynamicColor(statusBarElement);
       line-height: 1em;
       text-align: center;
       white-space: nowrap;
-      font-size: 0.75em;
+      font-size: 0.85em;
       font-weight: 500;
     }
   }
