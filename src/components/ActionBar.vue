@@ -185,14 +185,14 @@ props.pressButtonTrigger.listen((message) => {
 
   &__info {
     @include mixin-center-children;
-    min-width: calc(v-bind(buttonSize) * 1.75rem);
+    min-width: calc(v-bind(buttonSize) * 1.8rem);
     width: fit-content;
 
     &__date_time {
-      font-size: calc(v-bind(buttonSize) * 0.23rem);
+      font-size: calc(v-bind(buttonSize) * 0.22rem);
       color: var(--color-text-actionbar);
       text-align: center;
-      letter-spacing: 0.175em;
+      letter-spacing: 0.165em;
       font-weight: 500;
 
       display: flex;
