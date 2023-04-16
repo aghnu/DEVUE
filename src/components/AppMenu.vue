@@ -17,7 +17,7 @@ const emits = defineEmits<{
 }>();
 
 const AppMenuElement = ref<HTMLDivElement>();
-const { elementDropShadowStyle, elementBorderColorStyle } =
+const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
   useDynamicColor(AppMenuElement);
 
 const AppInternalMetaArray = computed(() => {
@@ -88,7 +88,7 @@ function handleClose() {
   border-radius: 0.85rem;
   // padding: 0.25rem;
 
-  box-shadow: v-bind(elementDropShadowStyle);
+  box-shadow: v-bind(elementDropShadowIntensityStyle);
   border: solid;
   border-width: 2px;
   border-color: v-bind(elementBorderColorStyle);

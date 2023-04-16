@@ -4,23 +4,49 @@ import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
 
+interface TerminalTheme {
+  colorPlain: string;
+  colorFocus: string;
+  colorBackground: string;
+  colorDesc: string;
+  colorAppBackground: string;
+}
+
+const COLOR_THEME: Record<string, TerminalTheme> = {
+  dark: {
+    colorPlain: "#a9a9a9",
+    colorFocus: "#f9ca8f",
+    colorBackground: "#181721",
+    colorDesc: "#7fc5d0",
+    colorAppBackground: "#181721",
+  },
+  light: {
+    colorPlain: "#6688cc",
+    colorFocus: "#ffeebb",
+    colorBackground: "#000c18",
+    colorDesc: "#19ceda",
+    colorAppBackground: "#000c18",
+  },
+};
+
 export class AppTerminal extends ApplicationInternal {
   readonly name: AppName;
 
   applicationStyle: ApplicationStyle;
-  backgroundColor: string;
+  colorTheme: TerminalTheme;
 
   constructor() {
     super();
     this.name = "terminal";
-    this.backgroundColor = "#181721";
+    this.colorTheme = COLOR_THEME.light;
     this.applicationStyle = defaultApplicationStyleFactory();
-    this.applicationStyle.colorBackground = this.backgroundColor;
+    this.applicationStyle.colorBackground = this.colorTheme.colorBackground;
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
-      sizeInitRatio: 9 / 10,
+      sizeInitPerc: [0.95, 0.95],
+      sizeInitRatio: 7 / 5,
     });
   }
 
@@ -28,14 +54,8 @@ export class AppTerminal extends ApplicationInternal {
     element.contentWindow?.postMessage(
       {
         type: "init",
-
-        colorPlain: "#a9a9a9",
-        colorFocus: "#f9ca8f",
-        colorBackground: this.backgroundColor,
-        colorDesc: "#7fc5d0",
-        colorAppBackground: this.backgroundColor,
-
         fontSize: "13px",
+        ...this.colorTheme,
       },
       "*"
     );

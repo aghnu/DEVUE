@@ -47,10 +47,25 @@ export function useDynamicColor(element: Ref<HTMLElement | undefined>) {
     }
   });
 
+  const elementDropShadowIntensityStyle = computed(() => {
+    if (!elementBackgroundColor.value) return "none";
+    const intensity = convertStyleColorToIntensity(
+      elementBackgroundColor.value as string
+    );
+    if (intensity === null) return "none";
+
+    if (intensity > 0.5) {
+      return "var(--shadow-intensity-high)";
+    } else {
+      return "var(--shadow-intensity-low)";
+    }
+  });
+
   return {
     elementBackgroundColor,
     elementDropShadowStyle,
     elementBorderColorStyle,
     elementColorIntensity,
+    elementDropShadowIntensityStyle,
   };
 }

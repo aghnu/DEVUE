@@ -10,7 +10,7 @@ const windowsStore = useWindowsStatesStore();
 const { topWindow } = storeToRefs(windowsStore);
 const statusBarElement = ref<HTMLDivElement>();
 
-const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
+const { elementDropShadowIntensityStyle } = useDynamicColor(statusBarElement);
 </script>
 
 <template>
@@ -43,7 +43,7 @@ const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
 .StatusBar {
   @include mixin-glassblur();
 
-  height: 1.6rem;
+  height: 2rem;
   color: var(--color-text-statusbar);
   background-color: var(--color-block-transparent-statusbar);
 
@@ -51,15 +51,15 @@ const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: v-bind(elementDropShadowStyle);
+  box-shadow: v-bind(elementDropShadowIntensityStyle);
 
   &__appinfo {
     @include mixin-center-children;
     height: 100%;
     width: fit-content;
-    padding: 0 0.75rem;
+    padding: 0 1rem;
 
-    gap: 0.75rem;
+    gap: 1.25rem;
 
     &__transition {
       &-enter-active,
@@ -74,8 +74,8 @@ const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
     }
 
     &__icon {
-      height: 60%;
-      width: 60%;
+      height: 55%;
+      width: 55%;
     }
 
     &__name {
@@ -85,6 +85,7 @@ const { elementDropShadowStyle } = useDynamicColor(statusBarElement);
       text-align: center;
       white-space: nowrap;
       font-size: 0.75em;
+      font-weight: 500;
     }
   }
 }

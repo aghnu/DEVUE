@@ -24,7 +24,7 @@ export const applicationActionBarStyle: Partial<
 > = {
   reset: {
     colorBackground: "var(--color-icon-warn)",
-    colorText: "var(--color-icon-inner-dark)",
+    colorText: "var(--color-icon-inner-warn)",
   },
 };
 

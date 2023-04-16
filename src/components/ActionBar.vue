@@ -13,7 +13,7 @@ const props = defineProps<{
   pressButtonTrigger: Trigger;
 }>();
 
-const buttonSize = ref(2.9);
+const buttonSize = ref(3.25);
 const windowsState = useWindowsStatesStore();
 const menuOpen = ref(false);
 const actionBarElement = ref<HTMLDivElement>();
@@ -26,7 +26,7 @@ function handleMenuClose() {
   menuOpen.value = false;
 }
 
-const { elementDropShadowStyle, elementBorderColorStyle } =
+const { elementBorderColorStyle, elementDropShadowIntensityStyle } =
   useDynamicColor(actionBarElement);
 
 const appsMeta = computed(() => {
@@ -140,7 +140,7 @@ props.pressButtonTrigger.listen((message) => {
   &__inner {
     @include mixin-center-children;
     @include mixin-disable-pointer;
-    @include mixin-glassblur();
+    @include mixin-glassblur;
 
     display: flex;
     gap: calc(v-bind(buttonSize) * 0.35rem);
@@ -157,7 +157,7 @@ props.pressButtonTrigger.listen((message) => {
     border-color: v-bind(elementBorderColorStyle);
     background-color: var(--color-block-transparent-actionbar);
 
-    box-shadow: v-bind(elementDropShadowStyle);
+    box-shadow: v-bind(elementDropShadowIntensityStyle);
   }
 
   &__menu {

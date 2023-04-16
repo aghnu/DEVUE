@@ -53,7 +53,7 @@ const handlerTouchStart = (e: TouchEvent) => {
 
 // TODO: refactor this notify trigger flow
 const handlerInitDefaultApplications = () => {
-  actionBarAppPressTrigger.notify("terminal");
+  // actionBarAppPressTrigger.notify("terminal");
 };
 
 const handlerImageLoad = () => {
@@ -95,7 +95,7 @@ onUnmounted(() => {
       :class="[{ 'Desktop__wallpaper--loaded': wallpaperDisplay }]"
       alt=""
       role="presentation"
-      src="../assets/img/DEVUE.jpg"
+      src="../assets/img/devue_park.jpg"
       @load="handlerImageLoad"
     />
     <div class="Desktop__status_bar">
@@ -127,7 +127,7 @@ onUnmounted(() => {
   height: 100%;
   width: 100%;
 
-  background-color: var(--color-background-dark);
+  background-color: var(--color-background);
 
   &__wallpaper {
     position: absolute;

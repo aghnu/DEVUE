@@ -35,7 +35,7 @@ const isBackgroundTransparent = computed(
 connectWindowMoving(ref(props.state), movingWindowElement);
 
 // compute styling string
-const { elementDropShadowStyle, elementBorderColorStyle } =
+const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
   useDynamicColor(windowDisplayElement);
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
@@ -216,7 +216,7 @@ function resetActionEvent() {
     overflow: hidden;
 
     border-radius: 0.5rem;
-    box-shadow: v-bind(elementDropShadowStyle);
+    box-shadow: v-bind(elementDropShadowIntensityStyle);
     background-color: v-bind(styleApplicationColorBackground);
     border: solid;
     border-width: 2px;

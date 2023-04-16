@@ -59,7 +59,7 @@ const iconHTML = computed(() => {
   if (meta.value.type === "internal") {
     return APPLICATION_INDEX[props.name].getAppIcon({
       size: "100%",
-      color: "var(--color-icon-inner-dark)",
+      color: "var(--color-icon-inner)",
     });
   }
 
@@ -165,8 +165,8 @@ if (props.press !== null) {
     height: fit-content;
     width: fit-content;
 
-    background-color: rgb(70, 70, 70);
-    color: rgba(195, 195, 195, 0.75);
+    background-color: var(--color-block-transparent-menu);
+    color: var(--color-text-menu);
 
     border-radius: calc(v-bind(buttonSize) * 100);
     padding: calc(v-bind(buttonSize) * 0.12) calc(v-bind(buttonSize) * 0.22);
@@ -208,8 +208,8 @@ if (props.press !== null) {
     @include mixin-glassblur(0.1rem);
 
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: -5%;
+    right: -5%;
 
     height: 35%;
     line-height: 1em;
@@ -219,7 +219,7 @@ if (props.press !== null) {
     border-radius: 10rem;
 
     transition: all 0.3s;
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(215, 215, 215, 0.8);
 
     color: rgba(34, 34, 34, 0.5);
     font-size: calc(v-bind(buttonSize) * 0.2);
