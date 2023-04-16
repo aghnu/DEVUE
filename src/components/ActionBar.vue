@@ -14,7 +14,7 @@ const props = defineProps<{
   pressButtonTrigger: Trigger;
 }>();
 
-const buttonSize = ref(3.25);
+const buttonSize = ref(3);
 const windowsState = useWindowsStatesStore();
 const menuOpen = ref(false);
 const actionBarElement = ref<HTMLDivElement>();
