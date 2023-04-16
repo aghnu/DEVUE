@@ -14,6 +14,7 @@ import {
 } from "../types/TypeWindows";
 import { connectWindowMoving } from "../logics/connectWindowMoving";
 import { useDynamicColor } from "../composables/useDynamicColor";
+import { useTrackComputedWidthHeightNumber } from "../composables/useTrackComputedStyle";
 
 // store
 const desktopStates = useDesktopStatesStore();
@@ -38,6 +39,8 @@ connectWindowMoving(ref(props.state), movingWindowElement);
 const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
   useDynamicColor(windowDisplayElement);
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
+const windowWidthNumberComputed =
+  useTrackComputedWidthHeightNumber(movingWindowElement).widthNumber;
 const { styleWindowZIndex, isWindowFocused, isWindowMoving } =
   useMovingWindowConfig(ref(props.state));
 const styleApplicationColorBackground = computed(
@@ -55,9 +58,16 @@ const styleIsTitleBarColor = computed(() =>
     ? "transparent"
     : elementBorderColorStyle.value
 );
-const styleTransformScale = computed(() =>
-  isWindowMoving.value ? "scale(1.01)" : "scale(1)"
-);
+const styleTransformScale = computed(() => {
+  // calculate scale based on windowWidthNumberComputed + scale factor
+  // scale factor is the pixel that will be added to the width
+
+  const scaleFactor = 12;
+  const scale =
+    (windowWidthNumberComputed.value + scaleFactor) /
+    windowWidthNumberComputed.value;
+  return isWindowMoving.value ? `scale(${scale})` : "scale(1)";
+});
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -214,7 +224,7 @@ function resetActionEvent() {
 
   will-change: height, width, left, top, z-index, transform;
 
-  transition: transform 0.25s;
+  transition: transform 0.225s ease-in-out;
 
   &__window_display {
     height: 100%;
