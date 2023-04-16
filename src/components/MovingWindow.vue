@@ -62,7 +62,7 @@ const styleTransformScale = computed(() => {
   // calculate scale based on windowWidthNumberComputed + scale factor
   // scale factor is the pixel that will be added to the width
 
-  const scaleFactor = 12;
+  const scaleFactor = 15;
   const scale =
     (windowWidthNumberComputed.value + scaleFactor) /
     windowWidthNumberComputed.value;
