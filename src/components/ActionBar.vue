@@ -205,7 +205,7 @@ props.pressButtonTrigger.listen((message) => {
       &__time {
         line-height: 1em;
         height: 1em;
-        font-size: 1.1em;
+        font-size: 1.07em;
       }
 
       &__date {
