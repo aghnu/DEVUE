@@ -135,12 +135,13 @@ props.pressButtonTrigger.listen((message) => {
     &__menu {
       &-enter-active,
       &-leave-active {
-        transition: all 0.185s ease-out;
+        transition: all 0.185s;
       }
 
       &-enter-from,
       &-leave-to {
-        bottom: 225%;
+        transform: scale(0.9);
+        bottom: 90%;
         opacity: 0;
       }
     }
