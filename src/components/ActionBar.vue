@@ -124,27 +124,27 @@ props.pressButtonTrigger.listen((message) => {
 </template>
 
 <style scoped lang="scss">
-.ActionBarTransition {
-  &__menu {
-    &-enter-active,
-    &-leave-active {
-      transition: all 0.2s, opacity 0.2s;
-    }
-
-    &-enter-from,
-    &-leave-to {
-      transform: scale(0.5) translate(0, 100%);
-      opacity: 0;
-    }
-  }
-}
-
 .ActionBar {
   @include mixin-center-children;
 
   position: relative;
   width: 0%;
   height: 100%;
+
+  .ActionBarTransition {
+    &__menu {
+      &-enter-active,
+      &-leave-active {
+        transition: all 0.185s ease-out;
+      }
+
+      &-enter-from,
+      &-leave-to {
+        bottom: 225%;
+        opacity: 0;
+      }
+    }
+  }
 
   &__inner {
     @include mixin-center-children;
@@ -162,7 +162,7 @@ props.pressButtonTrigger.listen((message) => {
     border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
     border: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-color: v-bind(elementBorderColorStyle);
     background-color: var(--color-block-transparent-actionbar);
 
@@ -172,6 +172,7 @@ props.pressButtonTrigger.listen((message) => {
   &__menu {
     position: absolute;
     bottom: 175%;
+    // transform: scale(1) translate(0, calc(v-bind(buttonSize) * -5rem));
   }
 
   &__dividor {

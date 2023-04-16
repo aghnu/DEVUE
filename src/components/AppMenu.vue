@@ -90,7 +90,7 @@ function handleClose() {
 
   box-shadow: v-bind(elementDropShadowIntensityStyle);
   border: solid;
-  border-width: 1px;
+  border-width: 2px;
   border-color: v-bind(elementBorderColorStyle);
 
   display: flex;
