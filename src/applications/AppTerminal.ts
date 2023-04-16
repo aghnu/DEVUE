@@ -20,12 +20,19 @@ const COLOR_THEME: Record<string, TerminalTheme> = {
     colorDesc: "#7fc5d0",
     colorAppBackground: "#181721",
   },
-  light: {
+  abyss: {
     colorPlain: "#6688cc",
     colorFocus: "#ffeebb",
     colorBackground: "#000c18",
     colorDesc: "#19ceda",
     colorAppBackground: "#000c18",
+  },
+  light: {
+    colorPlain: "#b0b8ad",
+    colorFocus: "#f59879",
+    colorBackground: "#111a1f",
+    colorDesc: "#1ca0a9",
+    colorAppBackground: "#111a1f",
   },
 };
 
@@ -46,7 +53,7 @@ export class AppTerminal extends ApplicationInternal {
   getInitMovingWindowState(): MovingWindowLocalState {
     return initMovingWindowState(this, {
       sizeInitPerc: [0.95, 0.95],
-      sizeInitRatio: 7 / 5,
+      sizeInitRatio: 5 / 7,
     });
   }
 

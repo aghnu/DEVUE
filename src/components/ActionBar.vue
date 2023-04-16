@@ -193,6 +193,7 @@ props.pressButtonTrigger.listen((message) => {
       color: var(--color-text-actionbar);
       text-align: center;
       letter-spacing: 0.175em;
+      font-weight: 500;
 
       display: flex;
       flex-direction: column;
