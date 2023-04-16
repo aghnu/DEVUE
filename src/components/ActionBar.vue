@@ -157,8 +157,8 @@ props.pressButtonTrigger.listen((message) => {
     width: fit-content;
     height: fit-content;
 
-    padding: calc(v-bind(buttonSize) * 0.15rem)
-      calc(v-bind(buttonSize) * 0.3rem);
+    padding: calc(v-bind(buttonSize) * 0.2rem)
+      calc(v-bind(buttonSize) * 0.35rem);
     border-radius: calc(v-bind(buttonSize) * 0.5rem);
 
     border: solid;
@@ -189,7 +189,7 @@ props.pressButtonTrigger.listen((message) => {
     width: fit-content;
 
     &__date_time {
-      font-size: calc(v-bind(buttonSize) * 0.22rem);
+      font-size: calc(v-bind(buttonSize) * 0.215rem);
       color: var(--color-text-actionbar);
       text-align: center;
       letter-spacing: 0.165em;
