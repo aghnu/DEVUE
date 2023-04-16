@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { useDesktopStatesStore } from "../stores/desktopStates";
-import { useWindowsStatesStore } from "../stores/windowsStates";
-import { storeToRefs } from "pinia";
-import { computed } from "vue";
 import { getIconClose } from "../utilities/factorySVG";
-import { MovingWindowID } from "../types/TypeWindows";
 import { DoubleClickDetector } from "../utilities/doubleClickDetector";
 
 const props = defineProps<{
   focused: boolean;
-  windowid: MovingWindowID;
+  moving: boolean;
   textColor: string;
   titleColor: string;
 }>();
@@ -28,27 +24,9 @@ const iconClose = getIconClose({
 
 // store
 const desktopStates = useDesktopStatesStore();
-const windowsState = useWindowsStatesStore();
-const { actionEvent, topWindow } = storeToRefs(windowsState);
 
 // var
 const doubleClickDetector = new DoubleClickDetector(() => emits("action:max"));
-
-const windowIsMoving = computed(() => {
-  if (
-    topWindow.value &&
-    topWindow.value.id === props.windowid &&
-    actionEvent.value !== null
-  ) {
-    switch (actionEvent.value.type) {
-      case "move":
-        return true;
-    }
-    return false;
-  }
-
-  return false;
-});
 
 // handler
 const handlerMouseDown = (e: MouseEvent) => {
@@ -71,7 +49,7 @@ const handlerTouchStart = (e: TouchEvent) => {
   <div
     :class="[
       'MovingWindowTitleBar',
-      { 'MovingWindowTitleBar--moving': windowIsMoving },
+      { 'MovingWindowTitleBar--moving': props.moving },
       { 'MovingWindowTitleBar--unfocused': !props.focused },
     ]"
   >

@@ -8,16 +8,32 @@ import { storeToRefs } from "pinia";
 
 export function useMovingWindowConfig(state: Ref<MovingWindowLocalState>) {
   const windowsState = useWindowsStatesStore();
-  const { topWindow } = storeToRefs(windowsState);
+  const { topWindow, actionEvent } = storeToRefs(windowsState);
 
   const styleWindowZIndex = computed(() => String(state.value.order));
   const isWindowFocused = computed(
     () => topWindow.value !== null && state.value.id === topWindow.value.id
   );
+  const isWindowMoving = computed(() => {
+    if (
+      topWindow.value &&
+      topWindow.value.id === state.value.id &&
+      actionEvent.value !== null
+    ) {
+      switch (actionEvent.value.type) {
+        case "move":
+          return true;
+      }
+      return false;
+    }
+
+    return false;
+  });
 
   return {
     styleWindowZIndex,
     isWindowFocused,
+    isWindowMoving,
   };
 }
 

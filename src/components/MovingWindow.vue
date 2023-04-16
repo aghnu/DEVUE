@@ -38,9 +38,8 @@ connectWindowMoving(ref(props.state), movingWindowElement);
 const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
   useDynamicColor(windowDisplayElement);
 const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
-const { styleWindowZIndex, isWindowFocused } = useMovingWindowConfig(
-  ref(props.state)
-);
+const { styleWindowZIndex, isWindowFocused, isWindowMoving } =
+  useMovingWindowConfig(ref(props.state));
 const styleApplicationColorBackground = computed(
   () =>
     props.state.appInstance.applicationStyle.colorBackground ??
@@ -137,10 +136,10 @@ function resetActionEvent() {
     >
       <div class="MovingWindow__window_display__title_bar">
         <MovingWindowTitleBar
-          :windowid="state.id"
           :focused="isWindowFocused"
           :text-color="styleApplicationColorTitleText"
           :title-color="styleIsTitleBarColor"
+          :moving="isWindowMoving"
           @action:close="handlerCloseWindow"
           @action:movestart="updateActionEventMoving"
           @action:moveover="resetActionEvent"
