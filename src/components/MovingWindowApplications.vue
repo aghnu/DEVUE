@@ -1,11 +1,7 @@
 <script lang="ts" setup>
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
-import { markRaw, shallowRef } from "vue";
-import { MovingWindowLocalState } from "../types/TypeWindows";
-import AppTerminal from "../applications/components/AppTerminal.vue";
 import {
-  AppName,
   AppNameInternal,
   ApplicationMetaInternal,
 } from "../types/TypeApplication";
@@ -27,18 +23,6 @@ function getComponent(name: AppNameInternal) {
           :is="getComponent(mvState.appInstance.name as AppNameInternal)"
           :state="mvState"
         ></component>
-        <!-- <AppTerminal
-          v-if="mvState.appInstance.name === 'terminal'"
-          :state="mvState"
-        />
-        <AppCalculator
-          v-else-if="mvState.appInstance.name === 'calculator'"
-          :state="mvState"
-        />
-        <AppWnfa
-          v-else-if="mvState.appInstance.name === 'wnfa'"
-          :state="mvState"
-        /> -->
       </template>
     </TransitionGroup>
   </div>
