@@ -5,9 +5,6 @@ import { WindowConfig, WINDOW_CONFIG } from "../constants/WindowManager";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { v4 as uuid } from "uuid";
 import { ApplicationInternal } from "../applications/ApplicationInternal";
-import { APPLICATION_INDEX } from "../applications/META";
-import { ApplicationMetaInternal } from "../types/TypeApplication";
-
 export interface InitMovingWindowStateOptions {
   sizeMin: Tuple<number>;
   SizeMax: Tuple<number>;
