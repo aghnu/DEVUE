@@ -37,7 +37,7 @@ const handlerImageLoad = () => {
   DesktopLoaded.value = true;
   setTimeout(() => {
     handlerInitDefaultApplications();
-  }, 2 * 1000);
+  }, 1 * 1000);
 };
 
 // connect logics
@@ -106,7 +106,7 @@ onUnmounted(() => {
 
   opacity: 1;
 
-  transition: opacity 2.5s ease-in;
+  transition: opacity 2s ease-out;
 
   &--loading {
     pointer-events: none;
