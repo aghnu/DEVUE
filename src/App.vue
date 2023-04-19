@@ -1,9 +1,37 @@
-<template>
-  <Desktop />
-</template>
-
 <script setup lang="ts">
 import Desktop from "./components/AppDesktop.vue";
 </script>
 
-<style scoped lang="scss"></style>
+<template>
+  <Desktop />
+</template>
+
+<style lang="scss">
+:root {
+  @include colors;
+  font-size: 15px;
+  font-family: $font-family-main;
+  background-color: var(--color-background);
+}
+
+#app {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+</style>
