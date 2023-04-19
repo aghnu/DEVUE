@@ -1,10 +1,102 @@
-import { Ref, computed, ComputedRef } from "vue";
+import { Ref, computed, ComputedRef, toRaw } from "vue";
 import {
   MovingWindowCursorType,
   MovingWindowLocalState,
+  MovingWindowResizeDirection,
 } from "../types/TypeWindows";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
+import { useDesktopStatesStore } from "../stores/desktopStates";
+
+export function useDesktopPointerDown() {
+  const desktopStates = useDesktopStatesStore();
+
+  function handlerMouseMove(e: MouseEvent) {
+    e.preventDefault();
+    desktopStates.updatePointerOperationType("move");
+    desktopStates.updatePositionPointer([e.clientX, e.clientY]);
+  }
+
+  function handlerTouchMove(e: TouchEvent) {
+    e.preventDefault();
+    desktopStates.updatePointerOperationType("move");
+    desktopStates.updatePositionPointer([
+      e.touches[0].clientX,
+      e.touches[0].clientY,
+    ]);
+  }
+
+  function handlerMouseDown(e: MouseEvent) {
+    e.preventDefault();
+    desktopStates.updatePointerOperationType("down");
+    desktopStates.updatePositionPointer([e.clientX, e.clientY]);
+  }
+
+  function handlerTouchStart(e: TouchEvent) {
+    e.preventDefault();
+    desktopStates.updatePointerOperationType("down");
+    desktopStates.updatePositionPointer([
+      e.touches[0].clientX,
+      e.touches[0].clientY,
+    ]);
+  }
+
+  return {
+    handlerMouseDown,
+    handlerTouchStart,
+    handlerMouseMove,
+    handlerTouchMove,
+  };
+}
+
+export function useMovingWindowActionEvent(state: Ref<MovingWindowLocalState>) {
+  const windowsStates = useWindowsStatesStore();
+  const desktopStates = useDesktopStatesStore();
+  const { actionEvent } = storeToRefs(windowsStates);
+
+  function updateActionEventMoving() {
+    windowsStates.updateMovingWindowAction({
+      id: state.value.id,
+      type: "move",
+      windowPositionSnapshot: toRaw(state.value.position),
+      windowSizeSnapshot: toRaw(state.value.size),
+      pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
+    });
+  }
+
+  function updateActionEventFocus() {
+    windowsStates.updateMovingWindowAction({
+      id: state.value.id,
+      type: "focus",
+      windowPositionSnapshot: toRaw(state.value.position),
+      windowSizeSnapshot: toRaw(state.value.size),
+      pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
+    });
+  }
+
+  function updateActionEventResize(direction: MovingWindowResizeDirection) {
+    windowsStates.updateMovingWindowAction({
+      id: state.value.id,
+      direction: direction,
+      type: "resize",
+      windowPositionSnapshot: toRaw(state.value.position),
+      windowSizeSnapshot: toRaw(state.value.size),
+      pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
+    });
+  }
+
+  function resetActionEvent() {
+    windowsStates.resetMovingWindowAction();
+  }
+
+  return {
+    actionEvent,
+    updateActionEventMoving,
+    updateActionEventFocus,
+    updateActionEventResize,
+    resetActionEvent,
+  };
+}
 
 export function useMovingWindowConfig(state: Ref<MovingWindowLocalState>) {
   const windowsState = useWindowsStatesStore();

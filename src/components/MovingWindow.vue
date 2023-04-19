@@ -1,39 +1,35 @@
 <script setup lang="ts">
-import { toRaw, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
-import { useDesktopStatesStore } from "../stores/desktopStates";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
-import { useMovingWindowConfig } from "../composables/useMovingWindowConfig";
+import {
+  useDesktopPointerDown,
+  useMovingWindowActionEvent,
+  useMovingWindowConfig,
+} from "../composables/useMovingWindowConfig";
 import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
 
-import {
-  MovingWindowLocalState,
-  MovingWindowResizeDirection,
-} from "../types/TypeWindows";
+import { MovingWindowLocalState } from "../types/TypeWindows";
 import { connectWindowMoving } from "../logics/connectWindowMoving";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { useTrackComputedWidthHeightNumber } from "../composables/useTrackComputedStyle";
-
-// store
-const desktopStates = useDesktopStatesStore();
-const windowsStates = useWindowsStatesStore();
 
 // define props
 const props = defineProps<{
   state: MovingWindowLocalState;
 }>();
 
-// var
+// store
+const windowsStates = useWindowsStatesStore();
+
+// variables
 const movingWindowElement = ref<HTMLDivElement>();
 const windowDisplayElement = ref<HTMLDivElement>();
 const isBackgroundTransparent = computed(
   () => props.state.appInstance.applicationStyle.isBgTransparent
 );
-
-// connect
-connectWindowMoving(ref(props.state), movingWindowElement);
 
 // compute styling string
 const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
@@ -59,9 +55,6 @@ const styleIsTitleBarColor = computed(() =>
     : elementBorderColorStyle.value
 );
 const styleTransformScale = computed(() => {
-  // calculate scale based on windowWidthNumberComputed + scale factor
-  // scale factor is the pixel that will be added to the width
-
   const scaleFactor = 15;
   const scale =
     (windowWidthNumberComputed.value + scaleFactor) /
@@ -70,25 +63,16 @@ const styleTransformScale = computed(() => {
 });
 
 // handler
-const handlerMouseDown = (e: MouseEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
-};
-
-const handlerTouchStart = (e: TouchEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([
-    e.touches[0].clientX,
-    e.touches[0].clientY,
-  ]);
-};
-
+const { handlerMouseDown, handlerTouchStart } = useDesktopPointerDown();
+const {
+  updateActionEventFocus,
+  updateActionEventMoving,
+  updateActionEventResize,
+  resetActionEvent,
+} = useMovingWindowActionEvent(ref(props.state));
 const handlerCloseWindow = () => {
   windowsStates.removeMovingWindow(props.state.id);
 };
-
 const handlerMaxWindow = () => {
   if (props.state.snapped === "center") {
     windowsStates.updateMovingWindowState(props.state.id, {
@@ -101,40 +85,8 @@ const handlerMaxWindow = () => {
   }
 };
 
-function updateActionEventMoving() {
-  windowsStates.updateMovingWindowAction({
-    id: props.state.id,
-    type: "move",
-    windowPositionSnapshot: toRaw(props.state.position),
-    windowSizeSnapshot: toRaw(props.state.size),
-    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
-  });
-}
-
-function updateActionEventFocus() {
-  windowsStates.updateMovingWindowAction({
-    id: props.state.id,
-    type: "focus",
-    windowPositionSnapshot: toRaw(props.state.position),
-    windowSizeSnapshot: toRaw(props.state.size),
-    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
-  });
-}
-
-function updateActionEventResize(direction: MovingWindowResizeDirection) {
-  windowsStates.updateMovingWindowAction({
-    id: props.state.id,
-    direction: direction,
-    type: "resize",
-    windowPositionSnapshot: toRaw(props.state.position),
-    windowSizeSnapshot: toRaw(props.state.size),
-    pointerPositionSnapshot: toRaw(desktopStates.relativePositionPointer),
-  });
-}
-
-function resetActionEvent() {
-  windowsStates.resetMovingWindowAction();
-}
+// connect
+connectWindowMoving(ref(props.state), movingWindowElement);
 </script>
 
 <template>

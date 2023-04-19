@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useDesktopStatesStore } from "../stores/desktopStates";
 import { getIconClose } from "../utilities/factorySVG";
 import { DoubleClickDetector } from "../utilities/doubleClickDetector";
+import { useDesktopPointerDown } from "../composables/useMovingWindowConfig";
 
 const props = defineProps<{
   focused: boolean;
@@ -22,27 +22,11 @@ const iconClose = getIconClose({
   size: "100%",
 });
 
-// store
-const desktopStates = useDesktopStatesStore();
-
 // var
 const doubleClickDetector = new DoubleClickDetector(() => emits("action:max"));
 
 // handler
-const handlerMouseDown = (e: MouseEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
-};
-
-const handlerTouchStart = (e: TouchEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([
-    e.touches[0].clientX,
-    e.touches[0].clientY,
-  ]);
-};
+const { handlerMouseDown, handlerTouchStart } = useDesktopPointerDown();
 </script>
 
 <template>

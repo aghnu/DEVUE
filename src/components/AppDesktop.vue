@@ -6,7 +6,6 @@ import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
 import StatusBar from "./StatusBar.vue";
 import WidgetsManager from "./WidgetsManager.vue";
 import { onMounted, onUnmounted, ref } from "vue";
-import { useDesktopStatesStore } from "../stores/desktopStates";
 
 import {
   connectWindowResizeStateUpdate,
@@ -14,51 +13,31 @@ import {
 } from "../logics/doWindowAction";
 import { connectWindowSnapping } from "../logics/doWindowSnapping";
 import { Trigger } from "../utilities/trigger";
+import { useDesktopPointerDown } from "../composables/useMovingWindowConfig";
 
 // variables
-const desktopStates = useDesktopStatesStore();
 const windowsManagerElement = ref<HTMLDivElement>();
 const DesktopLoaded = ref(false);
 const actionBarAppPressTrigger = Trigger.build();
 
 // handlers
-const handlerMouseMove = (e: MouseEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("move");
-  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
-};
-
-const handlerTouchMove = (e: TouchEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("move");
-  desktopStates.updatePositionPointer([
-    e.touches[0].clientX,
-    e.touches[0].clientY,
-  ]);
-};
-
-const handlerMouseDown = (e: MouseEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([e.clientX, e.clientY]);
-};
-
-const handlerTouchStart = (e: TouchEvent) => {
-  e.preventDefault();
-  desktopStates.updatePointerOperationType("down");
-  desktopStates.updatePositionPointer([
-    e.touches[0].clientX,
-    e.touches[0].clientY,
-  ]);
-};
+const {
+  handlerMouseDown,
+  handlerTouchStart,
+  handlerMouseMove,
+  handlerTouchMove,
+} = useDesktopPointerDown();
 
 // TODO: refactor this notify trigger flow
 const handlerInitDefaultApplications = () => {
-  // actionBarAppPressTrigger.notify("terminal");
+  actionBarAppPressTrigger.notify("terminal");
 };
 
 const handlerImageLoad = () => {
   DesktopLoaded.value = true;
+  setTimeout(() => {
+    handlerInitDefaultApplications();
+  }, 2 * 1000);
 };
 
 // connect logics
@@ -75,9 +54,6 @@ onMounted(() => {
   document.addEventListener("touchstart", handlerTouchStart, {
     passive: false,
   });
-  setTimeout(() => {
-    handlerInitDefaultApplications();
-  }, 700);
 });
 
 onUnmounted(() => {
