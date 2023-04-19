@@ -80,11 +80,11 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
   color: var(--color-text-menu);
 
   &--down {
-    background-color: rgba(175, 175, 175, 0.35);
+    background-color: rgba(175, 175, 175, 0.2);
   }
 
   &--hover {
-    background-color: rgba(175, 175, 175, 0.2);
+    background-color: rgba(175, 175, 175, 0.1);
   }
 
   &__icon {
