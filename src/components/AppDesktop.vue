@@ -2,7 +2,7 @@
 import ActionBar from "./ActionBar.vue";
 import AppFooter from "./AppFooter.vue";
 import MovingWindowApplications from "./MovingWindowApplications.vue";
-import WindowsManagerGhostPanel from "./WindowsManagerGhostPanel.vue";
+import MovingWindowGhostPanel from "./MovingWindowGhostPanel.vue";
 import StatusBar from "./StatusBar.vue";
 import WidgetsManager from "./WidgetsManager.vue";
 import { onMounted, onUnmounted, ref } from "vue";
@@ -79,7 +79,7 @@ onUnmounted(() => {
     </div>
     <div ref="windowsManagerElement" class="Desktop__windows">
       <WidgetsManager />
-      <WindowsManagerGhostPanel />
+      <MovingWindowGhostPanel />
       <MovingWindowApplications />
     </div>
     <div class="Desktop__action_bar">
