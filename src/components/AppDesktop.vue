@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ActionBar from "./ActionBar.vue";
 import AppFooter from "./AppFooter.vue";
-import MovingWindowApplications from "./MovingWindowApplications.vue";
+import AppWindowManager from "./AppWindowManager.vue";
 import MovingWindowGhostPanel from "./MovingWindowGhostPanel.vue";
 import StatusBar from "./StatusBar.vue";
 import WidgetsManager from "./WidgetsManager.vue";
@@ -80,7 +80,7 @@ onUnmounted(() => {
     <div ref="windowsManagerElement" class="Desktop__windows">
       <WidgetsManager />
       <MovingWindowGhostPanel />
-      <MovingWindowApplications />
+      <AppWindowManager />
     </div>
     <div class="Desktop__action_bar">
       <div id="teleport-actionbar-menu"></div>

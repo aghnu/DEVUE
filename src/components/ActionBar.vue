@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppButton from "./AppButton.vue";
+import ActionBarButton from "./ActionBarButton.vue";
 import { ref, computed } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import AppMenu from "./AppMenu.vue";
@@ -79,17 +79,17 @@ props.pressButtonTrigger.listen((message) => {
         <ScreenBlocker @click="handleMenuClose"></ScreenBlocker
       ></Teleport>
 
-      <AppButton
+      <ActionBarButton
         name="menu"
         :size="buttonSize"
         :press="triggerMap.has('menu') ? triggerMap.get('menu') : null"
         @click="handleMenuToggle"
-      ></AppButton>
+      ></ActionBarButton>
       <div class="ActionBar__dividor"></div>
 
       <!-- Applications that is pinned to action bar -->
 
-      <AppButton
+      <ActionBarButton
         v-for="meta in appsMeta"
         :key="meta.name"
         :name="meta.name"
@@ -101,10 +101,10 @@ props.pressButtonTrigger.listen((message) => {
             handleMenuClose();
           }
         "
-      ></AppButton>
+      ></ActionBarButton>
 
       <div class="ActionBar__dividor"></div>
-      <AppButton
+      <ActionBarButton
         name="reset"
         :size="buttonSize"
         :press="triggerMap.has('reset') ? triggerMap.get('reset') : null"
@@ -112,7 +112,7 @@ props.pressButtonTrigger.listen((message) => {
           windowsState.resetMovingWindow();
           handleMenuClose();
         "
-      ></AppButton>
+      ></ActionBarButton>
       <div class="ActionBar__info">
         <div class="ActionBar__info__date_time">
           <p class="ActionBar__info__date_time__time">{{ timeString }}</p>

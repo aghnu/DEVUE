@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MenuAppButton from "./MenuAppButton.vue";
+import AppMenuButton from "./AppMenuButton.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { ref, computed } from "vue";
 import {
@@ -47,7 +47,7 @@ function handleClose() {
 <template>
   <div ref="AppMenuElement" class="AppMenu">
     <div :class="['AppMenu__container', 'AppMenu__container--primary']">
-      <MenuAppButton
+      <AppMenuButton
         v-for="meta in AppInternalMetaArray"
         :key="meta.name"
         :name="meta.name"
@@ -57,10 +57,10 @@ function handleClose() {
             handleClose();
           }
         "
-      ></MenuAppButton>
+      ></AppMenuButton>
     </div>
     <div :class="['AppMenu__container', 'AppMenu__container--secondary']">
-      <MenuAppButton
+      <AppMenuButton
         v-for="meta in AppExternalMetaArray"
         :key="meta.name"
         :name="meta.name"
@@ -70,7 +70,7 @@ function handleClose() {
             handleClose();
           }
         "
-      ></MenuAppButton>
+      ></AppMenuButton>
     </div>
   </div>
 </template>
