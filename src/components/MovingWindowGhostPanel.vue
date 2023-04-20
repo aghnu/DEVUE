@@ -2,7 +2,7 @@
 import { onMounted, watch, computed, ref } from "vue";
 import { usePointerLocation } from "../composables/usePointerLocation";
 import { useWindowsStatesStore } from "../stores/windowsStates";
-import { useTopWindowStartedMoving } from "../composables/useTopWindowStartedMoving";
+import { useTopWindowStartedMoving } from "../composables/useMovingWindowConfig";
 import { storeToRefs } from "pinia";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { PointerLocation } from "../types/TypeDesktop";

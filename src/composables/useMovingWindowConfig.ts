@@ -173,3 +173,36 @@ export function useMovingWindowStyleGlobalCursor(
 
   return { styleWindowCursor };
 }
+
+export function useTopWindowStartedMoving() {
+  const windowsState = useWindowsStatesStore();
+  const desktopState = useDesktopStatesStore();
+  const { topWindow, actionEvent } = storeToRefs(windowsState);
+
+  let isWindowMoved = false;
+  const isTopWindowStartedMoving = computed(() => {
+    if (
+      actionEvent.value !== null &&
+      actionEvent.value.type === "move" &&
+      topWindow.value
+    ) {
+      if (isWindowMoved) {
+        return true;
+      }
+
+      if (
+        desktopState.relativePosXPointer !==
+          actionEvent.value.pointerPositionSnapshot[0] ||
+        desktopState.relativePosYPointer !==
+          actionEvent.value.pointerPositionSnapshot[1]
+      ) {
+        isWindowMoved = true;
+        return true;
+      }
+    }
+    isWindowMoved = false;
+    return false;
+  });
+
+  return { isTopWindowStartedMoving };
+}

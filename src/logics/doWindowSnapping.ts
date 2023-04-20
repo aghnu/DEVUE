@@ -1,5 +1,5 @@
 import { onMounted, watch } from "vue";
-import { useTopWindowStartedMoving } from "../composables/useTopWindowStartedMoving";
+import { useTopWindowStartedMoving } from "../composables/useMovingWindowConfig";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { useDesktopStatesStore } from "../stores/desktopStates";
 import { usePointerLocation } from "../composables/usePointerLocation";
