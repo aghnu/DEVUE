@@ -12,8 +12,8 @@ import {
 import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
 
 import { MovingWindowLocalState } from "../types/TypeWindows";
-import { connectWindowMoving } from "../logics/connectWindowMoving";
 import { useDynamicColor } from "../composables/useDynamicColor";
+import { useMovingWindow } from "../composables/useMovingWindow";
 import { useTrackComputedWidthHeightNumber } from "../composables/useTrackComputedStyle";
 
 // define props
@@ -30,6 +30,7 @@ const windowDisplayElement = ref<HTMLDivElement>();
 const isBackgroundTransparent = computed(
   () => props.state.appInstance.applicationStyle.isBgTransparent
 );
+const { startMovingWindow } = useMovingWindow(ref(props.state));
 
 // compute styling string
 const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
@@ -85,8 +86,8 @@ const handlerMaxWindow = () => {
   }
 };
 
-// connect
-connectWindowMoving(ref(props.state), movingWindowElement);
+// logic
+startMovingWindow(movingWindowElement);
 </script>
 
 <template>
