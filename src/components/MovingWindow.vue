@@ -3,18 +3,17 @@ import { ref, computed } from "vue";
 import MovingWindowContent from "./MovingWindowContent.vue";
 import MovingWindowTitleBar from "./MovingWindowTitleBar.vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
-import { MOVING_WINDOW_DIRECTIONS } from "../constants/MovingWindow";
 import {
   useDesktopPointerDown,
   useMovingWindowActionEvent,
   useMovingWindowConfig,
 } from "../composables/useMovingWindowConfig";
-import { useMovingWindowStyleGlobalCursor } from "../composables/useMovingWindowConfig";
 
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { useMovingWindow } from "../composables/useMovingWindow";
 import { useTrackComputedWidthHeightNumber } from "../composables/useTrackComputedStyle";
+import MovingWindowResizePanel from "./MovingWindowResizePanel.vue";
 
 // define props
 const props = defineProps<{
@@ -35,7 +34,6 @@ const { startMovingWindow } = useMovingWindow(ref(props.state));
 // compute styling string
 const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
   useDynamicColor(windowDisplayElement);
-const { styleWindowCursor } = useMovingWindowStyleGlobalCursor("auto");
 const windowWidthNumberComputed =
   useTrackComputedWidthHeightNumber(movingWindowElement).widthNumber;
 const { styleWindowZIndex, isWindowFocused, isWindowMoving } =
@@ -65,12 +63,8 @@ const styleTransformScale = computed(() => {
 
 // handler
 const { handlerMouseDown, handlerTouchStart } = useDesktopPointerDown();
-const {
-  updateActionEventFocus,
-  updateActionEventMoving,
-  updateActionEventResize,
-  resetActionEvent,
-} = useMovingWindowActionEvent(ref(props.state));
+const { updateActionEventFocus, updateActionEventMoving, resetActionEvent } =
+  useMovingWindowActionEvent(ref(props.state));
 const handlerCloseWindow = () => {
   windowsStates.removeMovingWindow(props.state.id);
 };
@@ -135,33 +129,7 @@ startMovingWindow(movingWindowElement);
       </div>
     </div>
 
-    <div
-      v-for="direction in MOVING_WINDOW_DIRECTIONS"
-      :key="direction"
-      :class="[
-        'MovingWindow__panel_resize',
-        `MovingWindow__panel_resize--direction-${direction}`,
-        { 'MovingWindow__panel_resize--disabled': state.snapped !== 'center' },
-        {
-          'MovingWindow__panel_resize--global-pointer':
-            styleWindowCursor !== 'auto',
-        },
-      ]"
-      @mousedown.stop="
-        (e) => {
-          handlerMouseDown(e);
-          updateActionEventResize(direction);
-        }
-      "
-      @touchstart.stop="
-        (e) => {
-          handlerTouchStart(e);
-          updateActionEventResize(direction);
-        }
-      "
-      @mouseup.stop="resetActionEvent()"
-      @touchend.stop="resetActionEvent()"
-    ></div>
+    <MovingWindowResizePanel :state="state" />
   </div>
 </template>
 
@@ -204,101 +172,6 @@ startMovingWindow(movingWindowElement);
 
     &__content {
       height: calc(100% - var(--title-height));
-    }
-  }
-
-  &__panel_resize {
-    position: absolute;
-
-    &--direction {
-      @mixin MovingWindow__panel_resize--corner {
-        width: 1rem;
-        height: 1rem;
-        border-radius: 100%;
-        z-index: 1;
-      }
-
-      @mixin MovingWindow__panel_resize--edge {
-        width: 0.5rem;
-        height: 0.5rem;
-        z-index: 0;
-      }
-
-      &-se {
-        @include MovingWindow__panel_resize--corner();
-        bottom: 0;
-        right: 0;
-        transform: translate(30%, 30%);
-        cursor: nwse-resize;
-      }
-
-      &-sw {
-        @include MovingWindow__panel_resize--corner();
-        bottom: 0;
-        left: 0;
-        transform: translate(-30%, 30%);
-        cursor: nesw-resize;
-      }
-
-      &-ne {
-        @include MovingWindow__panel_resize--corner();
-        top: 0;
-        right: 0;
-        transform: translate(30%, -30%);
-        cursor: nesw-resize;
-      }
-
-      &-nw {
-        @include MovingWindow__panel_resize--corner();
-        top: 0;
-        left: 0;
-        transform: translate(-30%, -30%);
-        cursor: nwse-resize;
-      }
-
-      &-n {
-        @include MovingWindow__panel_resize--edge();
-        width: 100%;
-        top: 0;
-        left: 0;
-        transform: translate(0, -50%);
-        cursor: ns-resize;
-      }
-
-      &-s {
-        @include MovingWindow__panel_resize--edge();
-        width: 100%;
-        bottom: 0;
-        left: 0;
-        transform: translate(0, 50%);
-        cursor: ns-resize;
-      }
-
-      &-w {
-        @include MovingWindow__panel_resize--edge();
-        height: 100%;
-        bottom: 0;
-        left: 0;
-        transform: translate(-50%, 0);
-        cursor: ew-resize;
-      }
-
-      &-e {
-        @include MovingWindow__panel_resize--edge();
-        height: 100%;
-        bottom: 0;
-        right: 0;
-        transform: translate(50%, 0);
-        cursor: ew-resize;
-      }
-    }
-
-    &--disabled {
-      pointer-events: none;
-    }
-
-    &--global-pointer {
-      cursor: v-bind(styleWindowCursor);
     }
   }
 }
