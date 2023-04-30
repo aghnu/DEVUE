@@ -144,7 +144,7 @@ if (props.press !== null) {
 
     position: absolute;
 
-    top: calc(-1 * v-bind(buttonSize) * 0.6);
+    top: calc(-1 * v-bind(buttonSize) * 0.5);
 
     font-size: calc(v-bind(buttonSize) * 0.16);
     letter-spacing: 0.1em;
@@ -158,7 +158,7 @@ if (props.press !== null) {
     background-color: var(--color-block-transparent-menu);
     color: var(--color-text-menu);
 
-    border-radius: calc(v-bind(buttonSize) * 1);
+    border-radius: calc(v-bind(buttonSize) * 0.16);
     padding: calc(v-bind(buttonSize) * 0.1) calc(v-bind(buttonSize) * 0.18);
 
     transition: all 0.15s;
@@ -167,7 +167,7 @@ if (props.press !== null) {
     text-align: center;
     white-space: nowrap;
     &--show {
-      top: calc(-1 * v-bind(buttonSize) * 0.7);
+      top: calc(-1 * v-bind(buttonSize) * 0.65);
       opacity: 1;
     }
   }
