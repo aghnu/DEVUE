@@ -5,7 +5,6 @@ import { AppTerminal } from "./AppTerminal";
 import { AppWnfa } from "./AppWnfa";
 
 import {
-  ActionBarAppIconStyle,
   AppName,
   AppNameInternal,
   ApplicationMeta,
@@ -16,14 +15,6 @@ import AppWnfaVue from "./components/AppWnfa.vue";
 
 // app placement globals and style
 export const applicationActionBar: AppNameInternal[] = ["terminal"];
-export const applicationActionBarStyle: Partial<
-  Record<AppName, ActionBarAppIconStyle>
-> = {
-  reset: {
-    colorBackground: "var(--color-icon-warn)",
-    colorText: "var(--color-icon-inner-warn)",
-  },
-};
 
 // app name index
 export const APPLICATION_OBJECT_CLASS_INTERNAL = [

@@ -8,7 +8,7 @@ import { useDynamicColor } from "../composables/useDynamicColor";
 import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
 import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
 import { Trigger } from "../utilities/trigger";
-import { useDateTime } from "../composables/useDateTime";
+// import { useDateTime } from "../composables/useDateTime";
 
 const props = defineProps<{
   pressButtonTrigger: Trigger;
@@ -30,7 +30,7 @@ function handleMenuClose() {
 const { elementBorderColorStyle, elementDropShadowIntensityStyle } =
   useDynamicColor(actionBarElement);
 
-const { timeString, dateString } = useDateTime();
+// const { timeString, dateString } = useDateTime();
 
 const appsMeta = computed(() => {
   const appsMetaList: ApplicationMetaInternal[] = [];
@@ -85,7 +85,7 @@ props.pressButtonTrigger.listen((message) => {
         :press="triggerMap.has('menu') ? triggerMap.get('menu') : null"
         @click="handleMenuToggle"
       ></ActionBarButton>
-      <div class="ActionBar__dividor"></div>
+      <!-- <div class="ActionBar__dividor"></div> -->
 
       <!-- Applications that is pinned to action bar -->
 
@@ -103,7 +103,7 @@ props.pressButtonTrigger.listen((message) => {
         "
       ></ActionBarButton>
 
-      <div class="ActionBar__dividor"></div>
+      <!-- <div class="ActionBar__dividor"></div> -->
       <ActionBarButton
         name="reset"
         :size="buttonSize"
@@ -113,12 +113,12 @@ props.pressButtonTrigger.listen((message) => {
           handleMenuClose();
         "
       ></ActionBarButton>
-      <div class="ActionBar__info">
+      <!-- <div class="ActionBar__info">
         <div class="ActionBar__info__date_time">
           <p class="ActionBar__info__date_time__time">{{ timeString }}</p>
           <p class="ActionBar__info__date_time__date">{{ dateString }}</p>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -153,7 +153,7 @@ props.pressButtonTrigger.listen((message) => {
     @include mixin-glassblur;
 
     display: flex;
-    gap: calc(v-bind(buttonSize) * 0.35rem);
+    gap: calc(v-bind(buttonSize) * 0.6rem);
 
     width: fit-content;
     height: fit-content;
@@ -180,7 +180,7 @@ props.pressButtonTrigger.listen((message) => {
     height: calc(v-bind(buttonSize) * 0.45rem);
     margin-left: calc(v-bind(buttonSize) * -0.1rem);
     margin-right: calc(v-bind(buttonSize) * -0.1rem);
-    width: 2px;
+    width: calc(v-bind(buttonSize) * 0.05rem);
     border-radius: calc(v-bind(buttonSize) * 100rem);
     background-color: var(--color-icon-dividor);
   }

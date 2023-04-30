@@ -85,7 +85,7 @@ function handleClose() {
   // #c5c5c5 #464646 - light mode
   // #212121 #d4d4d4 - black mode
   background-color: var(--color-block-transparent-menu);
-  border-radius: 0.85rem;
+  border-radius: 0.9rem;
   // padding: 0.25rem;
 
   box-shadow: v-bind(elementDropShadowIntensityStyle);
@@ -101,13 +101,12 @@ function handleClose() {
   &__container {
     padding: 0.75rem 0.9rem;
     // border-radius: 0.5rem;
-    width: 100%;
     height: fit-content;
 
     display: grid;
     grid-template-columns: 50% 50%;
     row-gap: 0.85rem;
-    column-gap: 0.25rem;
+    column-gap: 0.5rem;
     align-items: center;
     justify-items: center;
     justify-content: center;

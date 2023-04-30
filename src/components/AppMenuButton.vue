@@ -45,7 +45,7 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
       <AppIcon
         color="var(--color-text-menu)"
         :name="props.name"
-        :scale="0.75"
+        :scale="0.7"
       ></AppIcon>
     </div>
     <div class="MenuAppButton__text">
@@ -68,11 +68,11 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
 
   width: 100%;
   height: 100%;
-  border-radius: 0.75rem;
+  border-radius: 0.9rem;
   display: flex;
   gap: 0.85rem;
 
-  padding: 0.65rem 1.5rem 1rem 1rem;
+  padding: 0.7rem 1.5rem 1.05rem 1.25rem;
 
   font-size: 1rem;
   text-align: left;
@@ -80,11 +80,11 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
   color: var(--color-text-menu);
 
   &--down {
-    background-color: rgba(175, 175, 175, 0.2);
+    background-color: rgba(175, 175, 175, 0.3);
   }
 
   &--hover {
-    background-color: rgba(175, 175, 175, 0.1);
+    background-color: rgba(175, 175, 175, 0.2);
   }
 
   &__icon {
@@ -100,12 +100,15 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
       display: flex;
       align-items: center;
       height: 1.5rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
       white-space: nowrap;
     }
 
     &__desc {
       font-size: 0.5rem;
+      letter-spacing: 0.05em;
+      line-height: 1.5em;
     }
   }
 }
