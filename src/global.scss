@@ -5,11 +5,11 @@ $font-family-main: "Roboto Mono", sans-serif;
 @mixin colors {
   // base color
   --color-block-dark: #101010;
-  --color-block-bright: rgb(176, 184, 173);
+  --color-block-bright: rgba(255, 255, 255, 0.6);
   --color-background: #000000;
   --color-text-bright:#c7c7c7;
   --color-text-dark: #161616;
-  --color-block-transparent: rgba(236, 208, 187, 0.65);
+  --color-block-transparent: rgba(120, 120, 120, 0.3);
   --color-block-transparent-actionbar: rgba(15, 15, 15, 0.9);
   --color-text-actionbar: rgba(255, 255, 255, 0.75);
   --color-block-transparent-menu: rgba(255, 255, 255, 0.9);
