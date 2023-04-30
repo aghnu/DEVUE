@@ -36,13 +36,17 @@ const {
   emits("click");
 });
 const pressDown = ref(false);
+const pressHover = ref(false);
 const buttonElement = ref<HTMLElement>();
 const animationPointerDown = computed(
   () => pressDown.value || pointerDown.value
 );
+const animationPointerHover = computed(
+  () => pressHover.value || pointerHover.value
+);
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSizeFactor = computed(() =>
-  animationPointerDown.value ? 0.4 : pointerHover.value ? 1 : 0.6
+  animationPointerDown.value ? 0.4 : animationPointerHover.value ? 1 : 0.6
 );
 const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
 
@@ -61,12 +65,23 @@ const appInstancesCount = computed(() => {
 let pressDownTimeout: number | undefined = undefined;
 function handlePressDown() {
   // manually triggered by system
+
+  // reset state
+  pressHover.value = false;
+  pressDown.value = false;
   window.clearTimeout(pressDownTimeout);
-  pressDown.value = true;
+
+  // start animation
+  pressHover.value = true;
   pressDownTimeout = window.setTimeout(() => {
-    pressDown.value = false;
-    emits("click");
-  }, 450);
+    pressDown.value = true;
+    window.clearTimeout(pressDownTimeout);
+    pressDownTimeout = window.setTimeout(() => {
+      pressDown.value = false;
+      pressHover.value = false;
+      emits("click");
+    }, 400);
+  }, 1000);
 }
 if (props.press !== null) {
   props.press.listen(() => {
@@ -102,7 +117,8 @@ if (props.press !== null) {
       :class="[
         'AppButton__desc',
         {
-          'AppButton__desc--show': pointerHover && !animationPointerDown,
+          'AppButton__desc--show':
+            animationPointerHover && !animationPointerDown,
         },
       ]"
       role="presentation"
@@ -165,7 +181,7 @@ if (props.press !== null) {
     height: v-bind(buttonSize);
     width: v-bind(buttonSize);
 
-    transition: all 0.3s;
+    transition: all 0.25s;
 
     &__icon {
       @include mixin-center-children;
@@ -182,10 +198,10 @@ if (props.press !== null) {
     bottom: -5%;
     right: -5%;
 
-    height: 35%;
+    height: 30%;
     line-height: 1em;
     width: fit-content;
-    min-width: 35%;
+    min-width: 30%;
 
     border-radius: 10rem;
 
@@ -195,7 +211,7 @@ if (props.press !== null) {
     color: var(--color-text-menu);
 
     font-size: calc(v-bind(buttonSize) * 0.2);
-    padding: 0.25em 0.5em;
+    padding: 0.2em 0.4em;
 
     font-weight: 500;
   }

@@ -23,6 +23,9 @@ export const useWindowsStatesStore = defineStore("windowsStates", {
         .sort((a, b) => b.order - a.order)
         .map((e) => e.id);
     },
+    movingWindowTotalCount(): number {
+      return this.movingWindowsOrderStack.length;
+    },
     topWindow(state): MovingWindowLocalState | null {
       return state.movingWindows.get(this.movingWindowsOrderStack[0]) ?? null;
     },

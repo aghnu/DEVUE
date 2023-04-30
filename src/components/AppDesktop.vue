@@ -29,9 +29,9 @@ const {
 
 // TODO: refactor this notify trigger flow
 const handlerInitDefaultApplications = () => {
-  setTimeout(() => {
-    actionBarAppPressTrigger.notify("menu");
-  }, 0.5 * 1000);
+  // setTimeout(() => {
+  //   actionBarAppPressTrigger.notify("menu");
+  // }, 0.5 * 1000);
 };
 
 const graphSvg = getShapeSun({

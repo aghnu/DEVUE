@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ActionBarButton from "./ActionBarButton.vue";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import AppMenu from "./AppMenu.vue";
 import ScreenBlocker from "./ScreenBlocker.vue";
@@ -8,6 +8,7 @@ import { useDynamicColor } from "../composables/useDynamicColor";
 import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
 import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
 import { Trigger } from "../utilities/trigger";
+import { storeToRefs } from "pinia";
 // import { useDateTime } from "../composables/useDateTime";
 
 const props = defineProps<{
@@ -16,6 +17,7 @@ const props = defineProps<{
 
 const buttonSize = ref(4);
 const windowsState = useWindowsStatesStore();
+const { movingWindowTotalCount } = storeToRefs(windowsState);
 const menuOpen = ref(false);
 const actionBarElement = ref<HTMLDivElement>();
 
@@ -62,6 +64,19 @@ props.pressButtonTrigger.listen((message) => {
   if (trigger) {
     trigger.notify();
   }
+});
+
+onMounted(() => {
+  watch(
+    movingWindowTotalCount,
+    (value) => {
+      if (value === 0) {
+        const menuAppTrigger = triggerMap.value.get("menu");
+        menuAppTrigger?.notify();
+      }
+    },
+    { immediate: true }
+  );
 });
 </script>
 
