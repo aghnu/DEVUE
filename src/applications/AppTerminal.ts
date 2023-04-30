@@ -27,12 +27,12 @@ const COLOR_THEME: Record<string, TerminalTheme> = {
     colorDesc: "#19ceda",
     colorAppBackground: "#000c18",
   },
-  light: {
+  min: {
     colorPlain: "#b0b8ad",
     colorFocus: "#f59879",
-    colorBackground: "#111a1f",
+    colorBackground: "#000c18",
     colorDesc: "#1ca0a9",
-    colorAppBackground: "#111a1f",
+    colorAppBackground: "#000c18",
   },
 };
 
@@ -45,7 +45,7 @@ export class AppTerminal extends ApplicationInternal {
   constructor() {
     super();
     this.name = "terminal";
-    this.colorTheme = COLOR_THEME.light;
+    this.colorTheme = COLOR_THEME.min;
     this.applicationStyle = defaultApplicationStyleFactory();
     this.applicationStyle.colorBackground = this.colorTheme.colorBackground;
   }
