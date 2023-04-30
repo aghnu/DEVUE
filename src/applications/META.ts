@@ -15,6 +15,10 @@ import AppWnfaVue from "./components/AppWnfa.vue";
 
 // app placement globals and style
 export const applicationActionBar: AppNameInternal[] = ["terminal"];
+export const applicationBlacklist: Set<AppNameInternal> = new Set([
+  "calculator",
+  "wnfa",
+]);
 
 // app name index
 export const APPLICATION_OBJECT_CLASS_INTERNAL = [

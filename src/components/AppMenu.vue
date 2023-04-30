@@ -6,6 +6,7 @@ import {
   APPLICATION_INDEX,
   APPLICATION_INDEX_NAME_EXTERNAL,
   APPLICATION_INDEX_NAME_INTERNAL,
+  applicationBlacklist,
 } from "../applications/META";
 import {
   ApplicationMetaExternal,
@@ -25,7 +26,8 @@ const AppInternalMetaArray = computed(() => {
 
   APPLICATION_INDEX_NAME_INTERNAL.forEach((appName) => {
     const meta = APPLICATION_INDEX[appName];
-    if (meta.type === "internal") appsMetaList.push(meta);
+    if (meta.type === "internal" && !applicationBlacklist.has(appName))
+      appsMetaList.push(meta);
   });
   return appsMetaList;
 });
