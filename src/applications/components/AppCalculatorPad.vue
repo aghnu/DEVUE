@@ -69,7 +69,7 @@ const textSizeStyle = computed(() => {
 
     color: var(--color-calculator-text-display);
 
-    font-size: calc(v-bind(sizeUnit) * 1px * 33);
+    font-size: calc(v-bind(sizeUnit) * 1px * 28);
 
     transition: background-color 0.05s, transform 0.15s, box-shadow 0.1s;
 
