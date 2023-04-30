@@ -14,7 +14,7 @@ const props = defineProps<{
   pressButtonTrigger: Trigger;
 }>();
 
-const buttonSize = ref(3);
+const buttonSize = ref(4);
 const windowsState = useWindowsStatesStore();
 const menuOpen = ref(false);
 const actionBarElement = ref<HTMLDivElement>();
@@ -153,12 +153,12 @@ props.pressButtonTrigger.listen((message) => {
     @include mixin-glassblur;
 
     display: flex;
-    gap: calc(v-bind(buttonSize) * 0.6rem);
+    gap: calc(v-bind(buttonSize) * 0.4rem);
 
     width: fit-content;
     height: fit-content;
 
-    padding: calc(v-bind(buttonSize) * 0.2rem)
+    padding: calc(v-bind(buttonSize) * 0.05rem)
       calc(v-bind(buttonSize) * 0.35rem);
     border-radius: calc(v-bind(buttonSize) * 0.5rem);
 

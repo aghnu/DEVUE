@@ -42,7 +42,7 @@ const animationPointerDown = computed(
 );
 const containerSize = computed(() => `${props.size}rem`);
 const buttonSizeFactor = computed(() =>
-  animationPointerDown.value ? 0.6 : pointerHover.value ? 1 : 0.8
+  animationPointerDown.value ? 0.4 : pointerHover.value ? 1 : 0.6
 );
 const buttonSize = computed(() => `${props.size * buttonSizeFactor.value}rem`);
 
@@ -130,7 +130,7 @@ if (props.press !== null) {
 
     top: calc(-1 * v-bind(buttonSize) * 0.6);
 
-    font-size: calc(v-bind(buttonSize) * 0.2);
+    font-size: calc(v-bind(buttonSize) * 0.16);
     letter-spacing: 0.1em;
     font-weight: 500;
 
@@ -142,8 +142,8 @@ if (props.press !== null) {
     background-color: var(--color-block-transparent-menu);
     color: var(--color-text-menu);
 
-    border-radius: calc(v-bind(buttonSize) * 100);
-    padding: calc(v-bind(buttonSize) * 0.12) calc(v-bind(buttonSize) * 0.22);
+    border-radius: calc(v-bind(buttonSize) * 1);
+    padding: calc(v-bind(buttonSize) * 0.1) calc(v-bind(buttonSize) * 0.18);
 
     transition: all 0.15s;
 
@@ -151,7 +151,7 @@ if (props.press !== null) {
     text-align: center;
     white-space: nowrap;
     &--show {
-      top: calc(-1 * v-bind(buttonSize) * 0.9);
+      top: calc(-1 * v-bind(buttonSize) * 0.7);
       opacity: 1;
     }
   }
@@ -169,8 +169,8 @@ if (props.press !== null) {
 
     &__icon {
       @include mixin-center-children;
-      height: 45%;
-      width: 45%;
+      height: 50%;
+      width: 50%;
     }
   }
 
