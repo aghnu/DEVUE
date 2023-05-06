@@ -1,7 +1,7 @@
 import { AppName } from "../types/TypeApplication";
-import { ApplicationExternal } from "./ApplicationExternal";
+import ApplicationExternal from "./ApplicationExternal";
 
-export class AppLinkedin extends ApplicationExternal {
+export default class AppLinkedin extends ApplicationExternal {
   readonly name: AppName;
   readonly link;
 

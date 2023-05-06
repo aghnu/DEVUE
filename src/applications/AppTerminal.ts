@@ -1,5 +1,5 @@
 import { ApplicationStyle, AppName } from "../types/TypeApplication";
-import { ApplicationInternal } from "./ApplicationInternal";
+import ApplicationInternal from "./ApplicationInternal";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
@@ -36,7 +36,7 @@ const COLOR_THEME: Record<string, TerminalTheme> = {
   },
 };
 
-export class AppTerminal extends ApplicationInternal {
+export default class AppTerminal extends ApplicationInternal {
   readonly name: AppName;
 
   applicationStyle: ApplicationStyle;

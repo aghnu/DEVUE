@@ -1,5 +1,5 @@
 import { ApplicationStyle, AppName } from "../types/TypeApplication";
-import { ApplicationInternal } from "./ApplicationInternal";
+import ApplicationInternal from "./ApplicationInternal";
 import { CalculatorKey } from "../types/TypeCalculator";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
@@ -33,7 +33,7 @@ const TRANSLATE_INTERNAL_DISPLAY = new Map([
   ["√", "√("],
 ]);
 
-export class AppCalculator extends ApplicationInternal {
+export default class AppCalculator extends ApplicationInternal {
   readonly name: AppName = "calculator";
   applicationStyle: ApplicationStyle = defaultApplicationStyleFactory();
 

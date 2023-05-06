@@ -1,10 +1,10 @@
 import { ApplicationStyle, AppName } from "../types/TypeApplication";
-import { ApplicationInternal } from "./ApplicationInternal";
+import ApplicationInternal from "./ApplicationInternal";
 import { MovingWindowLocalState } from "../types/TypeWindows";
 import { initMovingWindowState } from "../logics/doWindowCreation";
 import { defaultApplicationStyleFactory } from "../utilities/application";
 
-export class AppWnfa extends ApplicationInternal {
+export default class AppWnfa extends ApplicationInternal {
   readonly name: AppName = "wnfa";
 
   applicationStyle: ApplicationStyle = defaultApplicationStyleFactory();

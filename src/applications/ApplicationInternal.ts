@@ -5,9 +5,9 @@ import {
   AppType,
 } from "../types/TypeApplication";
 import { MovingWindowLocalState } from "../types/TypeWindows";
-import { Application } from "./Application";
+import Application from "./Application";
 
-export abstract class ApplicationInternal
+export default abstract class ApplicationInternal
   extends Application
   implements ApplicationInternalnterface
 {

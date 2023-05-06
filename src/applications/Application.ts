@@ -1,6 +1,6 @@
 import { AppName, AppType } from "../types/TypeApplication";
 
-export abstract class Application {
+export default abstract class Application {
   abstract readonly name: AppName;
   abstract readonly type: AppType;
 

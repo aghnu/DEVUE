@@ -1,5 +1,4 @@
-import { Component } from "vue";
-import { ApplicationInternal } from "../applications/ApplicationInternal";
+import ApplicationInternal from "../applications/ApplicationInternal";
 import { Tuple } from "../types/TypeBasic";
 import { PointerLocation } from "./TypeDesktop";
 

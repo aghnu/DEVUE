@@ -1,8 +1,8 @@
-import { AppCalculator } from "./AppCalculator";
-import { AppGithub } from "./AppGithub";
-import { AppLinkedin } from "./AppLinkedin";
-import { AppTerminal } from "./AppTerminal";
-import { AppWnfa } from "./AppWnfa";
+import AppCalculator from "./AppCalculator";
+import AppGithub from "./AppGithub";
+import AppLinkedin from "./AppLinkedin";
+import AppTerminal from "./AppTerminal";
+import AppWnfa from "./AppWnfa";
 
 import {
   AppName,

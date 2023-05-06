@@ -1,7 +1,7 @@
 import { AppName } from "../types/TypeApplication";
-import { ApplicationExternal } from "./ApplicationExternal";
+import ApplicationExternal from "./ApplicationExternal";
 
-export class AppGithub extends ApplicationExternal {
+export default class AppGithub extends ApplicationExternal {
   readonly name: AppName;
   readonly link;
 
