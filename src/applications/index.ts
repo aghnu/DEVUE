@@ -3,16 +3,15 @@ import AppGithub from "./AppGithub";
 import AppLinkedin from "./AppLinkedin";
 import AppTerminal from "./AppTerminal";
 import AppWnfa from "./AppWnfa";
+import AppPortfolio from "./AppPortfolio";
 
-import AppCalculatorVue from "./components/AppCalculator.vue";
-import AppTerminalVue from "./components/AppTerminal.vue";
-import AppWnfaVue from "./components/AppWnfa.vue";
+import * as AppVue from "./components";
 
 import { AppName, ApplicationMeta } from "../types/TypeApplication";
 
 declare module "../types/TypeApplication" {
   // names
-  type AppNameInternal = "terminal" | "calculator" | "wnfa";
+  type AppNameInternal = "terminal" | "calculator" | "wnfa" | "portfolio";
   type AppNameExternal = "github" | "linkedin";
   type AppNameAction = "reset" | "menu";
 
@@ -20,19 +19,47 @@ declare module "../types/TypeApplication" {
   type AppObjectClassInternal =
     | typeof AppTerminal
     | typeof AppCalculator
-    | typeof AppWnfa;
+    | typeof AppWnfa
+    | typeof AppPortfolio;
   type AppObjectClassExternal = typeof AppGithub | typeof AppLinkedin;
 
   // vue components
   type AppVueComponent =
-    | typeof AppCalculatorVue
-    | typeof AppTerminalVue
-    | typeof AppWnfaVue;
+    | typeof AppVue.AppCalculator
+    | typeof AppVue.AppTerminal
+    | typeof AppVue.AppWnfa
+    | typeof AppVue.AppPortfolio;
 }
 
 const applicationActionBar: AppName[] = ["terminal"];
-const applicationMenu: AppName[] = ["terminal", "github", "linkedin"];
+const applicationMenu: AppName[] = [
+  "terminal",
+  "github",
+  "linkedin",
+  "portfolio",
+];
 const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
+  portfolio: {
+    name: "portfolio",
+    type: "internal",
+    nameDisplay: "Portfolio",
+    description: "A portfolio of my projects",
+    getAppIcon: (style) => /*html*/ `
+      <svg height="${style.size}" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M37.9062 37.8612H12.1491V12.0771H37.9062V37.8612ZM15.9034 34.23H34.3381V15.513H15.9034V34.23Z" fill="${style.color}"/>
+        <path d="M37.9242 1H34.0437V8.83608H37.9242V1Z" fill="${style.color}"/>
+        <path d="M15.8914 1H12.0109V8.95923H15.8914V1Z" fill="${style.color}"/>
+        <path d="M37.8612 41.051H34.0437V48.824H37.8612V41.051Z" fill="${style.color}"/>
+        <path d="M15.8914 41.051H12.0109V49.0103H15.8914V41.051Z" fill="${style.color}"/>
+        <path d="M48.6828 34.0437H41.051V38.0294H48.6828V34.0437Z" fill="${style.color}"/>
+        <path d="M8.57176 34.0437H1V37.8011H8.57176V34.0437Z" fill="${style.color}"/>
+        <path d="M48.9982 12.011H41.051V15.8284H48.9982V12.011Z" fill="${style.color}"/>
+        <path d="M8.82106 12.011H1V15.8854H8.82106V12.011Z" fill="${style.color}"/>
+      </svg>
+    `,
+    vueComponent: AppVue.AppPortfolio,
+    objectClass: AppPortfolio,
+  },
   terminal: {
     name: "terminal",
     type: "internal",
@@ -43,7 +70,7 @@ const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
         <path d="M7.80355 40L5.00396 37.248L17.4616 24.9981L5 12.752L7.7996 10L23.0607 24.9981L7.80355 40ZM46 38.622H26.2009V34.7295H46V38.622Z" fill="${style.color}"/>
       </svg>
     `,
-    vueComponent: AppTerminalVue,
+    vueComponent: AppVue.AppTerminal,
     objectClass: AppTerminal,
   },
   calculator: {
@@ -56,7 +83,7 @@ const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.85863 6.85764C11.6725 4.04452 15.8535 3 21.1345 3H29.2902C34.5712 3 38.7523 4.04452 41.5661 6.85764C44.3799 9.67076 45.4247 13.8508 45.4247 19.1304V31.3608C45.4247 36.6404 44.3799 40.8204 41.5661 43.6335C38.7523 46.4466 34.5712 47.4911 29.2902 47.4911H21.1345C15.8535 47.4911 11.6725 46.4466 8.85863 43.6335C6.04479 40.8204 5 36.6404 5 31.3608V19.1304C5 13.8508 6.04479 9.67075 8.85863 6.85764ZM11.4919 9.49027C9.7182 11.2636 8.72406 14.218 8.72406 19.1304V31.3608C8.72406 36.2732 9.7182 39.2276 11.4919 41.0008C13.2657 42.7741 16.2208 43.768 21.1345 43.768H29.2902C34.2039 43.768 37.159 42.7741 38.9328 41.0008C40.7065 39.2276 41.7007 36.2732 41.7007 31.3608V19.1304C41.7007 14.218 40.7065 11.2636 38.9328 9.49027C37.159 7.71699 34.2039 6.72311 29.2902 6.72311H21.1345C16.2208 6.72311 13.2657 7.71699 11.4919 9.49027ZM19.0956 15.0397C18.4397 15.0397 17.8992 15.5843 17.8992 16.2357V18.2741C17.8992 18.9299 18.444 19.4703 19.0956 19.4703H31.3291C31.985 19.4703 32.5255 18.9257 32.5255 18.2741V16.2357C32.5255 15.572 31.9931 15.0397 31.3291 15.0397H19.0956ZM14.1752 16.2357C14.1752 13.5442 16.3668 11.3166 19.0956 11.3166H31.3291C34.0498 11.3166 36.2496 13.5158 36.2496 16.2357V18.2741C36.2496 20.9656 34.0579 23.1934 31.3291 23.1934H19.0956C16.4033 23.1934 14.1752 21.0021 14.1752 18.2741V16.2357ZM15.4722 29.3224C15.4722 28.2943 16.3058 27.4608 17.3342 27.4608H17.3577C18.3861 27.4608 19.2198 28.2943 19.2198 29.3224C19.2198 30.3505 18.3861 31.1839 17.3577 31.1839H17.3342C16.3058 31.1839 15.4722 30.3505 15.4722 29.3224ZM23.3405 29.3224C23.3405 28.2943 24.1742 27.4608 25.2026 27.4608H25.2262C26.2546 27.4608 27.0883 28.2943 27.0883 29.3224C27.0883 30.3505 26.2546 31.1839 25.2262 31.1839H25.2026C24.1742 31.1839 23.3405 30.3505 23.3405 29.3224ZM31.2092 29.3224C31.2092 28.2943 32.0428 27.4608 33.0712 27.4608H33.0946C34.123 27.4608 34.9567 28.2943 34.9567 29.3224C34.9567 30.3505 34.123 31.1839 33.0946 31.1839H33.0712C32.0428 31.1839 31.2092 30.3505 31.2092 29.3224ZM15.4722 36.4568C15.4722 35.4287 16.3058 34.5952 17.3342 34.5952H17.3577C18.3861 34.5952 19.2198 35.4287 19.2198 36.4568C19.2198 37.4849 18.3861 38.3183 17.3577 38.3183H17.3342C16.3058 38.3183 15.4722 37.4849 15.4722 36.4568ZM23.3405 36.4568C23.3405 35.4287 24.1742 34.5952 25.2026 34.5952H25.2262C26.2546 34.5952 27.0883 35.4287 27.0883 36.4568C27.0883 37.4849 26.2546 38.3183 25.2262 38.3183H25.2026C24.1742 38.3183 23.3405 37.4849 23.3405 36.4568ZM31.2092 36.4568C31.2092 35.4287 32.0428 34.5952 33.0712 34.5952H33.0946C34.123 34.5952 34.9567 35.4287 34.9567 36.4568C34.9567 37.4849 34.123 38.3183 33.0946 38.3183H33.0712C32.0428 38.3183 31.2092 37.4849 31.2092 36.4568Z" fill="${style.color}"/>
       </svg>
     `,
-    vueComponent: AppCalculatorVue,
+    vueComponent: AppVue.AppCalculator,
     objectClass: AppCalculator,
   },
   wnfa: {
@@ -77,7 +104,7 @@ const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
         <path d="M8.82106 12.011H1V15.8854H8.82106V12.011Z" fill="${style.color}"/>
       </svg>
     `,
-    vueComponent: AppWnfaVue,
+    vueComponent: AppVue.AppWnfa,
     objectClass: AppWnfa,
   },
   github: {
