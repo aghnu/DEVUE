@@ -4,44 +4,35 @@ import AppLinkedin from "./AppLinkedin";
 import AppTerminal from "./AppTerminal";
 import AppWnfa from "./AppWnfa";
 
-import {
-  AppName,
-  AppNameInternal,
-  ApplicationMeta,
-} from "../types/TypeApplication";
 import AppCalculatorVue from "./components/AppCalculator.vue";
 import AppTerminalVue from "./components/AppTerminal.vue";
 import AppWnfaVue from "./components/AppWnfa.vue";
 
-// app placement globals and style
-export const applicationActionBar: AppNameInternal[] = ["terminal"];
-export const applicationBlacklist: Set<AppNameInternal> = new Set([
-  "calculator",
-  "wnfa",
-]);
+import { AppName, ApplicationMeta } from "../types/TypeApplication";
 
-// app name index
-export const APPLICATION_OBJECT_CLASS_INTERNAL = [
-  AppTerminal,
-  AppCalculator,
-  AppWnfa,
-] as const;
+declare module "../types/TypeApplication" {
+  // names
+  type AppNameInternal = "terminal" | "calculator" | "wnfa";
+  type AppNameExternal = "github" | "linkedin";
+  type AppNameAction = "reset" | "menu";
 
-export const APPLICATION_OBJECT_CLASS_EXTERNAL = [
-  AppGithub,
-  AppLinkedin,
-] as const;
+  // object class
+  type AppObjectClassInternal =
+    | typeof AppTerminal
+    | typeof AppCalculator
+    | typeof AppWnfa;
+  type AppObjectClassExternal = typeof AppGithub | typeof AppLinkedin;
 
-export const APPLICATION_INDEX_NAME_INTERNAL = [
-  "terminal",
-  "calculator",
-  "wnfa",
-] as const;
-export const APPLICATION_INDEX_NAME_EXTERNAL = ["github", "linkedin"] as const;
-export const APPLICATION_INDEX_NAME_ACTION = ["reset", "menu"] as const;
+  // vue components
+  type AppVueComponent =
+    | typeof AppCalculatorVue
+    | typeof AppTerminalVue
+    | typeof AppWnfaVue;
+}
 
-// app meta index
-export const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
+const applicationActionBar: AppName[] = ["terminal"];
+const applicationMenu: AppName[] = ["terminal", "github", "linkedin"];
+const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
   terminal: {
     name: "terminal",
     type: "internal",
@@ -142,3 +133,7 @@ export const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
     `,
   },
 } as const;
+
+// export
+export default APPLICATION_INDEX;
+export { applicationActionBar, applicationMenu };

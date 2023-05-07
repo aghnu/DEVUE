@@ -2,8 +2,9 @@
 import { AppName } from "../types/TypeApplication";
 import AppIcon from "./AppIcon.vue";
 import { useButtonAction } from "../composables/useButtonAction";
-import { APPLICATION_INDEX } from "../applications/META";
 import { computed } from "vue";
+
+import APPLICATION_INDEX from "../applications";
 
 const {
   pointerDown,

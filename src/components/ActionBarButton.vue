@@ -4,8 +4,9 @@ import { computed, ref } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
 import { storeToRefs } from "pinia";
 import { useButtonAction } from "../composables/useButtonAction";
-import { APPLICATION_INDEX } from "../applications/META";
 import { Trigger } from "../utilities/trigger";
+
+import APPLICATION_INDEX from "../applications";
 
 const props = withDefaults(
   defineProps<{

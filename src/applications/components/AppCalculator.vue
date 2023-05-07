@@ -3,7 +3,7 @@ import { computed } from "vue";
 import MovingWindow from "../../components/MovingWindow.vue";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
 import AppCalculatorPad from "./AppCalculatorPad.vue";
-import { AppCalculator } from "../AppCalculator";
+import AppCalculator from "../AppCalculator";
 import AppCalculatorDisplay from "./AppCalculatorDisplay.vue";
 
 const props = defineProps<{

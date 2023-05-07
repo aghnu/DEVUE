@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { AppName } from "../types/TypeApplication";
-import { APPLICATION_INDEX } from "../applications/META";
+import APPLICATION_INDEX from "../applications";
 
 const props = withDefaults(
   defineProps<{

@@ -5,7 +5,8 @@ import {
   AppNameInternal,
   ApplicationMetaInternal,
 } from "../types/TypeApplication";
-import { APPLICATION_INDEX } from "../applications/META";
+
+import APPLICATION_INDEX from "../applications";
 
 const windowsState = useWindowsStatesStore();
 const { movingWindows } = storeToRefs(windowsState);

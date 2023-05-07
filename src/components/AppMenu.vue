@@ -3,15 +3,12 @@ import AppMenuButton from "./AppMenuButton.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
 import { ref, computed } from "vue";
 import {
-  APPLICATION_INDEX,
-  APPLICATION_INDEX_NAME_EXTERNAL,
-  APPLICATION_INDEX_NAME_INTERNAL,
-  applicationBlacklist,
-} from "../applications/META";
-import {
   ApplicationMetaExternal,
   ApplicationMetaInternal,
 } from "../types/TypeApplication";
+
+import APPLICATION_INDEX from "../applications";
+import { applicationMenu } from "../applications";
 
 const emits = defineEmits<{
   (e: "close"): void;
@@ -24,20 +21,22 @@ const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
 const AppInternalMetaArray = computed(() => {
   const appsMetaList: ApplicationMetaInternal[] = [];
 
-  APPLICATION_INDEX_NAME_INTERNAL.forEach((appName) => {
+  applicationMenu.forEach((appName) => {
     const meta = APPLICATION_INDEX[appName];
-    if (meta.type === "internal" && !applicationBlacklist.has(appName))
-      appsMetaList.push(meta);
+    if (meta.type === "internal") appsMetaList.push(meta);
   });
+
   return appsMetaList;
 });
 
 const AppExternalMetaArray = computed(() => {
   const appsMetaList: ApplicationMetaExternal[] = [];
-  APPLICATION_INDEX_NAME_EXTERNAL.forEach((appName) => {
+
+  applicationMenu.forEach((appName) => {
     const meta = APPLICATION_INDEX[appName];
     if (meta.type === "external") appsMetaList.push(meta);
   });
+
   return appsMetaList;
 });
 

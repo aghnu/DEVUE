@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import ActionBarButton from "./ActionBarButton.vue";
 import { ref, computed, onMounted, watch } from "vue";
 import { useWindowsStatesStore } from "../stores/windowsStates";
-import AppMenu from "./AppMenu.vue";
-import ScreenBlocker from "./ScreenBlocker.vue";
 import { useDynamicColor } from "../composables/useDynamicColor";
-import { APPLICATION_INDEX, applicationActionBar } from "../applications/META";
 import { AppName, ApplicationMetaInternal } from "../types/TypeApplication";
 import { Trigger } from "../utilities/trigger";
 import { storeToRefs } from "pinia";
+import { applicationActionBar } from "../applications";
+
+import AppMenu from "./AppMenu.vue";
+import ActionBarButton from "./ActionBarButton.vue";
+import ScreenBlocker from "./ScreenBlocker.vue";
+import APPLICATION_INDEX from "../applications";
+
 // import { useDateTime } from "../composables/useDateTime";
 
 const props = defineProps<{

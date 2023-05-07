@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import MovingWindow from "../../components/MovingWindow.vue";
 import { MovingWindowLocalState } from "../../types/TypeWindows";
-import { AppTerminal } from "../AppTerminal";
+import AppTerminal from "../AppTerminal";
 
 const props = defineProps<{
   state: MovingWindowLocalState;
