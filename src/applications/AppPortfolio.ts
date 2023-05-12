@@ -11,6 +11,8 @@ export default class AppTerminal extends ApplicationInternal {
   constructor() {
     super();
     this.name = "portfolio";
+
+    this.applicationStyle.hideTitleBarFading = true;
   }
 
   getInitMovingWindowState(): MovingWindowLocalState {
