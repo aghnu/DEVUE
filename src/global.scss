@@ -5,7 +5,7 @@ $font-family-main: "Roboto Mono", sans-serif;
 @mixin colors {
   // base color
   --color-block-dark: #101010;
-  --color-block-bright: rgba(15, 15, 15, 0.9);
+  --color-block-bright: rgba(15, 15, 15, 0.75);
   --color-background: rgb(255, 247, 237);
   --color-text-bright:#c7c7c7;
   --color-text-dark: #161616;
