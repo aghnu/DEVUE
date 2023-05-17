@@ -5,7 +5,7 @@ import AppWindowManager from "./AppWindowManager.vue";
 import MovingWindowGhostPanel from "./MovingWindowGhostPanel.vue";
 import WidgetsManager from "./WidgetsManager.vue";
 import { onMounted, onUnmounted, ref } from "vue";
-import { getShapeSun } from "../utilities/factorySVG";
+import GraphSunEye from "./GraphSunEye.vue";
 
 import {
   connectWindowResizeStateUpdate,
@@ -28,16 +28,11 @@ const {
 } = useDesktopPointerDown();
 
 // TODO: refactor this notify trigger flow
-const handlerInitDefaultApplications = () => {
-  // setTimeout(() => {
-  //   actionBarAppPressTrigger.notify("menu");
-  // }, 0.5 * 1000);
-};
-
-const graphSvg = getShapeSun({
-  size: "100%",
-  color: "var(--color-block-bright)",
-});
+// const handlerInitDefaultApplications = () => {
+//   // setTimeout(() => {
+//   //   actionBarAppPressTrigger.notify("menu");
+//   // }, 0.5 * 1000);
+// };
 
 // connect logics
 connectWindowResizeStateUpdate(windowsManagerElement); // tracking resize event of the given element, udpate desktop state accordingly
@@ -53,7 +48,7 @@ onMounted(() => {
   document.addEventListener("touchstart", handlerTouchStart, {
     passive: false,
   });
-  handlerInitDefaultApplications();
+  // handlerInitDefaultApplications();
 });
 
 onUnmounted(() => {
@@ -69,7 +64,9 @@ onUnmounted(() => {
   <div :class="['Desktop']">
     <div ref="windowsManagerElement" class="Desktop__windows">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div class="Desktop__graph" v-html="graphSvg"></div>
+      <div class="Desktop__graph">
+        <GraphSunEye></GraphSunEye>
+      </div>
       <WidgetsManager />
       <MovingWindowGhostPanel />
       <AppWindowManager />
