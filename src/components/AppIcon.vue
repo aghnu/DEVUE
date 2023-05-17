@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { AppName } from "../types/TypeApplication";
 import APPLICATION_INDEX from "../applications";
+import { getCSSVarValueRecursive } from "../utilities/getGlobalCSSVarValue";
+import gsap from "gsap";
 
 const props = withDefaults(
   defineProps<{
@@ -17,14 +19,36 @@ const props = withDefaults(
 const iconHTML = computed(() => {
   return APPLICATION_INDEX[props.name].getAppIcon({
     size: `${props.scale * 100}%`,
-    color: props.color,
+    color: 'var(--app-icon-color)',
   });
+});
+
+const appIconColor = computed(() => props.color);
+
+const appIconElement = ref<HTMLDivElement>();
+
+function setAppIconColor(name: string, duration: number) {
+  if (appIconElement.value) {
+    gsap.to(appIconElement.value, {
+      "--app-icon-color": getCSSVarValueRecursive(name, appIconElement.value) ?? 'transparent', 
+      duration: duration,
+      ease: "power1",
+      overwrite: "auto",
+    });
+  }    
+}
+
+onMounted(() => {
+  watch(appIconColor, (value) => {
+    setAppIconColor(value, 0.3);
+  });
+  setAppIconColor(props.color, 0);
 });
 </script>
 
 <template>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div class="AppIcon" v-html="iconHTML"></div>
+  <div class="AppIcon" ref="appIconElement" v-html="iconHTML"></div>
 </template>
 
 <style scoped lang="scss">
