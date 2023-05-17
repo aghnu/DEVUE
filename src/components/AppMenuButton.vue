@@ -26,6 +26,9 @@ const props = defineProps<{
 }>();
 
 const meta = computed(() => APPLICATION_INDEX[props.name]);
+const styleAppIconColor = computed(() => {
+  return (pointerDown.value || pointerHover.value) ? "var(--color-text-menu-focus)" : "var(--color-text-menu)";
+});
 </script>
 
 <template>
@@ -44,7 +47,7 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
   >
     <div class="MenuAppButton__icon">
       <AppIcon
-        color="var(--color-text-menu)"
+        :color="styleAppIconColor"
         :name="props.name"
         :scale="0.7"
       ></AppIcon>
@@ -81,11 +84,14 @@ const meta = computed(() => APPLICATION_INDEX[props.name]);
   color: var(--color-text-menu);
 
   &--down {
-    background-color: rgba(175, 175, 175, 0.3);
+    background-color: var(--color-block-transparent-menu-focus);
+    color: var(--color-text-menu-focus);
+    opacity: 0.9;
   }
 
   &--hover {
-    background-color: rgba(175, 175, 175, 0.2);
+    background-color: var(--color-block-transparent-menu-focus);
+    color: var(--color-text-menu-focus);
   }
 
   &__icon {

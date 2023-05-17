@@ -89,7 +89,7 @@ function handleClose() {
   border-radius: 0.9rem;
   // padding: 0.25rem;
 
-  box-shadow: v-bind(elementDropShadowIntensityStyle);
+  /* box-shadow: v-bind(elementDropShadowIntensityStyle); */
   border: solid;
   border-width: 2px;
   border-color: v-bind(elementBorderColorStyle);
@@ -117,7 +117,7 @@ function handleClose() {
     }
 
     &--primary {
-      background-color: rgba(150, 150, 150, 0.1);
+      background-color: rgba(150, 150, 150, 0.075);
     }
 
     // &--secondary {
