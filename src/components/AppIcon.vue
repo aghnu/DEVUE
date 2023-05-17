@@ -19,7 +19,7 @@ const props = withDefaults(
 const iconHTML = computed(() => {
   return APPLICATION_INDEX[props.name].getAppIcon({
     size: `${props.scale * 100}%`,
-    color: 'var(--app-icon-color)',
+    color: "var(--app-icon-color)",
   });
 });
 
@@ -30,12 +30,13 @@ const appIconElement = ref<HTMLDivElement>();
 function setAppIconColor(name: string, duration: number) {
   if (appIconElement.value) {
     gsap.to(appIconElement.value, {
-      "--app-icon-color": getCSSVarValueRecursive(name, appIconElement.value) ?? 'transparent', 
+      "--app-icon-color":
+        getCSSVarValueRecursive(name, appIconElement.value) ?? "transparent",
       duration: duration,
       ease: "power1",
       overwrite: "auto",
     });
-  }    
+  }
 }
 
 onMounted(() => {
@@ -48,7 +49,7 @@ onMounted(() => {
 
 <template>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div class="AppIcon" ref="appIconElement" v-html="iconHTML"></div>
+  <div ref="appIconElement" class="AppIcon" v-html="iconHTML"></div>
 </template>
 
 <style scoped lang="scss">

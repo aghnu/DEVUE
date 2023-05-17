@@ -27,7 +27,9 @@ const props = defineProps<{
 
 const meta = computed(() => APPLICATION_INDEX[props.name]);
 const styleAppIconColor = computed(() => {
-  return (pointerDown.value || pointerHover.value) ? "var(--color-text-menu-focus)" : "var(--color-text-menu)";
+  return pointerDown.value || pointerHover.value
+    ? "var(--color-text-menu-focus)"
+    : "var(--color-text-menu)";
 });
 </script>
 

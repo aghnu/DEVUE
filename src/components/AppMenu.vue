@@ -15,8 +15,7 @@ const emits = defineEmits<{
 }>();
 
 const AppMenuElement = ref<HTMLDivElement>();
-const { elementDropShadowIntensityStyle, elementBorderColorStyle } =
-  useDynamicColor(AppMenuElement);
+const { elementBorderColorStyle } = useDynamicColor(AppMenuElement);
 
 const AppInternalMetaArray = computed(() => {
   const appsMetaList: ApplicationMetaInternal[] = [];
