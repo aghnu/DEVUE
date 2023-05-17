@@ -12,6 +12,12 @@ import Desktop from "./components/AppDesktop.vue";
   font-size: 15px;
   font-family: $font-family-main;
   background-color: var(--color-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
 }
 
 #app {
@@ -30,8 +36,5 @@ import Desktop from "./components/AppDesktop.vue";
 p {
   padding: 0;
   margin: 0;
-  font-smooth: always;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 </style>
