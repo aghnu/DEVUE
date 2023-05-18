@@ -153,7 +153,7 @@ onMounted(() => {
     &__menu {
       &-enter-active,
       &-leave-active {
-        transition: all 0.185s;
+        transition: transform 0.185s, bottom 0.185s, opacity 0.185s;
       }
 
       &-enter-from,
