@@ -15,7 +15,8 @@ const emits = defineEmits<{
 }>();
 
 const AppMenuElement = ref<HTMLDivElement>();
-const { elementBorderColorStyle } = useDynamicColor(AppMenuElement);
+const { elementBorderColorStyle, elementDropShadowIntensityStyle } =
+  useDynamicColor(AppMenuElement);
 
 const AppInternalMetaArray = computed(() => {
   const appsMetaList: ApplicationMetaInternal[] = [];
@@ -88,7 +89,8 @@ function handleClose() {
   border-radius: 0.9rem;
   // padding: 0.25rem;
 
-  /* box-shadow: v-bind(elementDropShadowIntensityStyle); */
+  box-shadow: v-bind(elementDropShadowIntensityStyle);
+  /* box-shadow: 0 0 16px rgba(150, 150, 150, 0.1); */
   border: solid;
   border-width: 2px;
   border-color: v-bind(elementBorderColorStyle);
