@@ -8,20 +8,24 @@ export function getGlobalCSSVarValue(name: string): string | null {
   return cssValue === "" ? null : cssValue;
 }
 
-
-export function getCSSVarValue(name: string, element: HTMLElement): string | null {
+export function getCSSVarValue(
+  name: string,
+  element: HTMLElement
+): string | null {
   if (hasVarInName(name)) name = cleanVarFromName(name);
 
-  const cssValue = window
-    .getComputedStyle(element)
-    .getPropertyValue(name);
+  const cssValue = window.getComputedStyle(element).getPropertyValue(name);
 
   return cssValue === "" ? null : cssValue;
 }
 
-export function getCSSVarValueRecursive(name: string, element: HTMLElement ): string | null {
+export function getCSSVarValueRecursive(
+  name: string,
+  element: HTMLElement
+): string | null {
   const value = getCSSVarValue(name, element);
-  if (value !== null && hasVarInName(value)) return getCSSVarValue(value, element);
+  if (value !== null && hasVarInName(value))
+    return getCSSVarValue(value, element);
   return value;
 }
 
