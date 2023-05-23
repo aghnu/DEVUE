@@ -78,7 +78,7 @@ const styleAppIconColor = computed(() => {
   display: flex;
   gap: 0.85rem;
 
-  padding: 0.7rem 1.5rem 1.05rem 1.25rem;
+  padding: 0.7rem 1.25rem 1rem 1.25rem;
 
   font-size: 1rem;
   text-align: left;
@@ -104,18 +104,18 @@ const styleAppIconColor = computed(() => {
   &__text {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
     &__name {
       display: flex;
       align-items: center;
       height: 1.5rem;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       letter-spacing: 0.05em;
       white-space: nowrap;
     }
 
     &__desc {
-      font-size: 0.5rem;
+      font-size: 0.6rem;
       letter-spacing: 0.05em;
       line-height: 1.5em;
     }
