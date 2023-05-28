@@ -73,12 +73,13 @@ const styleAppIconColor = computed(() => {
   @include mixin-clean-button-style;
 
   width: 100%;
+  min-width: 10.5rem;
   height: 100%;
   border-radius: 0.9rem;
   display: flex;
   gap: 0.85rem;
 
-  padding: 0.7rem 1.25rem 1rem 1.25rem;
+  padding: 0.7rem 1.75rem 1rem 1.25rem;
 
   font-size: 1rem;
   text-align: left;
@@ -110,7 +111,7 @@ const styleAppIconColor = computed(() => {
       align-items: center;
       height: 1.5rem;
       font-size: 0.9rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.075em;
       white-space: nowrap;
     }
 
@@ -118,6 +119,7 @@ const styleAppIconColor = computed(() => {
       font-size: 0.6rem;
       letter-spacing: 0.05em;
       line-height: 1.5em;
+      opacity: 0.85;
     }
   }
 }
