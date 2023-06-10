@@ -36,7 +36,7 @@ jobs:
 
           user-email: scotthuang007@outlook.com
           user-name: AUTO UPLOAD
-          commit-message: "AUTO UPLOAD: DEVUE updates"
+          commit-message: "AUTO UPLOAD DEVUE: ${{ github.event.head_commit.message }}"
 
           target-branch: main
           target-directory: "app/DEVUE/"
