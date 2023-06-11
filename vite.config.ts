@@ -1,11 +1,11 @@
-import { defineConfig } from "vite";
+import { defineConfig, splitVendorChunkPlugin } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "",
-  plugins: [vue()],
+  plugins: [vue(), splitVendorChunkPlugin()],
   css: {
     preprocessorOptions: {
       scss: {
@@ -19,6 +19,7 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: true,
     chunkSizeWarningLimit: 1000,
   },
 });
