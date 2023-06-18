@@ -31,7 +31,7 @@ declare module "../types/TypeApplication" {
     | typeof AppVue.AppPortfolio;
 }
 
-const applicationActionBar: AppName[] = ["terminal"];
+const applicationActionBar: AppName[] = [];
 const applicationMenu: AppName[] = ["github", "linkedin", "wnfa", "calculator"];
 const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
   portfolio: {
