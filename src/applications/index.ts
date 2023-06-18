@@ -32,12 +32,7 @@ declare module "../types/TypeApplication" {
 }
 
 const applicationActionBar: AppName[] = ["terminal"];
-const applicationMenu: AppName[] = [
-  "terminal",
-  "github",
-  "linkedin",
-  "portfolio",
-];
+const applicationMenu: AppName[] = ["github", "linkedin", "wnfa", "calculator"];
 const APPLICATION_INDEX: Record<AppName, ApplicationMeta> = {
   portfolio: {
     name: "portfolio",
