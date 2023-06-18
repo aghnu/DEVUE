@@ -25,7 +25,7 @@ function handleIframeload(e: Event) {
     <div class="AppTerminal">
       <iframe
         class="AppTerminal__internal"
-        src="https://www.aghnu.me?options=desktop"
+        src="https://www.aghnu.me/legacy/?options=desktop"
         frameborder="0"
         @load="handleIframeload"
       />
